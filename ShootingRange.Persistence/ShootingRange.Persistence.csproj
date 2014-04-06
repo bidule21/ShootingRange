@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{161A7067-75A0-4FF5-A614-7AE8C938515D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShootingRange.Persistence</RootNamespace>
+    <AssemblyName>ShootingRange.Persistence</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShootingRangeModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShootingRangeModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShootingRangeModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShootingRangeModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="t_bestshot.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_club.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_event.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_group.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_order.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_orderitem.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_person.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_programitem.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_programsubtotal.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_session.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_sessionsubtotal.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shooter.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shot.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="ShootingRangeModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ShootingRangeModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+    <None Include="ShootingRangeModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
+      <LastGenOutput>ShootingRangeModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="ShootingRangeModel.edmx.diagram">
+      <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
+    </None>
+    <None Include="ShootingRangeModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
+      <LastGenOutput>ShootingRangeModel.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

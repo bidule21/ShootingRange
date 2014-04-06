@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sius.Communication.SiusApi.ClientLib</name>
+    </assembly>
+    <members>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sius.Communication.SiusApi.ClientLib.SiusApiClient"/> class.
+            </summary>
+            <param name="serverUrl">The server URL. If the url is empty or null, the client will try to connect to a SiusApi Server on the local host.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.Dispose">
+            <summary>
+            Disposes this object
+            </summary>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.Dispose(System.Boolean)">
+            <summary>
+            Free up this object
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.Login(System.String)">
+            <summary>
+            Allows the client to specify a unique ClientName on the SiusApiServer.
+            The successcode will be received via the LoginResponseReceived event.
+            </summary>
+            <param name="uniqueClientName">Name of the unique client.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.SendBarcode(Sius.Communication.SiusApi.Contracts.SiusDevice,System.String)">
+            <summary>
+            Sends the barcode to the addressed device
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="barcode">The barcode without crc</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.SendDemoOnOff(Sius.Communication.SiusApi.Contracts.SiusDevice,System.Boolean)">
+            <summary>
+            Sets the demomode on the addressed device
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="on">if set to <c>true</c> [on].</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.RequestDemoShot(Sius.Communication.SiusApi.Contracts.SiusDevice)">
+            <summary>
+            Requests a demo shot. This Command has allways to be sent to the targets, even if there are CU941 connected.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.RequestIdle(Sius.Communication.SiusApi.Contracts.SiusDevice)">
+            <summary>
+            Requests an Idle Message from the addressed CU941.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.RecoveryFrom(Sius.Communication.SiusApi.Contracts.SiusDevice,System.Int32)">
+            <summary>
+            Starts a recovery of all logevents from the addressed CU941 starting with sequenceNumber up to the most recent.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="sequenceNumber">The sequence number.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.ClearLog(Sius.Communication.SiusApi.Contracts.SiusDevice)">
+            <summary>
+            Clears the log on the addressed CU941.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.SendShooterName(Sius.Communication.SiusApi.Contracts.SiusDevice,System.String)">
+            <summary>
+            Allows to set the name of the shooter corresponding to the via <see cref="T:Sius.Communication.SiusApi.Contracts.RCIShooterID"/> received shooterID.
+            </summary>
+            <param name="device">The device.</param>
+            <param name="shooterName">Shootername: maxLength = 15 ASCII characters</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.SendProgramName(Sius.Communication.SiusApi.Contracts.SiusDevice,System.String)">
+            <summary>
+            Allows to set the Practicename of the selected Programm for the via <see cref="T:Sius.Communication.SiusApi.Contracts.RCIGetPracticeName"/> received ExternalNumber.
+            </summary>
+            <param name="device">The device.</param>
+            <param name="practiceName">Practicename: maxLength = 20 ASCII characters</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.SendGenericCommand(Sius.Communication.SiusApi.Contracts.SiusDevice,System.Byte[])">
+            <summary>
+            Allows the user to send a generic RCI Command to the addressed Devices.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.ConfigureLonInterface(Sius.Communication.SiusApi.Contracts.SiusApiConstants.LonInterfaceConfiguration)">
+            <summary>
+            Configures the standard lon interface to the specified configuration.
+            </summary>
+            <param name="lonConfiguration">The lon configuration.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.ClientLib.SiusApiClient.RequestConnectedDevices">
+            <summary>
+            Sends a request for all connected Devices to the CommService, the answer will be received via the DeviceListReceived event
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.ClientLib.SiusApiClient.ConnectionStateChanged">
+            <summary>
+            Occurs when the connectionstate to the SiusApiServer changes.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.ClientLib.SiusApiClient.LoginResponseReceived">
+            <summary>
+            Includes the return value to the Login method.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.ClientLib.SiusApiClient.RCIMessageReceived">
+            <summary>
+            Occurs for every RCIMessage that is received from the range.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.ClientLib.SiusApiClient.ShotReceived">
+            <summary>
+            Occurs whenever a shot is received.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.ClientLib.SiusApiClient.DeviceListReceived">
+            <summary>
+            Occurs when a deviceList is received from the server via getDeviceList
+            </summary>
+        </member>
+    </members>
+</doc>

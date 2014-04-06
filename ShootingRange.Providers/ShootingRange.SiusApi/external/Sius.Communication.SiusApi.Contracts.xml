@@ -1,0 +1,761 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sius.Communication.SiusApi.Contracts</name>
+    </assembly>
+    <members>
+        <member name="T:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status">
+            <summary>
+            This enumeration represents the current status of a CU941.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status.Ready">
+            <summary>
+            The CU941 is in an active shooting program and ready to receive shots
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status.Stop">
+            <summary>
+            There is no active shooting program on the CU941 
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status.Offline">
+            <summary>
+            There is no connection between the CU941 and its target
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status.Pause">
+            <summary>
+            The current shootingprogram on the CU941 is in pause mode, e.g. stage break
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status.Show">
+            <summary>
+            The CU941 is currently displaying shots from a deffered shot series
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.ME931Status.Recovery">
+            <summary>
+            There was a powerfail/software crash on the CU941 and it is currently recovering the last shooting program
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.SiusApiConstants.LonInterfaceConfiguration">
+            <summary>
+            This enumeration is used to configure the Loninterface to the needed setup
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.LonInterfaceConfiguration.asLaneController">
+            <summary>
+            The Loninterface is configured as a lane controller (Subnet 1/Node 1). This setup is needed when no CU941 are present.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.SiusApiConstants.LonInterfaceConfiguration.asControlRoomPC">
+            <summary>
+            The Loninterface is configured as control room PC (Subnet 254/Node 1). This setup is needed when CU941 are present.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.SiusApiConstants.RCICommands">
+            <summary>
+            This is a definition for the RCI Codes for the common set of RCI commands.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIIdentificationID">
+            <summary>
+            This Command is used to be able to support an additional way to send login information on the CU941 to the 
+            controlroom to the FirerID. If a barcode that starts with 51xxxx is read in on the CU941 this command will
+            be sent to the controlroom, containing all the numbers after the 51 in a string.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIUnknown">
+            <summary>
+            This is the base class of all RCI commands all unknown / not implemented RCI-Commands will be RCIUnknown.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIUnknown.Device">
+            <summary>
+            This <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice">SiusDevice</see> represents the sender of the RCI Command.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIUnknown.RCIMessage">
+            <summary>
+            The RCI message representet in a hexstring.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIUnknown.RCICode">
+            <summary>
+            The RCICode describing the type of the RCIMessage
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIUnknown.IsAcknowledge">
+            <summary>
+            Is true if the message is an answer
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIUnknown.IsEnquiry">
+            <summary>
+            Is true if the message is a request
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIIdentificationID.IdentificationID">
+            <summary>
+            The numbers from the 51xxxxx bardcode represented as string.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIGetPracticeName">
+            <summary>
+            This Command is sent by the CU941 when a program is selected with an external number that is not 0.
+            The Client is now able to send a userdefined practice name to the control unit for the specific external number.
+            This is done using the SendShootPracticeName command of the SiusApiClient-Object. <see cref="T:Sius.Communication.SiusApi.Contracts.ISiusApiServer"/>
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIGetPracticeName.ExternalNumber">
+            <summary>
+            The numbers from the 51xxxxx bardcode represented as string.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogGroupHeader">
+            <summary>
+            Represents a group header entry in the CU941 log
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogEntry">
+            <summary>
+            This represents the base class for all CU941 log events. All important types are specified in derived classes. 
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogEntry.SequenceNumber">
+            <summary>
+            The Sequence Number of the event inside the Log. This is used to recover from datalosses, and for consistency
+            </summary>        
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogEntry.TimeStamp">
+            <summary>
+            The TimeStamp of the logevent. For Shots this represents the time the shot was detected by the target. 
+            For other events this represents the time the event was logged.
+            </summary>        
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogEntry.EventKind">
+            <summary>
+            The event kind of the logevent, used for further evaluation.
+            </summary>        
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind">
+            <summary>
+            This Enumeration specifies the different log event types.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.PracticeHeader">
+            <summary>
+            Represents the practice header/start. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogPracticeHeader"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.BestShot">
+            <summary>
+            The best shot inside a group with firekind series, if the parameter BestShot is active on the given CU941.
+            Note that this is an copy of a shot event in the given group.
+            Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogShot"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.OwnShot">
+            <summary>
+            A normal counting shot. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogShot"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.PracticeTrailer">
+            <summary>
+            Represents the footer/end of a practice. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogPracticeFooter"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.GroupTrailer">
+            <summary>
+            Represents the footer/end of a group. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogGroupFooter"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.GroupHeader">
+            <summary>
+            Represents the group header/start. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogGroupHeader"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.CrossShot">
+            <summary>
+            Represents a cross shot from an other firer on this target. Only detectable with shot sensors. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogShot"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.DiagnosticLogEntry">
+            <summary>
+            A diagnosty entry for a different set of events. see <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.IllegalShot">
+            <summary>
+            Represents an illegal shot, which is not counted inside a practice. This happens if a shot is fired while no program is active, 
+            a shot is fired when the control unit is showing shots, or additional shots are fired during a lightsignal practice. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogShot"/>
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogEntry.LogEventKind.AdvanceShot">
+            <summary>
+            Advance shots are only present in multi target practices, e.g. Olympic Rapid Fire 25m. This are the shots recorded on each individual lane
+            and are transmitted before the shotgroup is confirmed by the Master CU941 to update the scoreboards. Implemented as <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogShot"/>
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogGroupHeader.GroupOrdinal">
+            <summary>
+            Defines the sequencenumber of this group inside the current practice.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogGroupHeader.FireKind">
+            <summary>
+            Specifies the firekind for this group
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogGroupHeader.NumberOfRounds">
+            <summary>
+            Defines the number of shots this group has. If this value is 0, it is an unlimited group with no shotlimit. eg sighters group in ISSF matches
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.ISiusApiClient">
+            <summary>
+            This is the Interface that specifies the client side Events for the SiusApi
+            </summary>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.Login(System.String)">
+            <summary>
+            Allows the client to specify a unique ClientName on the SiusApiServer. 
+            The successcode will be received via the LoginResponseReceived event.
+            </summary>
+            <param name="uniqueClientName">Name of the unique client.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.SendBarcode(Sius.Communication.SiusApi.Contracts.SiusDevice,System.String)">
+            <summary>
+            Sends the barcode to the addressed device
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="barcode">The barcode without crc</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.SendDemoOnOff(Sius.Communication.SiusApi.Contracts.SiusDevice,System.Boolean)">
+            <summary>
+            Sets the demomode on the addressed device
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="on">if set to <c>true</c> [on].</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.RequestDemoShot(Sius.Communication.SiusApi.Contracts.SiusDevice)">
+            <summary>
+            Requests a demo shot. This Command has allways to be sent to the targets, even if there are CU941 connected.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.RequestIdle(Sius.Communication.SiusApi.Contracts.SiusDevice)">
+            <summary>
+            Requests an Idle Message from the addressed CU941.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.RecoveryFrom(Sius.Communication.SiusApi.Contracts.SiusDevice,System.Int32)">
+            <summary>
+            Starts a recovery of all logevents from the addressed CU941 starting with sequenceNumber up to the most recent.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="sequenceNumber">The sequence number.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.ClearLog(Sius.Communication.SiusApi.Contracts.SiusDevice)">
+            <summary>
+            Clears the log on the addressed CU941.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.SendShooterName(Sius.Communication.SiusApi.Contracts.SiusDevice,System.String)">
+            <summary>
+            Allows to set the name of the shooter corresponding to the via <see cref="T:Sius.Communication.SiusApi.Contracts.RCIShooterID"/> received shooterID.
+            </summary>
+            <param name="device">The device.</param>
+            <param name="shooterName">Shootername: maxLength = 15 ASCII characters</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.SendProgramName(Sius.Communication.SiusApi.Contracts.SiusDevice,System.String)">
+            <summary>
+            Allows to set the Practicename of the selected Programm for the via <see cref="T:Sius.Communication.SiusApi.Contracts.RCIGetPracticeName"/> received ExternalNumber.
+            </summary>
+            <param name="device">The device.</param>
+            <param name="practiceName">Practicename: maxLength = 20 ASCII characters</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.SendGenericCommand(Sius.Communication.SiusApi.Contracts.SiusDevice,System.Byte[])">
+            <summary>
+            Allows the user to send a generic RCI Command to the addressed Devices.
+            </summary>
+            <param name="device">The recipient for further information see <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/></param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.ConfigureLonInterface(Sius.Communication.SiusApi.Contracts.SiusApiConstants.LonInterfaceConfiguration)">
+            <summary>
+            Configures the standard lon interface to the specified configuration.
+            </summary>
+            <param name="lonConfiguration">The lon configuration.</param>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.ISiusApiServer.RequestConnectedDevices">
+            <summary>
+            Sends a request for all connected Devices to the CommService, the answer will be received via the DeviceListReceived event
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.Contracts.ISiusApiClient.ConnectionStateChanged">
+            <summary>
+            Occurs when the connectionstate to the SiusApiServer changes.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.Contracts.ISiusApiClient.LoginResponseReceived">
+            <summary>
+            Includes the return value to the Login method.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.Contracts.ISiusApiClient.RCIMessageReceived">
+            <summary>
+            Occurs for every RCIMessage that is received from the range.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.Contracts.ISiusApiClient.ShotReceived">
+            <summary>
+            Occurs whenever a shot is received.
+            </summary>
+        </member>
+        <member name="E:Sius.Communication.SiusApi.Contracts.ISiusApiClient.DeviceListReceived">
+            <summary>
+            Occurs when a deviceList is received from the server via getDeviceList
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.TICType">
+            <summary>
+            This Enumeration specifies the different targettypes that exist.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIRawShot">
+            <summary>
+            This class represents a shot, that was directly received from a target. This is used when no CU941 are present on the range.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.IShot">
+            <summary>
+            The IShot interface is the common interface for all shots, for both shots with scorecalculations 
+            from the CU941 and raw shots directly from a target.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.XCoordinate">
+            <summary>
+            Contains the X-Coordinate of the shot in meter
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.YCoordinate">
+            <summary>
+            Contains the X-Coordinate of the shot in meter
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.TimeStamp">
+            <summary>
+            Contains recording time of the shot on the target
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.OverTime">
+            <summary>
+            If light signals are used, this contains the time since the last lightsignal change in 1/100 of a second
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.LogicalTargetIndex">
+            <summary>
+            In multitarget exercises eg. Rapid Fire Pistol, this contains the index of the target on which the shot was fired.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.IsMiss">
+            <summary>
+            If the shot could not be calculated, or didn't hit the target (only 300m with shot detector) IsMiss will be true
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.IsFrameHit">
+            <summary>
+            Is true if the shot hit the Frame
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.IsOverTime">
+            <summary>
+            If light signals are used, shots in the red phase or with lightsignals off will be marked as overtime
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.IShot.IsDemo">
+            <summary>
+            Indicates if the shot was produced for simulation, and not actually shotten.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.TIC">
+            <summary>
+            Specifies the type of the target.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.XCoordinate">
+            <summary>
+            Contains the X-Coordinate of the shot in meter
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.YCoordinate">
+            <summary>
+            Contains the X-Coordinate of the shot in meter
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.TimeStamp">
+            <summary>
+            Contains recording time of the shot on the target
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.OverTime">
+            <summary>
+            If light signals are used, this contains the time since the last lightsignal change in 1/100 of a second
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.LogicalTargetIndex">
+            <summary>
+            In multitarget exercises eg. Rapid Fire Pistol, this contains the index of the target on which the shot was fired.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.IsMiss">
+            <summary>
+            If the shot could not be calculated, or didn't hit the target (only 300m with shot detector) IsMiss will be true
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.IsFrameHit">
+            <summary>
+            Is true if the shot hit the Frame
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.IsOverTime">
+            <summary>
+            If light signals are used, shots in the red phase or with lightsignals off will be marked as overtime
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIRawShot.IsDemo">
+            <summary>
+            Indicates if the shot was produced for simulation, and not actually shotten.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic">
+            <summary>
+            Represents a diagnostic log event which is used in many different ways.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticCode">
+            <summary>
+            Represents the Type of the DiagnosticEntry
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType">
+            <summary>
+            This Enumeration specifies the type of the diagnostic event
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.PracticeAbortedByOperator">
+            <summary>
+            This event is created when the current shooting program was abortet manually
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.ShootHeader">
+            <summary>
+            Represents a start of a shooting program
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.ShootFooter">
+            <summary>
+            Represents the end of a shooting program
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.MonitorDeadstart">
+            <summary>
+            This event is created everytime the CU941 boots.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.HeapSizeNotOk">
+            <summary>
+            This is created when the ram of the CU941 is about to be full.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.LowPower">
+            <summary>
+            Shows that the supply power was low on the given time.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.LowBattery">
+            <summary>
+            Shows that the battery is low and should be replaced.
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.PMD">
+            <summary>
+            Shows that the CU941 experienced a software-crash and debug information was created. 
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.SubnetChanged">
+            <summary>
+            The subnet of the CU941 was changed
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.LogCleared">
+            <summary>
+            Shows that the log was cleared. Therefor this is allways the first log entry
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.AllowableMalfunctionRepeat">
+            <summary>
+            An allowable Malfunction happened which will lead to a repeating series (25m RFP, STP)
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.AllowableMalfunctionComplete">
+            <summary>
+            An allowable Malfunction happened which will be completed, so no additional action has to be taken (25m CFP, SP)
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.NonAllowableMalfunctionRepeat">
+            <summary>
+            An non allowable Malfunction happened in a repeat match, no additional action has to be taken (25m RFP, STP)
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.NonAllowableComplete">
+            <summary>
+            An non allowable Malfunction happened in a complete match , so no additional action has to be taken (25m CFP, SP)
+            </summary>
+        </member>
+        <member name="F:Sius.Communication.SiusApi.Contracts.RCILogDiagnostic.DiagnosticType.ComputeSeries">
+            <summary>
+            If there was an allowable malfunction with a repetition series, this event will introduce the series with the corrected final results. (25m RFP, STP)
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogPracticeHeader">
+            <summary>
+            This class represents a practice header/start inside the CU941 log
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogPracticeHeader.PracticeSequenceNumber">
+            <summary>
+            Represents the upcounting SequenceNumber of this practice on the CU941
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogPracticeHeader.ExternalNumber">
+            <summary>
+            The external number of the practice, which can be user defined in the barcode with the barcode library
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogPracticeHeader.FirerID">
+            <summary>
+            The identification number of the firer set up in the control unit.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogCleared">
+            <summary>
+            This is sent from the CU941 directly after the log was cleared.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCITargetChanged">
+            <summary>
+            This Command is send from the CU941 everytime a new group has startet.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCITargetChanged.CurrentTarget">
+            <summary>
+            An identifier that represents the current Target
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCITargetChanged.CurrentFireKind">
+            <summary>
+            The firekind of the current group
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIShooterID">
+            <summary>
+            This Command is sent from the CU941 whenever a new ShooterID is set. It is used to identify
+            the shooter, so the Client Application can send the according name of the shooter to the CU941.
+            This is done using the SendShooterName command of the SiusApiClient-Object. <see cref="T:Sius.Communication.SiusApi.Contracts.ISiusApiServer"/>
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIShooterID.ShooterID">
+            <summary>
+            The ShooterID set in the CU941
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogGroupFooter">
+            <summary>
+            Represents a group footer entry in the CU941 log
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogGroupFooter.PrimaryScore">
+            <summary>
+            The primary score total of the given group. Note, that since the scoreformat is not included in this command, this is
+            an integer value and has to be formatet manually
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogGroupFooter.SecondaryScore">
+            <summary>
+            The secondary score total of the given group. Note, that since the scoreformat is not included in this command, this is
+            an integer value and has to be formatet manually
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.SiusDevice">
+            <summary>
+            This Class has two uses. First it is used to address
+            devices on the range, and second the incoming RCI Commands include a SiusDevice which represents the sender of the command.
+            </summary>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.SiusDevice.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sius.Communication.SiusApi.Contracts.SiusDevice"/> class. 
+            </summary>
+            <param name="subnet">If this is not set, the command will be sent to the whole range.</param>
+            <param name="node">If this is not set, the command will be sent to all devices on the specified lane</param>
+            <param name="neuronString">The neuronstring is only needed to specify the device name from received RCI Commands</param>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIME931StatusChanged">
+            <summary>
+            This command is sent every time the status of the CU941 changes.
+            </summary>
+        </member>
+        <member name="M:Sius.Communication.SiusApi.Contracts.NetworkHelper.GetIpAddress(System.String)">
+            <summary>
+            Gets the IP address.
+            </summary>
+            <param name="hostName">Name of the host.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIBarcode">
+            <summary>
+            Represents an RCI command for a barcode.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogShot">
+            <summary>
+            This class represents a shot in the CU941 log. Pay attention for the EventKind, because OwnShot, Illegalshot, AdvanceShot and
+            Crossshot are represented by the same class. See <see cref="T:Sius.Communication.SiusApi.Contracts.RCILogEntry"/> for more information.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.PrimaryScore">
+            <summary>
+            The primary Score of the shot represented as string
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.SecondaryScore">
+            <summary>
+            The secondary Score of the shot represented as string
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.ShotNumber">
+            <summary>
+            The shotnumber inside the current practice
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.Calibre">
+            <summary>
+            The calibre of the round for this shot
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.TargetPicture">
+            <summary>
+            An identifier that represents the current Target
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsSighting">
+            <summary>
+            Is true if this shot is a sighting shot
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsInnerTen">
+            <summary>
+            Is true if this shot is scored as an innerten
+            </summary>        
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsFastRun">
+            <summary>
+            Is true if the shot is detected during a fast run (Running Target)
+            </summary>        
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsLeftSweep">
+            <summary>
+            Is true if the shot is detected during a left sweep (Running Target)
+            </summary>        
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.XCoordinate">
+            <summary>
+            Contains the X-Coordinate of the shot in meter
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.YCoordinate">
+            <summary>
+            Contains the X-Coordinate of the shot in meter
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.OverTime">
+            <summary>
+            If light signals are used, this contains the time since the last lightsignal change in 1/100 of a second
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.LogicalTargetIndex">
+            <summary>
+            In multitarget exercises eg. Rapid Fire Pistol, this contains the index of the target on which the shot was fired.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsMiss">
+            <summary>
+            If the shot could not be calculated, or didn't hit the target (only 300m with shot detector) IsMiss will be true
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsFrameHit">
+            <summary>
+            Is true if the shot hit the Frame
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsOverTime">
+            <summary>
+            If light signals are used, shots in the red phase or with lightsignals off will be marked as overtime
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogShot.IsDemo">
+            <summary>
+            Indicates if the shot was produced for simulation, and not actually shotten.
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCILogPracticeFooter">
+            <summary>
+            Represents a practice footer entry in the CU941 log
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogPracticeFooter.PrimaryScore">
+            <summary>
+            The primary score total of the given practice. Note, that since the scoreformat is not included in this command, this is
+            an integer value and has to be formatet manually
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCILogPracticeFooter.SecondaryScore">
+            <summary>
+            The secondary score total of the given practice. Note, that since the scoreformat is not included in this command, this is
+            an integer value and has to be formatet manually
+            </summary>
+        </member>
+        <member name="T:Sius.Communication.SiusApi.Contracts.RCIIdleMessage">
+            <summary>
+            This Represents the periodic Idle message, which is sent roughly all 40 seconds by the CU941. This Message is used as an alive check,
+            as well as for log state checks and current Setup information retrieval.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIIdleMessage.NextEventOrdinal">
+            <summary>
+            The SequenceNumber of the next entry which will be stored in the log.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIIdleMessage.SeqNrOfLastShootHeader">
+            <summary>
+            If found, this represents the SequenceNumber of the start of the last shooting program. This can be used for easy access off the current program.
+            0xFFFF represents an undefined value if no such entry was found.
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIIdleMessage.CurrentTarget">
+            <summary>
+            The currently active target
+            </summary>
+        </member>
+        <member name="P:Sius.Communication.SiusApi.Contracts.RCIIdleMessage.CurrentFireKind">
+            <summary>
+            The currently active firekind
+            </summary>
+        </member>
+    </members>
+</doc>

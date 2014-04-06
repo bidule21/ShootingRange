@@ -1,0 +1,13 @@
+﻿<Window x:Class="ShootingRange.Spectator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:spectator="clr-namespace:ShootingRange.Spectator"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <spectator:SpectatorModel x:Key="SpectatorModel"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource SpectatorModel}">
+        <TextBox HorizontalAlignment="Left" Height="303" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Text}" VerticalAlignment="Top" Width="497"/>
+
+    </Grid>
+</Window>

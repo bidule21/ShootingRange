@@ -1,0 +1,924 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ShootingRange.Persistence.Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="t_bestshot">
+          <Key>
+            <PropertyRef Name="BestShotId" />
+          </Key>
+          <Property Name="BestShotId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShotId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_club">
+          <Key>
+            <PropertyRef Name="ClubId" />
+          </Key>
+          <Property Name="ClubId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClubName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Zip" Type="int" />
+          <Property Name="City" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="t_event">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+        </EntityType>
+        <EntityType Name="t_group">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupName" Type="varchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShooterId" Type="int" Nullable="false" />
+          <Property Name="OrderItemId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_orderitem">
+          <Key>
+            <PropertyRef Name="OrderItemId" />
+          </Key>
+          <Property Name="OrderItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgramItemId" Type="int" />
+          <Property Name="ItemName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="t_person">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Street" Type="varchar" MaxLength="45" />
+          <Property Name="Zip" Type="int" />
+          <Property Name="City" Type="varchar" MaxLength="45" />
+          <Property Name="Phone" Type="varchar" MaxLength="45" />
+          <Property Name="Email" Type="varchar" MaxLength="45" />
+          <Property Name="BirthDate" Type="datetime" Precision="0" />
+          <Property Name="LicenseNumber" Type="int" />
+        </EntityType>
+        <EntityType Name="t_programitem">
+          <Key>
+            <PropertyRef Name="ProgramItemId" />
+          </Key>
+          <Property Name="ProgramItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="ProgramNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_programsubtotal">
+          <Key>
+            <PropertyRef Name="ProgramSubtotalId" />
+          </Key>
+          <Property Name="ProgramSubtotalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgramItemId" Type="int" Nullable="false" />
+          <Property Name="SubtotalNumber" Type="int" />
+          <Property Name="NumberOfShots" Type="int" />
+        </EntityType>
+        <EntityType Name="t_session">
+          <Key>
+            <PropertyRef Name="SessionId" />
+          </Key>
+          <Property Name="SessionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProgramItemId" Type="int" Nullable="false" />
+          <Property Name="ShooterId" Type="int" Nullable="false" />
+          <Property Name="LaneNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_sessionsubtotal">
+          <Key>
+            <PropertyRef Name="SessionSubtotalId" />
+          </Key>
+          <Property Name="SessionSubtotalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SessionId" Type="int" Nullable="false" />
+          <Property Name="BestShotId" Type="int" />
+          <Property Name="SubtotalNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_shooter">
+          <Key>
+            <PropertyRef Name="ShooterId" />
+          </Key>
+          <Property Name="ShooterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonId" Type="int" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="ClubId" Type="int" />
+          <Property Name="GroupId" Type="int" />
+          <Property Name="ShooterNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="t_shot">
+          <Key>
+            <PropertyRef Name="ShotId" />
+          </Key>
+          <Property Name="ShotId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubtotalId" Type="int" Nullable="false" />
+          <Property Name="PrimaryScore" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="SecondaryScore" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ValueX" Type="decimal" Precision="10" Scale="0" />
+          <Property Name="ValueY" Type="decimal" Precision="10" Scale="0" />
+        </EntityType>
+        <Association Name="t_Deepshot_ShotId">
+          <End Role="t_shot" Type="Self.t_shot" Multiplicity="1" />
+          <End Role="t_bestshot" Type="Self.t_bestshot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shot">
+              <PropertyRef Name="ShotId" />
+            </Principal>
+            <Dependent Role="t_bestshot">
+              <PropertyRef Name="ShotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Order_OrderItemId">
+          <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="1" />
+          <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_orderitem">
+              <PropertyRef Name="OrderItemId" />
+            </Principal>
+            <Dependent Role="t_order">
+              <PropertyRef Name="OrderItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Order_ShooterId">
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooter">
+              <PropertyRef Name="ShooterId" />
+            </Principal>
+            <Dependent Role="t_order">
+              <PropertyRef Name="ShooterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_OrderItem_ProgramItemId">
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="0..1" />
+          <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_programitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Principal>
+            <Dependent Role="t_orderitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_ProgramSubtotal_ProgramItemId">
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1" />
+          <End Role="t_programsubtotal" Type="Self.t_programsubtotal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_programitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Principal>
+            <Dependent Role="t_programsubtotal">
+              <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Session_ProgramItemId">
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1" />
+          <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_programitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Principal>
+            <Dependent Role="t_session">
+              <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Session_ShooterId">
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooter">
+              <PropertyRef Name="ShooterId" />
+            </Principal>
+            <Dependent Role="t_session">
+              <PropertyRef Name="ShooterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_ClubId">
+          <End Role="t_club" Type="Self.t_club" Multiplicity="0..1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_club">
+              <PropertyRef Name="ClubId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="ClubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_EventId">
+          <End Role="t_event" Type="Self.t_event" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_GroupId">
+          <End Role="t_group" Type="Self.t_group" Multiplicity="0..1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_group">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_PersonId">
+          <End Role="t_person" Type="Self.t_person" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_person">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shot_SubtotalId">
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="1" />
+          <End Role="t_shot" Type="Self.t_shot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_sessionsubtotal">
+              <PropertyRef Name="SessionSubtotalId" />
+            </Principal>
+            <Dependent Role="t_shot">
+              <PropertyRef Name="SubtotalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Subtotal_BestShotId">
+          <End Role="t_bestshot" Type="Self.t_bestshot" Multiplicity="0..1" />
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_bestshot">
+              <PropertyRef Name="BestShotId" />
+            </Principal>
+            <Dependent Role="t_sessionsubtotal">
+              <PropertyRef Name="BestShotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Subtotal_SessionId">
+          <End Role="t_session" Type="Self.t_session" Multiplicity="1" />
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_session">
+              <PropertyRef Name="SessionId" />
+            </Principal>
+            <Dependent Role="t_sessionsubtotal">
+              <PropertyRef Name="SessionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShootingRangePersistenceModelStoreContainer">
+          <EntitySet Name="t_bestshot" EntityType="Self.t_bestshot" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_club" EntityType="Self.t_club" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_event" EntityType="Self.t_event" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_group" EntityType="Self.t_group" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_order" EntityType="Self.t_order" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_orderitem" EntityType="Self.t_orderitem" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_person" EntityType="Self.t_person" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_programitem" EntityType="Self.t_programitem" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_programsubtotal" EntityType="Self.t_programsubtotal" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_session" EntityType="Self.t_session" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_sessionsubtotal" EntityType="Self.t_sessionsubtotal" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_shooter" EntityType="Self.t_shooter" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_shot" EntityType="Self.t_shot" Schema="shootingrange" store:Type="Tables" />
+          <AssociationSet Name="t_Deepshot_ShotId" Association="Self.t_Deepshot_ShotId">
+            <End Role="t_shot" EntitySet="t_shot" />
+            <End Role="t_bestshot" EntitySet="t_bestshot" />
+          </AssociationSet>
+          <AssociationSet Name="t_Order_OrderItemId" Association="Self.t_Order_OrderItemId">
+            <End Role="t_orderitem" EntitySet="t_orderitem" />
+            <End Role="t_order" EntitySet="t_order" />
+          </AssociationSet>
+          <AssociationSet Name="t_Order_ShooterId" Association="Self.t_Order_ShooterId">
+            <End Role="t_shooter" EntitySet="t_shooter" />
+            <End Role="t_order" EntitySet="t_order" />
+          </AssociationSet>
+          <AssociationSet Name="t_OrderItem_ProgramItemId" Association="Self.t_OrderItem_ProgramItemId">
+            <End Role="t_programitem" EntitySet="t_programitem" />
+            <End Role="t_orderitem" EntitySet="t_orderitem" />
+          </AssociationSet>
+          <AssociationSet Name="t_ProgramSubtotal_ProgramItemId" Association="Self.t_ProgramSubtotal_ProgramItemId">
+            <End Role="t_programitem" EntitySet="t_programitem" />
+            <End Role="t_programsubtotal" EntitySet="t_programsubtotal" />
+          </AssociationSet>
+          <AssociationSet Name="t_Session_ProgramItemId" Association="Self.t_Session_ProgramItemId">
+            <End Role="t_programitem" EntitySet="t_programitem" />
+            <End Role="t_session" EntitySet="t_session" />
+          </AssociationSet>
+          <AssociationSet Name="t_Session_ShooterId" Association="Self.t_Session_ShooterId">
+            <End Role="t_shooter" EntitySet="t_shooter" />
+            <End Role="t_session" EntitySet="t_session" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_ClubId" Association="Self.t_Shooter_ClubId">
+            <End Role="t_club" EntitySet="t_club" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_EventId" Association="Self.t_Shooter_EventId">
+            <End Role="t_event" EntitySet="t_event" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_GroupId" Association="Self.t_Shooter_GroupId">
+            <End Role="t_group" EntitySet="t_group" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_PersonId" Association="Self.t_Shooter_PersonId">
+            <End Role="t_person" EntitySet="t_person" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shot_SubtotalId" Association="Self.t_Shot_SubtotalId">
+            <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
+            <End Role="t_shot" EntitySet="t_shot" />
+          </AssociationSet>
+          <AssociationSet Name="t_Subtotal_BestShotId" Association="Self.t_Subtotal_BestShotId">
+            <End Role="t_bestshot" EntitySet="t_bestshot" />
+            <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
+          </AssociationSet>
+          <AssociationSet Name="t_Subtotal_SessionId" Association="Self.t_Subtotal_SessionId">
+            <End Role="t_session" EntitySet="t_session" />
+            <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShootingRange.Persistence.Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="t_bestshot">
+          <Key>
+            <PropertyRef Name="BestShotId" />
+          </Key>
+          <Property Name="BestShotId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShotId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_shot" Relationship="Self.t_Deepshot_ShotId" FromRole="t_bestshot" ToRole="t_shot" />
+          <NavigationProperty Name="t_sessionsubtotal" Relationship="Self.t_Subtotal_BestShotId" FromRole="t_bestshot" ToRole="t_sessionsubtotal" />
+        </EntityType>
+        <EntityType Name="t_club">
+          <Key>
+            <PropertyRef Name="ClubId" />
+          </Key>
+          <Property Name="ClubId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClubName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Zip" Type="Int32" />
+          <Property Name="City" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_ClubId" FromRole="t_club" ToRole="t_shooter" />
+        </EntityType>
+        <EntityType Name="t_event">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_EventId" FromRole="t_event" ToRole="t_shooter" />
+        </EntityType>
+        <EntityType Name="t_group">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_GroupId" FromRole="t_group" ToRole="t_shooter" />
+        </EntityType>
+        <EntityType Name="t_order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShooterId" Type="Int32" Nullable="false" />
+          <Property Name="OrderItemId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_orderitem" Relationship="Self.t_Order_OrderItemId" FromRole="t_order" ToRole="t_orderitem" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_Order_ShooterId" FromRole="t_order" ToRole="t_shooter" />
+        </EntityType>
+        <EntityType Name="t_orderitem">
+          <Key>
+            <PropertyRef Name="OrderItemId" />
+          </Key>
+          <Property Name="OrderItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramItemId" Type="Int32" />
+          <Property Name="ItemName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="Decimal" />
+          <NavigationProperty Name="t_order" Relationship="Self.t_Order_OrderItemId" FromRole="t_orderitem" ToRole="t_order" />
+          <NavigationProperty Name="t_programitem" Relationship="Self.t_OrderItem_ProgramItemId" FromRole="t_orderitem" ToRole="t_programitem" />
+        </EntityType>
+        <EntityType Name="t_person">
+          <Key>
+            <PropertyRef Name="PersonId" />
+          </Key>
+          <Property Name="PersonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Street" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="Int32" />
+          <Property Name="City" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="BirthDate" Type="DateTime" />
+          <Property Name="LicenseNumber" Type="Int32" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_PersonId" FromRole="t_person" ToRole="t_shooter" />
+        </EntityType>
+        <EntityType Name="t_programitem">
+          <Key>
+            <PropertyRef Name="ProgramItemId" />
+          </Key>
+          <Property Name="ProgramItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProgramNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_orderitem" Relationship="Self.t_OrderItem_ProgramItemId" FromRole="t_programitem" ToRole="t_orderitem" />
+          <NavigationProperty Name="t_programsubtotal" Relationship="Self.t_ProgramSubtotal_ProgramItemId" FromRole="t_programitem" ToRole="t_programsubtotal" />
+          <NavigationProperty Name="t_session" Relationship="Self.t_Session_ProgramItemId" FromRole="t_programitem" ToRole="t_session" />
+        </EntityType>
+        <EntityType Name="t_programsubtotal">
+          <Key>
+            <PropertyRef Name="ProgramSubtotalId" />
+          </Key>
+          <Property Name="ProgramSubtotalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramItemId" Type="Int32" Nullable="false" />
+          <Property Name="SubtotalNumber" Type="Int32" />
+          <Property Name="NumberOfShots" Type="Int32" />
+          <NavigationProperty Name="t_programitem" Relationship="Self.t_ProgramSubtotal_ProgramItemId" FromRole="t_programsubtotal" ToRole="t_programitem" />
+        </EntityType>
+        <EntityType Name="t_session">
+          <Key>
+            <PropertyRef Name="SessionId" />
+          </Key>
+          <Property Name="SessionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProgramItemId" Type="Int32" Nullable="false" />
+          <Property Name="ShooterId" Type="Int32" Nullable="false" />
+          <Property Name="LaneNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_programitem" Relationship="Self.t_Session_ProgramItemId" FromRole="t_session" ToRole="t_programitem" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_Session_ShooterId" FromRole="t_session" ToRole="t_shooter" />
+          <NavigationProperty Name="t_sessionsubtotal" Relationship="Self.t_Subtotal_SessionId" FromRole="t_session" ToRole="t_sessionsubtotal" />
+        </EntityType>
+        <EntityType Name="t_sessionsubtotal">
+          <Key>
+            <PropertyRef Name="SessionSubtotalId" />
+          </Key>
+          <Property Name="SessionSubtotalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SessionId" Type="Int32" Nullable="false" />
+          <Property Name="BestShotId" Type="Int32" />
+          <Property Name="SubtotalNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_bestshot" Relationship="Self.t_Subtotal_BestShotId" FromRole="t_sessionsubtotal" ToRole="t_bestshot" />
+          <NavigationProperty Name="t_session" Relationship="Self.t_Subtotal_SessionId" FromRole="t_sessionsubtotal" ToRole="t_session" />
+          <NavigationProperty Name="t_shot" Relationship="Self.t_Shot_SubtotalId" FromRole="t_sessionsubtotal" ToRole="t_shot" />
+        </EntityType>
+        <EntityType Name="t_shooter">
+          <Key>
+            <PropertyRef Name="ShooterId" />
+          </Key>
+          <Property Name="ShooterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="ClubId" Type="Int32" />
+          <Property Name="GroupId" Type="Int32" />
+          <Property Name="ShooterNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_club" Relationship="Self.t_Shooter_ClubId" FromRole="t_shooter" ToRole="t_club" />
+          <NavigationProperty Name="t_event" Relationship="Self.t_Shooter_EventId" FromRole="t_shooter" ToRole="t_event" />
+          <NavigationProperty Name="t_group" Relationship="Self.t_Shooter_GroupId" FromRole="t_shooter" ToRole="t_group" />
+          <NavigationProperty Name="t_order" Relationship="Self.t_Order_ShooterId" FromRole="t_shooter" ToRole="t_order" />
+          <NavigationProperty Name="t_person" Relationship="Self.t_Shooter_PersonId" FromRole="t_shooter" ToRole="t_person" />
+          <NavigationProperty Name="t_session" Relationship="Self.t_Session_ShooterId" FromRole="t_shooter" ToRole="t_session" />
+        </EntityType>
+        <EntityType Name="t_shot">
+          <Key>
+            <PropertyRef Name="ShotId" />
+          </Key>
+          <Property Name="ShotId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubtotalId" Type="Int32" Nullable="false" />
+          <Property Name="PrimaryScore" Type="Decimal" Nullable="false" />
+          <Property Name="SecondaryScore" Type="Decimal" />
+          <Property Name="ValueX" Type="Decimal" />
+          <Property Name="ValueY" Type="Decimal" />
+          <NavigationProperty Name="t_bestshot" Relationship="Self.t_Deepshot_ShotId" FromRole="t_shot" ToRole="t_bestshot" />
+          <NavigationProperty Name="t_sessionsubtotal" Relationship="Self.t_Shot_SubtotalId" FromRole="t_shot" ToRole="t_sessionsubtotal" />
+        </EntityType>
+        <Association Name="t_Deepshot_ShotId">
+          <End Role="t_shot" Type="Self.t_shot" Multiplicity="1" />
+          <End Role="t_bestshot" Type="Self.t_bestshot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shot">
+              <PropertyRef Name="ShotId" />
+            </Principal>
+            <Dependent Role="t_bestshot">
+              <PropertyRef Name="ShotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Subtotal_BestShotId">
+          <End Role="t_bestshot" Type="Self.t_bestshot" Multiplicity="0..1" />
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_bestshot">
+              <PropertyRef Name="BestShotId" />
+            </Principal>
+            <Dependent Role="t_sessionsubtotal">
+              <PropertyRef Name="BestShotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_ClubId">
+          <End Role="t_club" Type="Self.t_club" Multiplicity="0..1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_club">
+              <PropertyRef Name="ClubId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="ClubId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_EventId">
+          <End Role="t_event" Type="Self.t_event" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_GroupId">
+          <End Role="t_group" Type="Self.t_group" Multiplicity="0..1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_group">
+              <PropertyRef Name="GroupId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Order_OrderItemId">
+          <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="1" />
+          <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_orderitem">
+              <PropertyRef Name="OrderItemId" />
+            </Principal>
+            <Dependent Role="t_order">
+              <PropertyRef Name="OrderItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Order_ShooterId">
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooter">
+              <PropertyRef Name="ShooterId" />
+            </Principal>
+            <Dependent Role="t_order">
+              <PropertyRef Name="ShooterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_OrderItem_ProgramItemId">
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="0..1" />
+          <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_programitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Principal>
+            <Dependent Role="t_orderitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shooter_PersonId">
+          <End Role="t_person" Type="Self.t_person" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_person">
+              <PropertyRef Name="PersonId" />
+            </Principal>
+            <Dependent Role="t_shooter">
+              <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_ProgramSubtotal_ProgramItemId">
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1" />
+          <End Role="t_programsubtotal" Type="Self.t_programsubtotal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_programitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Principal>
+            <Dependent Role="t_programsubtotal">
+              <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Session_ProgramItemId">
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1" />
+          <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_programitem">
+              <PropertyRef Name="ProgramItemId" />
+            </Principal>
+            <Dependent Role="t_session">
+              <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Session_ShooterId">
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooter">
+              <PropertyRef Name="ShooterId" />
+            </Principal>
+            <Dependent Role="t_session">
+              <PropertyRef Name="ShooterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Subtotal_SessionId">
+          <End Role="t_session" Type="Self.t_session" Multiplicity="1" />
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_session">
+              <PropertyRef Name="SessionId" />
+            </Principal>
+            <Dependent Role="t_sessionsubtotal">
+              <PropertyRef Name="SessionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Shot_SubtotalId">
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="1" />
+          <End Role="t_shot" Type="Self.t_shot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_sessionsubtotal">
+              <PropertyRef Name="SessionSubtotalId" />
+            </Principal>
+            <Dependent Role="t_shot">
+              <PropertyRef Name="SubtotalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShootingRangeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="t_bestshot" EntityType="Self.t_bestshot" />
+          <EntitySet Name="t_club" EntityType="Self.t_club" />
+          <EntitySet Name="t_event" EntityType="Self.t_event" />
+          <EntitySet Name="t_group" EntityType="Self.t_group" />
+          <EntitySet Name="t_order" EntityType="Self.t_order" />
+          <EntitySet Name="t_orderitem" EntityType="Self.t_orderitem" />
+          <EntitySet Name="t_person" EntityType="Self.t_person" />
+          <EntitySet Name="t_programitem" EntityType="Self.t_programitem" />
+          <EntitySet Name="t_programsubtotal" EntityType="Self.t_programsubtotal" />
+          <EntitySet Name="t_session" EntityType="Self.t_session" />
+          <EntitySet Name="t_sessionsubtotal" EntityType="Self.t_sessionsubtotal" />
+          <EntitySet Name="t_shooter" EntityType="Self.t_shooter" />
+          <EntitySet Name="t_shot" EntityType="Self.t_shot" />
+          <AssociationSet Name="t_Deepshot_ShotId" Association="Self.t_Deepshot_ShotId">
+            <End Role="t_shot" EntitySet="t_shot" />
+            <End Role="t_bestshot" EntitySet="t_bestshot" />
+          </AssociationSet>
+          <AssociationSet Name="t_Subtotal_BestShotId" Association="Self.t_Subtotal_BestShotId">
+            <End Role="t_bestshot" EntitySet="t_bestshot" />
+            <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_ClubId" Association="Self.t_Shooter_ClubId">
+            <End Role="t_club" EntitySet="t_club" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_EventId" Association="Self.t_Shooter_EventId">
+            <End Role="t_event" EntitySet="t_event" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_GroupId" Association="Self.t_Shooter_GroupId">
+            <End Role="t_group" EntitySet="t_group" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_Order_OrderItemId" Association="Self.t_Order_OrderItemId">
+            <End Role="t_orderitem" EntitySet="t_orderitem" />
+            <End Role="t_order" EntitySet="t_order" />
+          </AssociationSet>
+          <AssociationSet Name="t_Order_ShooterId" Association="Self.t_Order_ShooterId">
+            <End Role="t_shooter" EntitySet="t_shooter" />
+            <End Role="t_order" EntitySet="t_order" />
+          </AssociationSet>
+          <AssociationSet Name="t_OrderItem_ProgramItemId" Association="Self.t_OrderItem_ProgramItemId">
+            <End Role="t_programitem" EntitySet="t_programitem" />
+            <End Role="t_orderitem" EntitySet="t_orderitem" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shooter_PersonId" Association="Self.t_Shooter_PersonId">
+            <End Role="t_person" EntitySet="t_person" />
+            <End Role="t_shooter" EntitySet="t_shooter" />
+          </AssociationSet>
+          <AssociationSet Name="t_ProgramSubtotal_ProgramItemId" Association="Self.t_ProgramSubtotal_ProgramItemId">
+            <End Role="t_programitem" EntitySet="t_programitem" />
+            <End Role="t_programsubtotal" EntitySet="t_programsubtotal" />
+          </AssociationSet>
+          <AssociationSet Name="t_Session_ProgramItemId" Association="Self.t_Session_ProgramItemId">
+            <End Role="t_programitem" EntitySet="t_programitem" />
+            <End Role="t_session" EntitySet="t_session" />
+          </AssociationSet>
+          <AssociationSet Name="t_Session_ShooterId" Association="Self.t_Session_ShooterId">
+            <End Role="t_shooter" EntitySet="t_shooter" />
+            <End Role="t_session" EntitySet="t_session" />
+          </AssociationSet>
+          <AssociationSet Name="t_Subtotal_SessionId" Association="Self.t_Subtotal_SessionId">
+            <End Role="t_session" EntitySet="t_session" />
+            <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
+          </AssociationSet>
+          <AssociationSet Name="t_Shot_SubtotalId" Association="Self.t_Shot_SubtotalId">
+            <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
+            <End Role="t_shot" EntitySet="t_shot" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShootingRangePersistenceModelStoreContainer" CdmEntityContainer="ShootingRangeEntities">
+          <EntitySetMapping Name="t_bestshot">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_bestshot">
+              <MappingFragment StoreEntitySet="t_bestshot">
+                <ScalarProperty Name="BestShotId" ColumnName="BestShotId" />
+                <ScalarProperty Name="ShotId" ColumnName="ShotId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_club">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_club">
+              <MappingFragment StoreEntitySet="t_club">
+                <ScalarProperty Name="ClubId" ColumnName="ClubId" />
+                <ScalarProperty Name="ClubName" ColumnName="ClubName" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_event">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_event">
+              <MappingFragment StoreEntitySet="t_event">
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="EventName" ColumnName="EventName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_group">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_group">
+              <MappingFragment StoreEntitySet="t_group">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_order">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_order">
+              <MappingFragment StoreEntitySet="t_order">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_orderitem">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_orderitem">
+              <MappingFragment StoreEntitySet="t_orderitem">
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_person">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_person">
+              <MappingFragment StoreEntitySet="t_person">
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_programitem">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_programitem">
+              <MappingFragment StoreEntitySet="t_programitem">
+                <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ProgramNumber" ColumnName="ProgramNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_programsubtotal">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_programsubtotal">
+              <MappingFragment StoreEntitySet="t_programsubtotal">
+                <ScalarProperty Name="ProgramSubtotalId" ColumnName="ProgramSubtotalId" />
+                <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
+                <ScalarProperty Name="SubtotalNumber" ColumnName="SubtotalNumber" />
+                <ScalarProperty Name="NumberOfShots" ColumnName="NumberOfShots" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_session">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_session">
+              <MappingFragment StoreEntitySet="t_session">
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
+                <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
+                <ScalarProperty Name="LaneNumber" ColumnName="LaneNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_sessionsubtotal">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_sessionsubtotal">
+              <MappingFragment StoreEntitySet="t_sessionsubtotal">
+                <ScalarProperty Name="SessionSubtotalId" ColumnName="SessionSubtotalId" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="BestShotId" ColumnName="BestShotId" />
+                <ScalarProperty Name="SubtotalNumber" ColumnName="SubtotalNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_shooter">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_shooter">
+              <MappingFragment StoreEntitySet="t_shooter">
+                <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="ClubId" ColumnName="ClubId" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="ShooterNumber" ColumnName="ShooterNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_shot">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_shot">
+              <MappingFragment StoreEntitySet="t_shot">
+                <ScalarProperty Name="ShotId" ColumnName="ShotId" />
+                <ScalarProperty Name="SubtotalId" ColumnName="SubtotalId" />
+                <ScalarProperty Name="PrimaryScore" ColumnName="PrimaryScore" />
+                <ScalarProperty Name="SecondaryScore" ColumnName="SecondaryScore" />
+                <ScalarProperty Name="ValueX" ColumnName="ValueX" />
+                <ScalarProperty Name="ValueY" ColumnName="ValueY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

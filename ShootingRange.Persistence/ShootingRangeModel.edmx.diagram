@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f92e8330c8e146528fb98f5d4bdcd74c" Name="Diagram1" ZoomLevel="111">
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_bestshot" Width="1.5" PointX="12" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_club" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_event" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_group" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_order" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_orderitem" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_person" Width="1.5" PointX="0.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_programitem" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_programsubtotal" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_session" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_sessionsubtotal" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_shooter" Width="1.5" PointX="3" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.Model.t_shot" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Deepshot_ShotId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Subtotal_BestShotId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Shooter_ClubId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Shooter_EventId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Shooter_GroupId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Order_OrderItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Order_ShooterId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_OrderItem_ProgramItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Shooter_PersonId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_ProgramSubtotal_ProgramItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Session_ProgramItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Session_ShooterId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Subtotal_SessionId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.Model.t_Shot_SubtotalId" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
