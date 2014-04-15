@@ -38,7 +38,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Person.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.Entities\ShootingRange.Entities.csproj">
+      <Project>{99ff73cd-039b-4fa9-9779-662fa156144b}</Project>
+      <Name>ShootingRange.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Persistence\ShootingRange.Persistence.csproj">
+      <Project>{161a7067-75a0-4ff5-a614-7ae8c938515d}</Project>
+      <Name>ShootingRange.Persistence</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -19,7 +19,6 @@ namespace ShootingRange.Engine
       shootingRange.ProgramNumber += ShootingRangeOnProgramNumber;
       shootingRange.Shot += ShootingRangeOnShot;
 
-      _repository = new ShootingRangeRepository();
       _events = configurationFactory.GetEvents();
     }
 

@@ -30,20 +30,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotNetToolbox\Repository\bin\Debug\Repository.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationFactory.cs" />
+    <Compile Include="ConfigurationFactoryProvider.cs" />
+    <Compile Include="DummyRangeConfigurationFactory.cs" />
     <Compile Include="IConfigurationFactory.cs" />
     <Compile Include="SessionManager.cs" />
     <Compile Include="ShootingRangeEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
+      <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
+      <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Common\ShootingRange.Common.csproj">
       <Project>{A1C688F3-99DF-4EFD-93F3-5BACE9104FB2}</Project>
       <Name>ShootingRange.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Persistence\ShootingRange.Persistence.csproj">
+      <Project>{161A7067-75A0-4FF5-A614-7AE8C938515D}</Project>
+      <Name>ShootingRange.Persistence</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Providers\ShootingRange.SiusData\ShootingRange.SiusData.csproj">
       <Project>{e05652ae-4264-4757-964e-611910c42771}</Project>
@@ -53,6 +75,10 @@
       <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>
       <Name>ShootingRange.Repository</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

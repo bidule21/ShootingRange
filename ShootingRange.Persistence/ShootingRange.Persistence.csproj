@@ -30,68 +30,76 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Repository">
+      <HintPath>..\..\DotNetToolbox\Repository\bin\Debug\Repository.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityBestshot.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityClub.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityEvent.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityGroup.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityOrder.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityOrderitem.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityPerson.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityProgramitem.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityProgramsubtotal.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntitySession.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntitySessionsubtotal.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityShooter.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityShot.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShootingRangeEntities.cs">
+      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="ShootingRangeModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShootingRangeModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="ShootingRangeModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="ShootingRangeModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="t_bestshot.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_club.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_event.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_group.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_order.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_orderitem.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_person.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_programitem.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_programsubtotal.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_session.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_sessionsubtotal.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_shooter.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_shot.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +111,10 @@
   <ItemGroup>
     <None Include="App.Config" />
     <None Include="packages.config" />
+    <None Include="ShootingRangeEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ShootingRangeEntities.cs</LastGenOutput>
+    </None>
     <None Include="ShootingRangeModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
@@ -111,14 +123,15 @@
     <None Include="ShootingRangeModel.edmx.diagram">
       <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
     </None>
-    <None Include="ShootingRangeModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
-      <LastGenOutput>ShootingRangeModel.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.Entities\ShootingRange.Entities.csproj">
+      <Project>{99ff73cd-039b-4fa9-9779-662fa156144b}</Project>
+      <Name>ShootingRange.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Repository, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DotNetToolbox\Repository\bin\Debug\Repository.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -58,7 +62,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DummyRange.cs" />
-    <Compile Include="DummyRangeConfigurationFactory.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,6 +95,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
+      <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
+      <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Common\ShootingRange.Common.csproj">
       <Project>{A1C688F3-99DF-4EFD-93F3-5BACE9104FB2}</Project>
       <Name>ShootingRange.Common</Name>
@@ -99,6 +106,10 @@
     <ProjectReference Include="..\ShootingRange.Engine\ShootingRange.Engine.csproj">
       <Project>{85AB434A-A4B0-4760-A4A2-24A9781176D2}</Project>
       <Name>ShootingRange.Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Repository\ShootingRange.Repository.csproj">
+      <Project>{e55ad8ca-d4fe-444c-8a31-4d310755a630}</Project>
+      <Name>ShootingRange.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

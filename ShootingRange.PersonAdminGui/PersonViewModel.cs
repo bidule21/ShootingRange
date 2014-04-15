@@ -1,26 +1,41 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
+using System.Windows;
 using Repository;
 using ShootingRange.BusinessObjects;
+using ShootingRange.Engine;
 using ShootingRange.PersonAdminGui.Annotations;
+using ShootingRange.Repository;
 
 namespace ShootingRange.PersonAdminGui
 {
   public class PersonViewModel : INotifyPropertyChanged 
   {
-    private IRepository<Person> _repository;
+    private IPersonDataStore _repository;
 
     public PersonViewModel()
     {
-      IUnityContainer container = new UnityContainer().LoadConfiguration();
-      _repository = container.Resolve<IRepository<Person>>();
-      People = new ObservableCollection<Person>(_repository.FindAll());
+      var configurationFactory = ConfigurationFactoryProvider.GetConfigurationFactory();
+      _repository = configurationFactory.GetPersonRepository();
+      People = new ObservableCollection<Person>(_repository.GetAll());
     }
 
-    
+
+    private Person _person;
+    public Person Person
+    {
+      get { return _person; }
+      set
+      {
+        if (value != _person)
+        {
+          _person = value;
+          OnPropertyChanged("Person");
+        }
+      }
+    }
+
     private ObservableCollection<Person> _people;
     public ObservableCollection<Person> People
     {

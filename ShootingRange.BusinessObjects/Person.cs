@@ -2,14 +2,15 @@
 
 namespace ShootingRange.BusinessObjects
 {
-    public class Person : IEntity
+  public class Person
+  {
+    public int PersonId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public override string ToString()
     {
-      public int Id { get; set; }
-      public string FirstName { get; set; }
-      public string LastName { get; set; }
-      public override string ToString()
-      {
-        return string.Format("FirstName: {0}, LastName: {1}", FirstName, LastName);
-      }
+      return string.Format("LastName: {0}, FirstName: {1}", LastName, FirstName);
     }
+  }
 }

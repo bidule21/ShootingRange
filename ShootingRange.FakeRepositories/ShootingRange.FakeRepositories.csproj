@@ -41,10 +41,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.BusinessObjectContracts\ShootingRange.BusinessObjectContracts.csproj">
+      <Project>{E8714F16-A69A-40F7-AE22-B6A63BCE2B40}</Project>
+      <Name>ShootingRange.BusinessObjectContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
       <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Entities\ShootingRange.Entities.csproj">
+      <Project>{99FF73CD-039B-4FA9-9779-662FA156144B}</Project>
+      <Name>ShootingRange.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -34,12 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="Repository">
       <HintPath>..\..\DotNetToolbox\Repository\bin\Debug\Repository.dll</HintPath>
     </Reference>
@@ -67,7 +61,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConfigurationFactory.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -101,16 +94,26 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
       <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.FakeRepositories\ShootingRange.FakeRepositories.csproj">
-      <Project>{da696db6-3254-4a72-af39-74ab796be4ed}</Project>
-      <Name>ShootingRange.FakeRepositories</Name>
+    <ProjectReference Include="..\ShootingRange.Engine\ShootingRange.Engine.csproj">
+      <Project>{85AB434A-A4B0-4760-A4A2-24A9781176D2}</Project>
+      <Name>ShootingRange.Engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Repository\ShootingRange.Repository.csproj">
+      <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>
+      <Name>ShootingRange.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.View\ShootingRange.View.csproj">
+      <Project>{0c979f35-d417-47a1-84c8-13a72ee43480}</Project>
+      <Name>ShootingRange.View</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

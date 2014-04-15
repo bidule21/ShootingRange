@@ -1,5 +1,6 @@
 ﻿using ShootingRange.Common;
 using ShootingRange.Common.Modules;
+using ShootingRange.Repository;
 
 namespace ShootingRange.Engine
 {
@@ -7,5 +8,6 @@ namespace ShootingRange.Engine
   {
     IShootingRange GetShootingRange();
     ShootingRangeEvents GetEvents();
+    IPersonDataStore GetPersonRepository();
   }
 }
