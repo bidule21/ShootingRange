@@ -107,6 +107,10 @@
       <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>
       <Name>ShootingRange.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.ViewModel\ShootingRange.ViewModel.csproj">
+      <Project>{A869786D-0BAD-4C1B-8B8F-88CF40481712}</Project>
+      <Name>ShootingRange.ViewModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.View\ShootingRange.View.csproj">
       <Project>{0C979F35-D417-47A1-84C8-13A72EE43480}</Project>
       <Name>ShootingRange.View</Name>

@@ -6,7 +6,12 @@ namespace ShootingRange.Engine
 {
   public class DummyRangeConfigurationFactory : IConfigurationFactory
   {
+    private ShootingRangeEvents _events;
 
+    public DummyRangeConfigurationFactory()
+    {
+      _events = new ShootingRangeEvents();
+    }
 
     public IShootingRange GetShootingRange()
     {
@@ -15,7 +20,7 @@ namespace ShootingRange.Engine
 
     public ShootingRangeEvents GetEvents()
     {
-      throw new System.NotImplementedException();
+      return _events;
     }
 
     public IPersonDataStore GetPersonRepository()

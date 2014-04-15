@@ -30,15 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RelayCommand">
+      <HintPath>..\..\DotNetToolbox\RelayCommand\bin\Debug\RelayCommand.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainViewModel.cs" />
+    <Compile Include="PersonEditViewModel.cs" />
     <Compile Include="PersonListViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -47,6 +47,10 @@
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
       <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Common\ShootingRange.Common.csproj">
+      <Project>{A1C688F3-99DF-4EFD-93F3-5BACE9104FB2}</Project>
+      <Name>ShootingRange.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Engine\ShootingRange.Engine.csproj">
       <Project>{85AB434A-A4B0-4760-A4A2-24A9781176D2}</Project>

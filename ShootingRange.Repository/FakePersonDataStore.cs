@@ -12,7 +12,18 @@ namespace ShootingRange.Repository
     public FakePersonDataStore()
     {
       _repository = new FakeRepository<Person>();
-      _repository.Insert(new Person() {FirstName = "Waltenspül", LastName = "Roger"});
+
+      Person[] people = new[]
+      {
+        new Person() {FirstName = "Waltenspül", LastName = "Roger"},
+        new Person() {FirstName = "Eberli", LastName = "Daniel"},
+        new Person() {FirstName = "Hugentobler", LastName = "Hans"},
+      };
+
+      foreach (Person person in people)
+      {
+        _repository.Insert(person);
+      }
     }
 
     public IEnumerable<Person> GetAll()

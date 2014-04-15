@@ -1,41 +1,39 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using ShootAdmin.ViewModel;
+using System.Text;
+using System.Threading.Tasks;
 using ShootingRange.BusinessObjects;
 using ShootingRange.BusinessObjects.Annotations;
+using ShootingRange.Common.Modules;
 using ShootingRange.Engine;
 using ShootingRange.Repository;
 
-namespace ShootingRange.View
+namespace ShootingRange.ViewModel
 {
-  class PersonEditViewModel : INotifyPropertyChanged
+  public class PersonEditViewModel : INotifyPropertyChanged
   {
-    public ICommand UpdatePersonCommand { get; private set; }
+    private IPersonDataStore _repositoy;
+    private ShootingRangeEvents _events;
 
     public PersonEditViewModel()
     {
-      IConfigurationFactory configFactory = ConfigurationFactoryProvider.GetConfigurationFactory();
-      _repository = configFactory.GetPersonRepository();
+      //IConfigurationFactory configFactory = ConfigurationFactoryProvider.GetConfigurationFactory();
+      //_repositoy = configFactory.GetPersonRepository();
+      //_events = configFactory.GetEvents();
+      //_events.SelectedPersonChanged += SelectedPersonChanged;
+
+      //Person = new Person();
     }
 
-    private void InitializeCommands()
-    {
-      UpdatePersonCommand = new RelayCommand<Person>(ExecuteUpdatePersonCommand, CanExecuteUpdatePersonCommand);
-    }
-
-    private bool CanExecuteUpdatePersonCommand(Person person)
-    {
-      return person != null;
-    }
-
-    private void ExecuteUpdatePersonCommand(Person person)
-    {
-      _repository.Update(person);
-    }
+    //private void SelectedPersonChanged(int selectedPersonId)
+    //{
+    //  //Person = _repositoy.FindById(selectedPersonId);
+    //}
 
     private Person _person;
-    private IPersonDataStore _repository;
 
     public Person Person
     {
@@ -49,7 +47,7 @@ namespace ShootingRange.View
         }
       }
     }
-    
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     [NotifyPropertyChangedInvocator]
