@@ -24,5 +24,10 @@ namespace ShootingRange.MainWindow
     {
       InitializeComponent();
     }
+
+    private void PersonListView_OnSelectedPersonChanged(object sender, RoutedEventArgs e)
+    {
+      //PersonEditControl.FirstName = "foo";
+    }
   }
 }

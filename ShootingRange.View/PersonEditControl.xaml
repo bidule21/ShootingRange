@@ -3,14 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <viewModel:PersonEditViewModel x:Key="PersonEditViewModel"/>
-    </UserControl.Resources>
-    <StackPanel DataContext="{Binding Source={StaticResource PersonEditViewModel}}">
-        <TextBox HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Person.FirstName}" VerticalAlignment="Center" Width="300" Height="31"/>
-        <TextBox HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Person.LastName}" VerticalAlignment="Center" Width="300" Height="27"/>
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="UserControl">
+    <StackPanel DataContext="{Binding ElementName=UserControl}">
+        <TextBox HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding FirstName}" VerticalAlignment="Center" Width="300" Height="31"/>
+        <TextBox HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding LastName}" VerticalAlignment="Center" Width="300" Height="27"/>
     </StackPanel>
 </UserControl>
