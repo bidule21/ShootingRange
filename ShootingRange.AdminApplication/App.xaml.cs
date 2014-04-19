@@ -36,7 +36,7 @@ namespace ShootingRange.AdminApplication
     {
       ConfigurationSource.Configuration = _container.Resolve<IConfiguration>();
       Application.Current.MainWindow = _container.Resolve<MainWindow>();
-      Application.Current.MainWindow.Title = "TestTitle";
+      Application.Current.MainWindow.Title = "Shooting Range Admin";
     }
   }
 }
