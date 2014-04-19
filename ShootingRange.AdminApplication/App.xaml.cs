@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Practices.Unity;
 using ShootingRange.Configuration;
 using ShootingRange.ConfigurationProvider;
@@ -8,7 +7,7 @@ using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 using ShootingRange.View;
 
-namespace ShootingRange.Unity
+namespace ShootingRange.AdminApplication
 {
   /// <summary>
   /// Interaction logic for App.xaml
