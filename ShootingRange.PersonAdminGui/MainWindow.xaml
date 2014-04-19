@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:personAdminGui="clr-namespace:ShootingRange.PersonAdminGui"
-        xmlns:cc="clr-namespace:ShootingRange.View;assembly=ShootingRange.View"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
         <personAdminGui:PersonViewModel x:Key="PersonViewModel"/>

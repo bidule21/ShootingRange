@@ -2,7 +2,7 @@
 using ShootingRange.Common;
 using ShootingRange.Common.BusinessObjects;
 using ShootingRange.Common.Modules;
-using ShootingRange.Repository;
+using ShootingRange.ConfigurationProvider;
 
 namespace ShootingRange.Engine
 {
@@ -12,14 +12,14 @@ namespace ShootingRange.Engine
     private ShootingRangeEvents _events;
     private SessionManager _sessionManager;
 
-    public ShootingRangeEngine(IConfigurationFactory configurationFactory)
+    public ShootingRangeEngine(IConfiguration configuration)
     {
-      IShootingRange shootingRange = configurationFactory.GetShootingRange();
+      IShootingRange shootingRange = configuration.GetShootingRange();
       shootingRange.ShooterNumber += ShootingRangeOnShooterNumber;
       shootingRange.ProgramNumber += ShootingRangeOnProgramNumber;
       shootingRange.Shot += ShootingRangeOnShot;
 
-      _events = configurationFactory.GetEvents();
+      _events = configuration.GetEvents();
     }
 
     /// <summary>Stores the shot data to the repository and invokes module extension points.</summary>

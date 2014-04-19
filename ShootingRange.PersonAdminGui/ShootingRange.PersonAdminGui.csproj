@@ -34,11 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Repository">
-      <HintPath>..\..\DotNetToolbox\Repository\bin\Debug\Repository.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -103,17 +99,9 @@
       <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.Engine\ShootingRange.Engine.csproj">
-      <Project>{85AB434A-A4B0-4760-A4A2-24A9781176D2}</Project>
-      <Name>ShootingRange.Engine</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Repository\ShootingRange.Repository.csproj">
       <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>
       <Name>ShootingRange.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.View\ShootingRange.View.csproj">
-      <Project>{0c979f35-d417-47a1-84c8-13a72ee43480}</Project>
-      <Name>ShootingRange.View</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

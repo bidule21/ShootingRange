@@ -13,7 +13,7 @@ namespace ShootingRange.Persistence
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ShootingRangeEntities : DbContext
+    public partial class ShootingRangeEntities :  DbContext
     {
         public ShootingRangeEntities()
             : base("name=ShootingRangeEntities")

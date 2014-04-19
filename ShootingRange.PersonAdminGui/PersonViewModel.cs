@@ -1,11 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using Repository;
 using ShootingRange.BusinessObjects;
-using ShootingRange.Engine;
-using ShootingRange.PersonAdminGui.Annotations;
+using ShootingRange.PersonAdminGui.Properties;
 using ShootingRange.Repository;
 
 namespace ShootingRange.PersonAdminGui
@@ -16,9 +14,10 @@ namespace ShootingRange.PersonAdminGui
 
     public PersonViewModel()
     {
-      var configurationFactory = ConfigurationFactoryProvider.GetConfigurationFactory();
-      _repository = configurationFactory.GetPersonRepository();
-      People = new ObservableCollection<Person>(_repository.GetAll());
+      //IConfiguration configuration = ConfigurationSource.Configuration;
+      //_repository = configuration.GetPersonRepository();
+      //People = new ObservableCollection<Person>(_repository.GetAll());
+      People = new ObservableCollection<Person>(new List<Person>());
     }
 
 

@@ -99,6 +99,14 @@
       <Project>{A1C688F3-99DF-4EFD-93F3-5BACE9104FB2}</Project>
       <Name>ShootingRange.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.ConfigurationProvider\ShootingRange.ConfigurationProvider.csproj">
+      <Project>{4DA2B804-0082-45A9-9CE8-C727050A58A0}</Project>
+      <Name>ShootingRange.ConfigurationProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Configuration\ShootingRange.Configuration.csproj">
+      <Project>{FD6AD0E8-2BD2-4C1C-9704-04D65D221C18}</Project>
+      <Name>ShootingRange.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Engine\ShootingRange.Engine.csproj">
       <Project>{85AB434A-A4B0-4760-A4A2-24A9781176D2}</Project>
       <Name>ShootingRange.Engine</Name>

@@ -1,14 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using DotNetToolbox.RelayCommand;
 using ShootingRange.BusinessObjects;
-using ShootingRange.BusinessObjects.Annotations;
+using ShootingRange.BusinessObjects.Properties;
+using ShootingRange.Common;
 using ShootingRange.Common.Modules;
-using ShootingRange.Engine;
+using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository;
+using ShootingRange.Service.Interface;
 
 namespace ShootingRange.ViewModel
 {
@@ -16,13 +19,49 @@ namespace ShootingRange.ViewModel
   {
     public MainViewModel()
     {
-      IConfigurationFactory configFactory = ConfigurationFactoryProvider.GetConfigurationFactory();
-      _repository = configFactory.GetPersonRepository();
-      //_events = configFactory.GetEvents();
+      if (DesignTimeHelper.IsInDesignMode)
+      {
+        _repository = new FakePersonDataStore();
+      }
+      else
+      {
+        IConfiguration config = ConfigurationSource.Configuration;
+        _repository = config.GetPersonRepository();
+        _windowService = config.GetWindowService();
+        _events = config.GetEvents();
+        _uiEvents = config.GetUIEvents();
+      }
 
       People = new ObservableCollection<Person>(_repository.GetAll());
-      PersonNames = new ObservableCollection<string>(People.Select(_ => _.FirstName));
-      //PersonSelectionChangedCommand = new RelayCommand<int>(ExecutePersonSelectionChangedCommand);
+      PersonListItems =
+        new ObservableCollection<PersonListItem>(
+          People.Select(_ => new PersonListItem
+          {
+            Id = _.PersonId,
+            FirstName = _.FirstName,
+            LastName = _.LastName
+          }));
+
+      PersonSelectionChangedCommand = new RelayCommand<int>(ExecutePersonSelectionChangedCommand);
+      OpenPersonEditCommand = new RelayCommand<PersonListItem>(ExecuteOpenPersonEditCommand, CanExecuteOpenPersonEditCommand);
+      CreatePersonCommand = new RelayCommand<object>(ExecuteCreatePersonCommand);
+    }
+
+    private void ExecuteCreatePersonCommand(object obj)
+    {
+      _windowService.ShowPersonEditWindow();
+    }
+
+    private bool CanExecuteOpenPersonEditCommand(PersonListItem person)
+    {
+      return person != null;
+    }
+
+    private void ExecuteOpenPersonEditCommand(PersonListItem person)
+    {
+      _windowService.ShowPersonEditWindow();
+      Person entity = _repository.FindById(person.Id);
+      _uiEvents.PersonSelected(entity);
     }
 
     private void ExecutePersonSelectionChangedCommand(int selectedPersonId)
@@ -34,8 +73,23 @@ namespace ShootingRange.ViewModel
     private ShootingRangeEvents _events;
 
     public ICommand PersonSelectionChangedCommand { get; private set; }
+    public ICommand OpenPersonEditCommand { get; private set; }
+    public ICommand CreatePersonCommand { get; private set; }
 
-    
+    private PersonListItem _selectedPersonItem;
+    public PersonListItem SelectedPersonItem
+    {
+      get { return _selectedPersonItem; }
+      set
+      {
+        if (value != _selectedPersonItem)
+        {
+          _selectedPersonItem = value;
+          OnPropertyChanged("SelectedPersonItem");
+        }
+      }
+    }
+
     private Person _person;
     public Person Person
     {
@@ -49,22 +103,25 @@ namespace ShootingRange.ViewModel
         }
       }
     }
-    
-    private ObservableCollection<string> _personNames;
-    public ObservableCollection<string> PersonNames
+
+    private ObservableCollection<PersonListItem> _personListItems;
+    public ObservableCollection<PersonListItem> PersonListItems
     {
-      get { return _personNames; }
+      get { return _personListItems; }
       set
       {
-        if (value != _personNames)
+        if (value != _personListItems)
         {
-          _personNames = value;
-          OnPropertyChanged("PersonNames");
+          _personListItems = value;
+          OnPropertyChanged("PersonListItems");
         }
       }
     }
 
     private ObservableCollection<Person> _people;
+    private IWindowService _windowService;
+    private UIEvents _uiEvents;
+
     public ObservableCollection<Person> People
     {
       get { return _people; }

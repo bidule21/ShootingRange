@@ -38,7 +38,7 @@ namespace ShootingRange.Repository
     {
       t_person entity = _sqlRepository.Find(_ => _.PersonId == person.PersonId).Single();
       entity.UpdateEntity(person);
-      _sqlRepository.Update(entity);
+      _sqlRepository.Commit();
     }
 
     public void Delete(Person person)

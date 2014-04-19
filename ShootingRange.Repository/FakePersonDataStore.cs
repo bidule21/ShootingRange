@@ -15,9 +15,9 @@ namespace ShootingRange.Repository
 
       Person[] people = new[]
       {
-        new Person() {FirstName = "Waltenspül", LastName = "Roger"},
-        new Person() {FirstName = "Eberli", LastName = "Daniel"},
-        new Person() {FirstName = "Hugentobler", LastName = "Hans"},
+        new Person() {PersonId = 1, FirstName = "Roger", LastName = "Waltenspül"},
+        new Person() {PersonId = 2, FirstName = "Daniel", LastName = "Eberli"},
+        new Person() {PersonId = 3, FirstName = "Hans", LastName = "Hugentobler"},
       };
 
       foreach (Person person in people)
@@ -43,7 +43,10 @@ namespace ShootingRange.Repository
 
     public void Update(Person person)
     {
-      _repository.Update(person);
+      var entity = _repository.Find(_ => _.PersonId == person.PersonId).Single();
+      entity.FirstName = person.FirstName;
+      entity.LastName = person.LastName;
+      _repository.Commit();
     }
 
     public void Delete(Person person)

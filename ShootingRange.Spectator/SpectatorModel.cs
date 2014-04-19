@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ShootingRange.Common;
+using ShootingRange.Configuration;
+using ShootingRange.ConfigurationProvider;
 using ShootingRange.Engine;
-using ShootingRange.Spectator.Annotations;
+using ShootingRange.Spectator.Properties;
 
 namespace ShootingRange.Spectator
 {
@@ -11,7 +13,7 @@ namespace ShootingRange.Spectator
   {
     public SpectatorModel()
     {
-      ConfigurationFactory config = new ConfigurationFactory();
+      IConfiguration config = new DefaultConfiguration();
       ShootingRangeEngine engine = new ShootingRangeEngine(config);
       IShootingRange shootingRange = config.GetShootingRange();
 

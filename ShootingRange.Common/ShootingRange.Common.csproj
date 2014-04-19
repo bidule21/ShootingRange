@@ -46,6 +46,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShooterNumberEventArgs.cs" />
     <Compile Include="ShotEventArgs.cs" />
+    <Compile Include="UIEvents.cs" />
+    <Compile Include="UIEventsDelegate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
+      <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
+      <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

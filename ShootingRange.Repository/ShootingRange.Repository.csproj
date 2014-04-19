@@ -38,7 +38,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakePersonDataStore.cs" />
@@ -53,17 +52,9 @@
       <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.Common\ShootingRange.Common.csproj">
-      <Project>{a1c688f3-99df-4efd-93f3-5bace9104fb2}</Project>
-      <Name>ShootingRange.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Entities\ShootingRange.Entities.csproj">
       <Project>{99FF73CD-039B-4FA9-9779-662FA156144B}</Project>
       <Name>ShootingRange.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.Persistence\ShootingRange.Persistence.csproj">
-      <Project>{161a7067-75a0-4ff5-a614-7ae8c938515d}</Project>
-      <Name>ShootingRange.Persistence</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
