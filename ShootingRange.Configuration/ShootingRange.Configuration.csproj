@@ -59,11 +59,11 @@
       <Name>ShootingRange.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Service.Interface\ShootingRange.Service.Interface.csproj">
-      <Project>{7B2D7C87-4FA3-48DD-AB24-E90365D41F7F}</Project>
+      <Project>{7b2d7c87-4fa3-48dd-ab24-e90365d41f7f}</Project>
       <Name>ShootingRange.Service.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Service\ShootingRange.Service.csproj">
-      <Project>{24F04412-EDBF-45DB-81B6-A590E7903469}</Project>
+      <Project>{24f04412-edbf-45db-81b6-a590e7903469}</Project>
       <Name>ShootingRange.Service</Name>
     </ProjectReference>
   </ItemGroup>

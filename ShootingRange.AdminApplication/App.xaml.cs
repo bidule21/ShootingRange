@@ -29,7 +29,7 @@ namespace ShootingRange.AdminApplication
       _container = new UnityContainer();
       _container.RegisterType<IWindowService, WindowService>();
       _container.RegisterType<IPersonDataStore, FakePersonDataStore>(new ContainerControlledLifetimeManager());
-      _container.RegisterType<IConfiguration, DummyConfiguration>(new ContainerControlledLifetimeManager());
+      _container.RegisterType<IConfiguration, DefaultConfiguration>(new ContainerControlledLifetimeManager());
     }
 
     private void ComposeObjects()
