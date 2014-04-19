@@ -1,0 +1,50 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+	x:Class="ShootingRange.View.PersonEditWindow"
+	x:Name="Window"
+	Title="PersonEditWindow" Height="287" Width="320">
+    <Window.Resources>
+        <viewModel:PersonEditViewModel x:Key="PersonEditViewModel"/>
+    </Window.Resources>
+	<StackPanel x:Name="LayoutRoot" Margin="10">
+		<Grid Height="196" VerticalAlignment="Top" DataContext="{StaticResource PersonEditViewModel}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+			<Label Content="Nachname" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277"/>
+			<Label Grid.Column="0" Content="Vorname" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="1"/>
+            <Label Grid.Column="0" Content="Strasse" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="2"/>
+            <Label Grid.Column="0" Content="Postleitzahl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="3"/>
+            <Label Grid.Column="0" Content="Ort" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="4"/>
+            <Label Grid.Column="0" Content="Email" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="5"/>
+            <Label Grid.Column="0" Content="Telefon" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="6"/>
+            <Label Grid.Column="0" Content="Geburtsdatum" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="7"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding LastName}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="0"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding FirstName}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="1"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding Address}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="2"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding ZipCode}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="3"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding City}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="4"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding Email}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="5"/>
+			<TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding Phone}" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="6"/>
+			<DatePicker Grid.Column="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Top" SelectedDateFormat="Short" DisplayDate="{Binding DateOfBirthTime}"/>
+		</Grid>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+			<Button Content="OK" Width="80" Margin="3"/>
+			<Button Content="Cancel" Width="80" Margin="3"/>
+			<Button Content="Apply" Width="80" Margin="3"/>
+		</StackPanel>
+	</StackPanel>
+</Window>

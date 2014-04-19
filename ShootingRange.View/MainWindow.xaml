@@ -1,0 +1,24 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+        xmlns:view="clr-namespace:ShootingRange.View"
+        x:Class="ShootingRange.View.MainWindow"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <viewModel:MainViewModel x:Key="MainViewModel"/>
+    </Window.Resources>
+    <StackPanel DataContext="{Binding Source={StaticResource MainViewModel}}">
+    <ToolBar>
+            <Button Command="{Binding CreatePersonCommand}">
+                <Image Source="Images/add_person_32.png"/>
+            </Button>
+        <Button Command="{Binding OpenPersonEditCommand}" CommandParameter="{Binding SelectedPersonItem}">
+                <view:AutoGreyableImage Source="Images/edit_person_32.png"/>
+            </Button>
+    </ToolBar>
+        <Grid>
+            <view:PersonListView PersonListItems="{Binding PersonListItems}" SelectedPerson="{Binding SelectedPersonItem}" HorizontalAlignment="Left" Height="237" Margin="10,10,0,0" VerticalAlignment="Top" Width="228"/>
+        </Grid>
+    </StackPanel>
+</Window>

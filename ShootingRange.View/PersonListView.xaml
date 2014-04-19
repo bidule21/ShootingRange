@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ShootingRange.View.PersonListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+             xmlns:converter="clr-namespace:ShootingRange.View.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="UserControl">
+    <UserControl.Resources>
+        <converter:PersonNameConverter x:Key="PersonNameConverter"></converter:PersonNameConverter>
+        <DataTemplate x:Key="PersonDataTemplate" DataType="{x:Type viewModel:PersonListItem}">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource PersonNameConverter}" ConverterParameter="FormatLastFirst">
+                        <Binding Path="LastName"/>
+                        <Binding Path="FirstName"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </DataTemplate>
+    </UserControl.Resources>
+    <StackPanel DataContext="{Binding ElementName=UserControl}" d:DataContext="{d:DesignData Source=/SampleData/PersonListViewSampleData.xaml}">
+        <ListBox Name="ListBox" ItemsSource="{Binding PersonListItems}" SelectionChanged="OnSelectionChanged" ItemTemplate="{StaticResource PersonDataTemplate}"/>
+    </StackPanel>
+</UserControl>
