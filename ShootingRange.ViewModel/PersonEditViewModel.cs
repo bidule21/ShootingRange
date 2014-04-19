@@ -19,9 +19,12 @@ namespace ShootingRange.ViewModel
   {
     public PersonEditViewModel()
     {
-      IConfiguration config = ConfigurationSource.Configuration;
-      UIEvents uiEvents = config.GetUIEvents();
-      uiEvents.PersonSelected += UiEventPersonSelected;
+      if (!DesignTimeHelper.IsInDesignMode)
+      {
+        IConfiguration config = ConfigurationSource.Configuration;
+        UIEvents uiEvents = config.GetUIEvents();
+        uiEvents.PersonSelected += UiEventPersonSelected;   
+      }
     }
 
     private void UiEventPersonSelected(Person person)
