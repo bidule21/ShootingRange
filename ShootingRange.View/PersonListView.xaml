@@ -21,7 +21,7 @@
             </TextBlock>
         </DataTemplate>
     </UserControl.Resources>
-    <StackPanel DataContext="{Binding ElementName=UserControl}" d:DataContext="{d:DesignData Source=/SampleData/PersonListViewSampleData.xaml}">
+    <DockPanel DataContext="{Binding ElementName=UserControl}" d:DataContext="{d:DesignData Source=/SampleData/PersonListViewSampleData.xaml}">
         <ListBox Name="ListBox" ItemsSource="{Binding PersonListItems}" SelectionChanged="OnSelectionChanged" ItemTemplate="{StaticResource PersonDataTemplate}"/>
-    </StackPanel>
+    </DockPanel>
 </UserControl>

@@ -36,55 +36,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityBestshot.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityClub.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityEvent.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityGroup.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityOrder.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityOrderitem.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityPerson.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityProgramitem.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityProgramsubtotal.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntitySession.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntitySessionsubtotal.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityShooter.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityShot.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShootingRangeEntities.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="ShootingRangeModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -97,18 +57,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
     <EntityDeploy Include="ShootingRangeModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ShootingRangeModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="packages.config" />
-    <None Include="ShootingRangeEntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ShootingRangeEntities.cs</LastGenOutput>
-    </None>
     <None Include="ShootingRangeModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ShootingRangeModel.edmx</DependentUpon>
@@ -120,6 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.Entities\ShootingRange.Entities.csproj">
+      <Project>{99ff73cd-039b-4fa9-9779-662fa156144b}</Project>
+      <Name>ShootingRange.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

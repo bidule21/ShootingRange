@@ -31,53 +31,62 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityBestshot.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityClub.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityEvent.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityGroup.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityOrder.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityOrderitem.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityPerson.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityProgramitem.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityProgramsubtotal.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntitySession.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntitySessionsubtotal.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityShooter.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityShot.cs">
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShootingRangeEntities.cs">
+    <Compile Include="ShootingRangeModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ShootingRangeEntities.tt</DependentUpon>
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_bestshot.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_club.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_event.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_group.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_groupdescription.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_order.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_orderitem.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_person.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_programitem.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_programsubtotal.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_session.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_sessionsubtotal.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shooter.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shooternumberconfig.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shot.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +94,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="ShootingRangeEntities.tt">
+    <None Include="ShootingRangeModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ShootingRangeEntities.cs</LastGenOutput>
+      <LastGenOutput>ShootingRangeModel.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

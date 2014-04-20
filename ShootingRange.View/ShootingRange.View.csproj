@@ -44,6 +44,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="GroupTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -52,8 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AutoGreyableImage.cs" />
     <Compile Include="Converter\PersonNameConverter.cs" />
+    <Compile Include="GroupTreeView.xaml.cs">
+      <DependentUpon>GroupTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -70,6 +76,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <DesignData Include="SampleData\PersonListViewSampleData.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
+    <DesignData Include="SampleData\GroupTreeViewSampleData.xaml">
       <SubType>Designer</SubType>
     </DesignData>
   </ItemGroup>
@@ -110,12 +119,22 @@
       <Project>{a869786d-0bad-4c1b-8b8f-88cf40481712}</Project>
       <Name>ShootingRange.ViewModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.ViewUtils\ShootingRange.ViewUtils.csproj">
+      <Project>{5FE8D3BB-8AB9-46B4-8E39-845112A15B30}</Project>
+      <Name>ShootingRange.ViewUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\add_person_32.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\edit_person_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\create_group_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ticket_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

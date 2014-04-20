@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ShootingRange.Persistence.Model.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ShootingRange.Persistence.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="t_bestshot">
           <Key>
             <PropertyRef Name="BestShotId" />
@@ -26,6 +26,7 @@
             <PropertyRef Name="EventId" />
           </Key>
           <Property Name="EventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShooterNumberConfigId" Type="int" Nullable="false" />
           <Property Name="EventName" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="StartDate" Type="date" />
           <Property Name="EndDate" Type="date" />
@@ -36,6 +37,14 @@
           </Key>
           <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="GroupName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="GroupDescriptionId" Type="int" />
+        </EntityType>
+        <EntityType Name="t_groupdescription">
+          <Key>
+            <PropertyRef Name="GroupDescriptionId" />
+          </Key>
+          <Property Name="GroupDescriptionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="t_order">
           <Key>
@@ -83,7 +92,7 @@
           </Key>
           <Property Name="ProgramSubtotalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProgramItemId" Type="int" Nullable="false" />
-          <Property Name="SubtotalNumber" Type="int" />
+          <Property Name="SubtotalOrdinal" Type="int" />
           <Property Name="NumberOfShots" Type="int" />
         </EntityType>
         <EntityType Name="t_session">
@@ -102,7 +111,7 @@
           <Property Name="SessionSubtotalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SessionId" Type="int" Nullable="false" />
           <Property Name="BestShotId" Type="int" />
-          <Property Name="SubtotalNumber" Type="int" Nullable="false" />
+          <Property Name="SubtotalOrdinal" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="t_shooter">
           <Key>
@@ -115,12 +124,21 @@
           <Property Name="GroupId" Type="int" />
           <Property Name="ShooterNumber" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="t_shooternumberconfig">
+          <Key>
+            <PropertyRef Name="ShooterNumberConfigId" />
+          </Key>
+          <Property Name="ShooterNumberConfigId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastGivenShooterNumber" Type="int" Nullable="false" />
+          <Property Name="ShooterNumberIncrement" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="t_shot">
           <Key>
             <PropertyRef Name="ShotId" />
           </Key>
           <Property Name="ShotId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SubtotalId" Type="int" Nullable="false" />
+          <Property Name="ShotOrdinal" Type="int" Nullable="false" />
           <Property Name="PrimaryScore" Type="decimal" Precision="5" Scale="2" Nullable="false" />
           <Property Name="SecondaryScore" Type="decimal" Precision="5" Scale="2" />
           <Property Name="ValueX" Type="decimal" Precision="10" Scale="0" />
@@ -135,6 +153,30 @@
             </Principal>
             <Dependent Role="t_bestshot">
               <PropertyRef Name="ShotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Event_ShooterNumberConfigId">
+          <End Role="t_shooternumberconfig" Type="Self.t_shooternumberconfig" Multiplicity="1" />
+          <End Role="t_event" Type="Self.t_event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooternumberconfig">
+              <PropertyRef Name="ShooterNumberConfigId" />
+            </Principal>
+            <Dependent Role="t_event">
+              <PropertyRef Name="ShooterNumberConfigId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Group_GroupDescriptionId">
+          <End Role="t_groupdescription" Type="Self.t_groupdescription" Multiplicity="0..1" />
+          <End Role="t_group" Type="Self.t_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_groupdescription">
+              <PropertyRef Name="GroupDescriptionId" />
+            </Principal>
+            <Dependent Role="t_group">
+              <PropertyRef Name="GroupDescriptionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -222,18 +264,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="t_Shooter_EventId">
-          <End Role="t_event" Type="Self.t_event" Multiplicity="1" />
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_event">
-              <PropertyRef Name="EventId" />
-            </Principal>
-            <Dependent Role="t_shooter">
-              <PropertyRef Name="EventId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="t_Shooter_GroupId">
           <End Role="t_group" Type="Self.t_group" Multiplicity="0..1" />
           <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
@@ -294,11 +324,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ShootingRangePersistenceModelStoreContainer">
+        <EntityContainer Name="ShootingRangePersistenceStoreContainer">
           <EntitySet Name="t_bestshot" EntityType="Self.t_bestshot" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_club" EntityType="Self.t_club" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_event" EntityType="Self.t_event" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_group" EntityType="Self.t_group" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_groupdescription" EntityType="Self.t_groupdescription" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_order" EntityType="Self.t_order" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_orderitem" EntityType="Self.t_orderitem" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_person" EntityType="Self.t_person" Schema="shootingrange" store:Type="Tables" />
@@ -307,10 +338,19 @@
           <EntitySet Name="t_session" EntityType="Self.t_session" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_sessionsubtotal" EntityType="Self.t_sessionsubtotal" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_shooter" EntityType="Self.t_shooter" Schema="shootingrange" store:Type="Tables" />
+          <EntitySet Name="t_shooternumberconfig" EntityType="Self.t_shooternumberconfig" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_shot" EntityType="Self.t_shot" Schema="shootingrange" store:Type="Tables" />
           <AssociationSet Name="t_Deepshot_ShotId" Association="Self.t_Deepshot_ShotId">
             <End Role="t_shot" EntitySet="t_shot" />
             <End Role="t_bestshot" EntitySet="t_bestshot" />
+          </AssociationSet>
+          <AssociationSet Name="t_Event_ShooterNumberConfigId" Association="Self.t_Event_ShooterNumberConfigId">
+            <End Role="t_shooternumberconfig" EntitySet="t_shooternumberconfig" />
+            <End Role="t_event" EntitySet="t_event" />
+          </AssociationSet>
+          <AssociationSet Name="t_Group_GroupDescriptionId" Association="Self.t_Group_GroupDescriptionId">
+            <End Role="t_groupdescription" EntitySet="t_groupdescription" />
+            <End Role="t_group" EntitySet="t_group" />
           </AssociationSet>
           <AssociationSet Name="t_Order_OrderItemId" Association="Self.t_Order_OrderItemId">
             <End Role="t_orderitem" EntitySet="t_orderitem" />
@@ -340,10 +380,6 @@
             <End Role="t_club" EntitySet="t_club" />
             <End Role="t_shooter" EntitySet="t_shooter" />
           </AssociationSet>
-          <AssociationSet Name="t_Shooter_EventId" Association="Self.t_Shooter_EventId">
-            <End Role="t_event" EntitySet="t_event" />
-            <End Role="t_shooter" EntitySet="t_shooter" />
-          </AssociationSet>
           <AssociationSet Name="t_Shooter_GroupId" Association="Self.t_Shooter_GroupId">
             <End Role="t_group" EntitySet="t_group" />
             <End Role="t_shooter" EntitySet="t_shooter" />
@@ -365,11 +401,10 @@
             <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ShootingRange.Persistence.Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ShootingRange.Persistence" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="t_bestshot">
           <Key>
             <PropertyRef Name="BestShotId" />
@@ -398,6 +433,8 @@
           <Property Name="StartDate" Type="DateTime" />
           <Property Name="EndDate" Type="DateTime" />
           <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_EventId" FromRole="t_event" ToRole="t_shooter" />
+          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_shooternumberconfig" Relationship="ShootingRange.Persistence.t_Event_ShooterNumberConfigId" FromRole="t_event" ToRole="t_shooternumberconfig" />
         </EntityType>
         <EntityType Name="t_group">
           <Key>
@@ -406,6 +443,8 @@
           <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GroupName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_GroupId" FromRole="t_group" ToRole="t_shooter" />
+          <Property Name="GroupDescriptionId" Type="Int32" />
+          <NavigationProperty Name="t_groupdescription" Relationship="ShootingRange.Persistence.t_Group_GroupDescriptionId" FromRole="t_group" ToRole="t_groupdescription" />
         </EntityType>
         <EntityType Name="t_order">
           <Key>
@@ -461,7 +500,7 @@
           </Key>
           <Property Name="ProgramSubtotalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProgramItemId" Type="Int32" Nullable="false" />
-          <Property Name="SubtotalNumber" Type="Int32" />
+          <Property Name="SubtotalOrdinal" Type="Int32" />
           <Property Name="NumberOfShots" Type="Int32" />
           <NavigationProperty Name="t_programitem" Relationship="Self.t_ProgramSubtotal_ProgramItemId" FromRole="t_programsubtotal" ToRole="t_programitem" />
         </EntityType>
@@ -484,7 +523,7 @@
           <Property Name="SessionSubtotalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="BestShotId" Type="Int32" />
-          <Property Name="SubtotalNumber" Type="Int32" Nullable="false" />
+          <Property Name="SubtotalOrdinal" Type="Int32" Nullable="false" />
           <NavigationProperty Name="t_bestshot" Relationship="Self.t_Subtotal_BestShotId" FromRole="t_sessionsubtotal" ToRole="t_bestshot" />
           <NavigationProperty Name="t_session" Relationship="Self.t_Subtotal_SessionId" FromRole="t_sessionsubtotal" ToRole="t_session" />
           <NavigationProperty Name="t_shot" Relationship="Self.t_Shot_SubtotalId" FromRole="t_sessionsubtotal" ToRole="t_shot" />
@@ -512,6 +551,7 @@
           </Key>
           <Property Name="ShotId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SubtotalId" Type="Int32" Nullable="false" />
+          <Property Name="ShotOrdinal" Type="Int32" Nullable="false" />
           <Property Name="PrimaryScore" Type="Decimal" Nullable="false" />
           <Property Name="SecondaryScore" Type="Decimal" />
           <Property Name="ValueX" Type="Decimal" />
@@ -757,15 +797,66 @@
             <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
             <End Role="t_shot" EntitySet="t_shot" />
           </AssociationSet>
+          <EntitySet Name="t_groupdescription" EntityType="ShootingRange.Persistence.t_groupdescription" />
+          <AssociationSet Name="t_Group_GroupDescriptionId" Association="ShootingRange.Persistence.t_Group_GroupDescriptionId">
+            <End Role="t_groupdescription" EntitySet="t_groupdescription" />
+            <End Role="t_group" EntitySet="t_group" />
+          </AssociationSet>
+          <EntitySet Name="t_shooternumberconfig" EntityType="ShootingRange.Persistence.t_shooternumberconfig" />
+          <AssociationSet Name="t_Event_ShooterNumberConfigId" Association="ShootingRange.Persistence.t_Event_ShooterNumberConfigId">
+            <End Role="t_shooternumberconfig" EntitySet="t_shooternumberconfig" />
+            <End Role="t_event" EntitySet="t_event" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="t_groupdescription">
+          <Key>
+            <PropertyRef Name="GroupDescriptionId" />
+          </Key>
+          <Property Name="GroupDescriptionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="t_group" Relationship="ShootingRange.Persistence.t_Group_GroupDescriptionId" FromRole="t_groupdescription" ToRole="t_group" />
+        </EntityType>
+        <Association Name="t_Group_GroupDescriptionId">
+          <End Type="ShootingRange.Persistence.t_groupdescription" Role="t_groupdescription" Multiplicity="0..1" />
+          <End Type="ShootingRange.Persistence.t_group" Role="t_group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_groupdescription">
+              <PropertyRef Name="GroupDescriptionId" />
+            </Principal>
+            <Dependent Role="t_group">
+              <PropertyRef Name="GroupDescriptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="t_shooternumberconfig">
+          <Key>
+            <PropertyRef Name="ShooterNumberConfigId" />
+          </Key>
+          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastGivenShooterNumber" Type="Int32" Nullable="false" />
+          <Property Name="ShooterNumberIncrement" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_event" Relationship="ShootingRange.Persistence.t_Event_ShooterNumberConfigId" FromRole="t_shooternumberconfig" ToRole="t_event" />
+        </EntityType>
+        <Association Name="t_Event_ShooterNumberConfigId">
+          <End Type="ShootingRange.Persistence.t_shooternumberconfig" Role="t_shooternumberconfig" Multiplicity="1" />
+          <End Type="ShootingRange.Persistence.t_event" Role="t_event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooternumberconfig">
+              <PropertyRef Name="ShooterNumberConfigId" />
+            </Principal>
+            <Dependent Role="t_event">
+              <PropertyRef Name="ShooterNumberConfigId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ShootingRangePersistenceModelStoreContainer" CdmEntityContainer="ShootingRangeEntities">
+        <EntityContainerMapping StorageEntityContainer="ShootingRangePersistenceStoreContainer" CdmEntityContainer="ShootingRangeEntities">
           <EntitySetMapping Name="t_bestshot">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_bestshot">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_bestshot">
               <MappingFragment StoreEntitySet="t_bestshot">
                 <ScalarProperty Name="BestShotId" ColumnName="BestShotId" />
                 <ScalarProperty Name="ShotId" ColumnName="ShotId" />
@@ -773,7 +864,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_club">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_club">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_club">
               <MappingFragment StoreEntitySet="t_club">
                 <ScalarProperty Name="ClubId" ColumnName="ClubId" />
                 <ScalarProperty Name="ClubName" ColumnName="ClubName" />
@@ -783,8 +874,9 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_event">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_event">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_event">
               <MappingFragment StoreEntitySet="t_event">
+                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="EventName" ColumnName="EventName" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
@@ -793,15 +885,16 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_group">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_group">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_group">
               <MappingFragment StoreEntitySet="t_group">
+                <ScalarProperty Name="GroupDescriptionId" ColumnName="GroupDescriptionId" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_order">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_order">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_order">
               <MappingFragment StoreEntitySet="t_order">
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
@@ -810,7 +903,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_orderitem">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_orderitem">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_orderitem">
               <MappingFragment StoreEntitySet="t_orderitem">
                 <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
                 <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
@@ -820,7 +913,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_person">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_person">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_person">
               <MappingFragment StoreEntitySet="t_person">
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -836,7 +929,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_programitem">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_programitem">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_programitem">
               <MappingFragment StoreEntitySet="t_programitem">
                 <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
@@ -845,17 +938,17 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_programsubtotal">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_programsubtotal">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_programsubtotal">
               <MappingFragment StoreEntitySet="t_programsubtotal">
                 <ScalarProperty Name="ProgramSubtotalId" ColumnName="ProgramSubtotalId" />
                 <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
-                <ScalarProperty Name="SubtotalNumber" ColumnName="SubtotalNumber" />
+                <ScalarProperty Name="SubtotalOrdinal" ColumnName="SubtotalOrdinal" />
                 <ScalarProperty Name="NumberOfShots" ColumnName="NumberOfShots" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_session">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_session">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_session">
               <MappingFragment StoreEntitySet="t_session">
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
@@ -865,17 +958,17 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_sessionsubtotal">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_sessionsubtotal">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_sessionsubtotal">
               <MappingFragment StoreEntitySet="t_sessionsubtotal">
                 <ScalarProperty Name="SessionSubtotalId" ColumnName="SessionSubtotalId" />
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
                 <ScalarProperty Name="BestShotId" ColumnName="BestShotId" />
-                <ScalarProperty Name="SubtotalNumber" ColumnName="SubtotalNumber" />
+                <ScalarProperty Name="SubtotalOrdinal" ColumnName="SubtotalOrdinal" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_shooter">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_shooter">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shooter">
               <MappingFragment StoreEntitySet="t_shooter">
                 <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
@@ -887,14 +980,32 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="t_shot">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.Model.t_shot">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shot">
               <MappingFragment StoreEntitySet="t_shot">
                 <ScalarProperty Name="ShotId" ColumnName="ShotId" />
                 <ScalarProperty Name="SubtotalId" ColumnName="SubtotalId" />
+                <ScalarProperty Name="ShotOrdinal" ColumnName="ShotOrdinal" />
                 <ScalarProperty Name="PrimaryScore" ColumnName="PrimaryScore" />
                 <ScalarProperty Name="SecondaryScore" ColumnName="SecondaryScore" />
                 <ScalarProperty Name="ValueX" ColumnName="ValueX" />
                 <ScalarProperty Name="ValueY" ColumnName="ValueY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_groupdescription">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_groupdescription">
+              <MappingFragment StoreEntitySet="t_groupdescription">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="GroupDescriptionId" ColumnName="GroupDescriptionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_shooternumberconfig">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shooternumberconfig">
+              <MappingFragment StoreEntitySet="t_shooternumberconfig">
+                <ScalarProperty Name="ShooterNumberIncrement" ColumnName="ShooterNumberIncrement" />
+                <ScalarProperty Name="LastGivenShooterNumber" ColumnName="LastGivenShooterNumber" />
+                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

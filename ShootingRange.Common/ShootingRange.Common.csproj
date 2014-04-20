@@ -35,7 +35,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessObjects\Session.cs" />
-    <Compile Include="BusinessObjects\Shooter.cs" />
     <Compile Include="BusinessObjects\Shot.cs" />
     <Compile Include="IShootingRange.cs" />
     <Compile Include="IShootingRangeRepository.cs" />

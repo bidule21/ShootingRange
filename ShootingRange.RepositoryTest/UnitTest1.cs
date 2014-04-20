@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Persistence;
 using ShootingRange.Repository;
+using ShootingRange.Repository.Repositories;
 
 namespace ShootingRange.RepositoryTest
 {

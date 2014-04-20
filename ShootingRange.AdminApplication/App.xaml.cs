@@ -3,6 +3,8 @@ using Microsoft.Practices.Unity;
 using ShootingRange.Configuration;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository;
+using ShootingRange.Repository.FakeRepositories;
+using ShootingRange.Repository.Repositories;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 using ShootingRange.View;

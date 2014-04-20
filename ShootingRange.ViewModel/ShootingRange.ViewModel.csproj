@@ -40,11 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DesignTimeHelper.cs" />
+    <Compile Include="GroupListItem.cs" />
+    <Compile Include="GroupTreeItem.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="PersonEditViewModel.cs" />
     <Compile Include="PersonListItem.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShooterListItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">

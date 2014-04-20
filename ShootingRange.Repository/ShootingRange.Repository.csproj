@@ -40,12 +40,27 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakePersonDataStore.cs" />
-    <Compile Include="IDataStore.cs" />
-    <Compile Include="IPersonDataStore.cs" />
+    <Compile Include="FakeRepositories\FakeGroupDataStore.cs" />
+    <Compile Include="FakeRepositories\FakeGroupDetailsView.cs" />
+    <Compile Include="FakeRepositories\FakeGroupMemberDetailsView.cs" />
+    <Compile Include="FakeRepositories\FakePersonDataStore.cs" />
+    <Compile Include="FakeRepositories\FakeShooterDataStore.cs" />
+    <Compile Include="Mapper\GroupMapper.cs" />
     <Compile Include="Mapper\PersonMapper.cs" />
-    <Compile Include="PersonDataStore.cs" />
+    <Compile Include="Mapper\ShooterMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\GroupDataStore.cs" />
+    <Compile Include="Repositories\GroupDetailsView.cs" />
+    <Compile Include="Repositories\GroupMemberDetailsView.cs" />
+    <Compile Include="Repositories\IDataStore.cs" />
+    <Compile Include="Repositories\IDataView.cs" />
+    <Compile Include="Repositories\IGroupDataStore.cs" />
+    <Compile Include="Repositories\IGroupDetailsView.cs" />
+    <Compile Include="Repositories\IGroupMemberDetailsView.cs" />
+    <Compile Include="Repositories\IPersonDataStore.cs" />
+    <Compile Include="Repositories\IShooterDataStore.cs" />
+    <Compile Include="Repositories\PersonDataStore.cs" />
+    <Compile Include="Repositories\ShooterDataStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">

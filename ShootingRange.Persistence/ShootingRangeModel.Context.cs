@@ -7,13 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using ShootingRange.Entities;
+
 namespace ShootingRange.Persistence
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ShootingRangeEntities :  DbContext
+    public partial class ShootingRangeEntities : DbContext
     {
         public ShootingRangeEntities()
             : base("name=ShootingRangeEntities")
@@ -38,5 +40,7 @@ namespace ShootingRange.Persistence
         public DbSet<t_sessionsubtotal> t_sessionsubtotal { get; set; }
         public DbSet<t_shooter> t_shooter { get; set; }
         public DbSet<t_shot> t_shot { get; set; }
+        public DbSet<t_groupdescription> t_groupdescription { get; set; }
+        public DbSet<t_shooternumberconfig> t_shooternumberconfig { get; set; }
     }
 }

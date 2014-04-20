@@ -2,6 +2,8 @@
 using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository;
+using ShootingRange.Repository.FakeRepositories;
+using ShootingRange.Repository.Repositories;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 
@@ -35,14 +37,39 @@ namespace ShootingRange.Configuration
       return _uiEvents;
     }
 
-    public IPersonDataStore GetPersonRepository()
+    public IPersonDataStore GetPersonDataStore()
     {
       return new FakePersonDataStore();
+    }
+
+    public IShooterDataStore GetShooterDataStore()
+    {
+      return new FakeShooterDataStore();
+    }
+
+    public IGroupDataStore GetGroupDataStore()
+    {
+      return new FakeGroupDataStore();
+    }
+
+    public IGroupMemberDetailsView GetGroupMemberDetailsView()
+    {
+      return new FakeGroupMemberDetailsView();
+    }
+
+    public IGroupDetailsView GetGroupDetailsView()
+    {
+      return new FakeGroupDetailsView();
     }
 
     public IWindowService GetWindowService()
     {
       return _windowService;
+    }
+
+    public IShooterNumberService GetShooterNumberService()
+    {
+      return new FakeShooterNumberService();
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using ShootingRange.Common;
 using ShootingRange.Common.Modules;
 using ShootingRange.Repository;
+using ShootingRange.Repository.Repositories;
 using ShootingRange.Service.Interface;
 
 namespace ShootingRange.ConfigurationProvider
@@ -10,7 +11,12 @@ namespace ShootingRange.ConfigurationProvider
     IShootingRange GetShootingRange();
     ShootingRangeEvents GetEvents();
     UIEvents GetUIEvents();
-    IPersonDataStore GetPersonRepository();
+    IPersonDataStore GetPersonDataStore();
+    IShooterDataStore GetShooterDataStore();
+    IGroupDataStore GetGroupDataStore();
+    IGroupMemberDetailsView GetGroupMemberDetailsView();
+    IGroupDetailsView GetGroupDetailsView();
     IWindowService GetWindowService();
+    IShooterNumberService GetShooterNumberService();
   }
 }

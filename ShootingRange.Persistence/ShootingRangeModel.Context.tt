@@ -27,6 +27,8 @@ if (container == null)
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using ShootingRange.Entities;
+
 <#
 
 var codeNamespace = code.VsNamespaceSuggestion();
