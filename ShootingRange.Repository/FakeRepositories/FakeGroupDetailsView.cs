@@ -10,24 +10,24 @@ namespace ShootingRange.Repository.FakeRepositories
 {
   public class FakeGroupDetailsView : IGroupDetailsView
   {
-    private HashSet<GroupDetails> _set;
+    private HashSet<ParticipationDetails> _set;
 
     public FakeGroupDetailsView()
     {
-      _set = new HashSet<GroupDetails>();
+      _set = new HashSet<ParticipationDetails>();
     }
 
-    public IEnumerable<GroupDetails> GetAll()
+    public IEnumerable<ParticipationDetails> GetAll()
     {
       return _set;
     }
 
-    public IEnumerable<GroupDetails> FindByShooterId(int shooterId)
+    public IEnumerable<ParticipationDetails> FindByShooterId(int shooterId)
     {
       throw new NotImplementedException();
     }
 
-    public IEnumerable<GroupDetails> FindByPersonId(int personId)
+    public IEnumerable<ParticipationDetails> FindByPersonId(int personId)
     {
       throw new NotImplementedException();
     }

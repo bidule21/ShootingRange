@@ -1,4 +1,5 @@
-﻿using ShootingRange.BusinessObjects;
+﻿using System;
+using ShootingRange.UiBusinessObjects;
 
 namespace ShootingRange.Common
 {
@@ -8,10 +9,19 @@ namespace ShootingRange.Common
     {
       PersonSelected = delegate { };
       RequireSelectedPerson = delegate { };
+      PersonDataStoreChanged = delegate { };
+      ShooterDataStoreChanged = delegate { };
     }
-    public UIEventsDelegate<Person> PersonSelected { get; set; }
+    public UIEventsDelegate<UiPerson> PersonSelected { get; set; }
 
     public UIEventsDelegate RequireSelectedPerson { get; set; }
+
+    public UIEventsDelegate PersonDataStoreChanged { get; set; }
+
+    public UIEventsDelegate ShooterDataStoreChanged { get; set; }
+    public UIEventsDelegate<UiShooter> ShooterSelected { get; set; }
+
+    public UIEventsDelegate RequireSelectedShooter { get; set; }
   }
 
 

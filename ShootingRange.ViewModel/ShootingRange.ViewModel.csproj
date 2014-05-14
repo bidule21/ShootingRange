@@ -41,13 +41,18 @@
   <ItemGroup>
     <Compile Include="DesignTimeHelper.cs" />
     <Compile Include="GroupListItem.cs" />
-    <Compile Include="GroupTreeItem.cs" />
+    <Compile Include="ParticipationListItem.cs" />
+    <Compile Include="ParticipationTreeItem.cs" />
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="PersonCreateViewModel.cs" />
     <Compile Include="PersonEditViewModel.cs" />
-    <Compile Include="PersonListItem.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShooterListItem.cs" />
+    <Compile Include="ShooterCreateViewModel.cs" />
+    <Compile Include="ShooterEditViewModel.cs" />
+    <Compile Include="ShooterParticipationListItem.cs" />
+    <Compile Include="UiBusinessObjectMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
@@ -69,6 +74,10 @@
     <ProjectReference Include="..\ShootingRange.Service.Interface\ShootingRange.Service.Interface.csproj">
       <Project>{7B2D7C87-4FA3-48DD-AB24-E90365D41F7F}</Project>
       <Name>ShootingRange.Service.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.UiBusinessObjects\ShootingRange.UiBusinessObjects.csproj">
+      <Project>{F55192F5-0745-4ADA-ADD2-90EDC4E947B0}</Project>
+      <Name>ShootingRange.UiBusinessObjects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

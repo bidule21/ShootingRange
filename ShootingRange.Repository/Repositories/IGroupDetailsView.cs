@@ -7,9 +7,9 @@ using ShootingRange.BusinessObjects;
 
 namespace ShootingRange.Repository.Repositories
 {
-  public interface IGroupDetailsView : IDataView<GroupDetails>
+  public interface IGroupDetailsView : IDataView<ParticipationDetails>
   {
-    IEnumerable<GroupDetails> FindByShooterId(int shooterId);
-    IEnumerable<GroupDetails> FindByPersonId(int personId);
+    IEnumerable<ParticipationDetails> FindByShooterId(int shooterId);
+    IEnumerable<ParticipationDetails> FindByPersonId(int personId);
   }
 }

@@ -31,10 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,16 +49,16 @@
     <Compile Include="t_event.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="t_group.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_groupdescription.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="t_order.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_orderitem.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_participation.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_participationdescription.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_person.cs">
@@ -83,6 +80,9 @@
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_shooternumberconfig.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shooterparticipation.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_shot.cs">

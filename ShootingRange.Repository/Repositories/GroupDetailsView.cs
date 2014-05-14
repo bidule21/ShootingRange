@@ -13,64 +13,67 @@ namespace ShootingRange.Repository.Repositories
 {
   public class GroupDetailsView : IGroupDetailsView
   {
-    private DbSet<t_group> _groups;
+    private DbSet<t_participation> _participations;
+    private DbSet<t_shooterparticipation> _shooterParticipations;
     private DbSet<t_person> _people;
     private DbSet<t_shooter> _shooters;
-    private DbSet<t_groupdescription> _groupDescriptions;
+    private DbSet<t_participationdescription> _participationDescriptions;
 
     public GroupDetailsView(DbContext context)
     {
-      _groups = context.Set<t_group>();
+      _participations = context.Set<t_participation>();
       _shooters = context.Set<t_shooter>();
       _people = context.Set<t_person>();
-      _groupDescriptions = context.Set<t_groupdescription>();
+      _participationDescriptions = context.Set<t_participationdescription>();
+      _shooterParticipations = context.Set<t_shooterparticipation>();
     }
-    public IEnumerable<GroupDetails> GetAll()
+    public IEnumerable<ParticipationDetails> GetAll()
     {
-      IEnumerable<GroupDetails> view = from gd in _groupDescriptions
-        join g in _groups on gd.GroupDescriptionId equals g.GroupDescriptionId into gds
-        select new GroupDetails
+      IEnumerable<ParticipationDetails> view = from pd in _participationDescriptions
+        join g in _participations on pd.ParticipationDescriptionId equals g.ParticipationDescriptionId into gds
+        select new ParticipationDetails
         {
-          GroupDescription = gd.Description,
-          GroupNames = gds.Select(_ => _.GroupName)
+          ParticipationDescription = pd.Description,
+          ParticipationNames = gds.OrderBy(_ => _.ParticipationName).Select(_ => _.ParticipationName)
         };
 
       return view;
     }
 
-    public IEnumerable<GroupDetails> FindByShooterId(int shooterId)
+    public IEnumerable<ParticipationDetails> FindByShooterId(int shooterId)
     {
-      IEnumerable<GroupDetails> view =
-        from gd in _groupDescriptions
+      IEnumerable<ParticipationDetails> view =
+        from gd in _participationDescriptions
         join g in
-          (from g in _groups 
-           join s in _shooters on g.GroupId equals s.GroupId 
-           where s.ShooterId == shooterId
-           select g) on gd.GroupDescriptionId equals
-          g.GroupDescriptionId into gds
-        select new GroupDetails
+          (from g in _participations 
+           join sp in _shooterParticipations on g.ParticipationId equals sp.ParticipationId 
+           where sp.ShooterId == shooterId
+           select g) on gd.ParticipationDescriptionId equals
+          g.ParticipationDescriptionId into gds
+        select new ParticipationDetails
         {
-          GroupDescription = gd.Description,
-          GroupNames = gds.Select(_ => _.GroupName)
+          ParticipationDescription = gd.Description,
+          ParticipationNames = gds.OrderBy(_ => _.ParticipationName).Select(_ => _.ParticipationName)
         };
 
       return view;
     }
 
-    public IEnumerable<GroupDetails> FindByPersonId(int personId)
+    public IEnumerable<ParticipationDetails> FindByPersonId(int personId)
     {
-      IEnumerable<GroupDetails> view =
-        from gd in _groupDescriptions
+      IEnumerable<ParticipationDetails> view =
+        from gd in _participationDescriptions
         join g in
-          (from g in _groups
-           join s in _shooters on g.GroupId equals s.GroupId 
-           where s.PersonId == personId
-           select g) on gd.GroupDescriptionId equals
-          g.GroupDescriptionId into gds
-        select new GroupDetails
+          (from g in _participations
+           join s in _shooterParticipations on g.ParticipationId equals s.ParticipationId 
+           join p in _shooters on s.ShooterId equals p.ShooterId
+           where p.PersonId == personId
+           select g) on gd.ParticipationDescriptionId equals
+          g.ParticipationDescriptionId into gds
+        select new ParticipationDetails
         {
-          GroupDescription = gd.Description,
-          GroupNames = gds.Select(_ => _.GroupName)
+          ParticipationDescription = gd.Description,
+          ParticipationNames = gds.OrderBy(_ => _.ParticipationName).Select(_ => _.ParticipationName)
         };
 
       return view;

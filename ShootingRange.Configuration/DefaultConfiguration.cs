@@ -17,10 +17,14 @@ namespace ShootingRange.Configuration
     private UIEvents _uiEvents;
     private IPersonDataStore _personRepository;
     private IShooterDataStore _shooterRepository;
-    private IGroupDataStore _groupDataStore;
+    private IParticipationDataStore _participationDataStore;
+    private IShooterNumberConfigDataStore _shooterNumberConfigDataStore;
     private IWindowService _windowService;
     private GroupMemberDetailsView _groupMemberDetailsView;
     private GroupDetailsView _groupDetailsView;
+    private ShooterNumberService _shooterNumberService;
+    private ShooterParticipationDataStore _shooterParticipationDataStore;
+    private IShooterParticipationView _shooterParticipationView;
 
     public DefaultConfiguration()
     {
@@ -31,10 +35,14 @@ namespace ShootingRange.Configuration
       ShootingRangeEntities entites = new ShootingRangeEntities();
       _personRepository = new PersonDataStore(entites);
       _shooterRepository = new ShooterDataStore(entites);
-      _groupDataStore = new GroupDataStore(entites);
+      _participationDataStore = new ParticipationDataStore(entites);
+      _shooterNumberConfigDataStore = new ShooterNumberConfigDataStore(entites);
+      _shooterParticipationDataStore = new ShooterParticipationDataStore(entites);
       _groupMemberDetailsView = new GroupMemberDetailsView(entites);
       _groupDetailsView = new GroupDetailsView(entites);
+      _shooterParticipationView = new ShooterParticipationView(entites);
       _windowService = new WindowService();
+      _shooterNumberService = new ShooterNumberService(_shooterNumberConfigDataStore);
     }
 
     public UIEvents GetUIEvents()
@@ -52,9 +60,9 @@ namespace ShootingRange.Configuration
       return _shooterRepository;
     }
 
-    public IGroupDataStore GetGroupDataStore()
+    public IParticipationDataStore GetParticipationDataStore()
     {
-      return _groupDataStore;
+      return _participationDataStore;
     }
 
     public IGroupMemberDetailsView GetGroupMemberDetailsView()
@@ -74,7 +82,17 @@ namespace ShootingRange.Configuration
 
     public IShooterNumberService GetShooterNumberService()
     {
-      return new FakeShooterNumberService();
+      return _shooterNumberService;
+    }
+
+    public IShooterParticipationDataStore GetShooterParticipationDataStore()
+    {
+      return _shooterParticipationDataStore;
+    }
+
+    public IShooterParticipationView GetShooterParticipationView()
+    {
+      return _shooterParticipationView;
     }
 
     public IShootingRange GetShootingRange()

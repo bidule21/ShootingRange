@@ -13,10 +13,12 @@ namespace ShootingRange.ConfigurationProvider
     UIEvents GetUIEvents();
     IPersonDataStore GetPersonDataStore();
     IShooterDataStore GetShooterDataStore();
-    IGroupDataStore GetGroupDataStore();
+    IParticipationDataStore GetParticipationDataStore();
     IGroupMemberDetailsView GetGroupMemberDetailsView();
     IGroupDetailsView GetGroupDetailsView();
     IWindowService GetWindowService();
     IShooterNumberService GetShooterNumberService();
+    IShooterParticipationDataStore GetShooterParticipationDataStore();
+    IShooterParticipationView GetShooterParticipationView();
   }
 }

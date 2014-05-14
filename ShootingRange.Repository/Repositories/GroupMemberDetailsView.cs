@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using Microsoft.Win32.SafeHandles;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Entities;
 
@@ -9,33 +10,36 @@ namespace ShootingRange.Repository.Repositories
 {
   public class GroupMemberDetailsView : IGroupMemberDetailsView
   {
-    private DbSet<t_group> _groups;
+    private DbSet<t_participation> _participations;
     private DbSet<t_shooter> _shooters;
-    private DbSet<t_groupdescription> _groupDescriptions;
+    private DbSet<t_participationdescription> _participationDescriptions;
     private DbSet<t_person> _people;
+    private DbSet<t_shooterparticipation> _shooterParticipations;
 
     public GroupMemberDetailsView(DbContext context)
     {
-      _groups = context.Set<t_group>();
+      _participations = context.Set<t_participation>();
       _shooters = context.Set<t_shooter>();
       _people = context.Set<t_person>();
-      _groupDescriptions = context.Set<t_groupdescription>();
+      _participationDescriptions = context.Set<t_participationdescription>();
+      _shooterParticipations = context.Set<t_shooterparticipation>();
     }
 
     public IEnumerable<GroupMemberDetails> GetAll()
     {
       IEnumerable<GroupMemberDetails> view = 
-        from g in _groups
-        join s in _shooters on g.GroupId equals s.GroupId
+        from pa in _participations
+        join sp in _shooterParticipations on pa.ParticipationId equals sp.ParticipationId
+        join s in _shooters on sp.ShooterId equals s.ShooterId
         join p in _people on s.PersonId equals p.PersonId
-        join gd in _groupDescriptions on g.GroupDescriptionId equals gd.GroupDescriptionId into gj
+        join gd in _participationDescriptions on pa.ParticipationDescriptionId equals gd.ParticipationDescriptionId into gj
         from sgj in gj.DefaultIfEmpty()
         select new GroupMemberDetails
         {
           PersonId = p.PersonId,
-          GroupId = g.GroupId,
+          GroupId = pa.ParticipationId,
           ShooterId = s.ShooterId,
-          GroupName = g.GroupName,
+          GroupName = pa.ParticipationName,
           GroupDescription = (sgj == null ? string.Empty : sgj.Description)
         };
 

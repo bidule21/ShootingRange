@@ -47,9 +47,9 @@ namespace ShootingRange.Configuration
       return new FakeShooterDataStore();
     }
 
-    public IGroupDataStore GetGroupDataStore()
+    public IParticipationDataStore GetParticipationDataStore()
     {
-      return new FakeGroupDataStore();
+      return new FakeParticipationDataStore();
     }
 
     public IGroupMemberDetailsView GetGroupMemberDetailsView()
@@ -70,6 +70,16 @@ namespace ShootingRange.Configuration
     public IShooterNumberService GetShooterNumberService()
     {
       return new FakeShooterNumberService();
+    }
+
+    public IShooterParticipationDataStore GetShooterParticipationDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public IShooterParticipationView GetShooterParticipationView()
+    {
+      throw new System.NotImplementedException();
     }
   }
 }

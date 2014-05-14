@@ -53,6 +53,10 @@
       <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.UiBusinessObjects\ShootingRange.UiBusinessObjects.csproj">
+      <Project>{F55192F5-0745-4ADA-ADD2-90EDC4E947B0}</Project>
+      <Name>ShootingRange.UiBusinessObjects</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -30,7 +30,6 @@ namespace ShootingRange.Persistence
         public DbSet<t_bestshot> t_bestshot { get; set; }
         public DbSet<t_club> t_club { get; set; }
         public DbSet<t_event> t_event { get; set; }
-        public DbSet<t_group> t_group { get; set; }
         public DbSet<t_order> t_order { get; set; }
         public DbSet<t_orderitem> t_orderitem { get; set; }
         public DbSet<t_person> t_person { get; set; }
@@ -40,7 +39,9 @@ namespace ShootingRange.Persistence
         public DbSet<t_sessionsubtotal> t_sessionsubtotal { get; set; }
         public DbSet<t_shooter> t_shooter { get; set; }
         public DbSet<t_shot> t_shot { get; set; }
-        public DbSet<t_groupdescription> t_groupdescription { get; set; }
         public DbSet<t_shooternumberconfig> t_shooternumberconfig { get; set; }
+        public DbSet<t_participation> t_participation { get; set; }
+        public DbSet<t_participationdescription> t_participationdescription { get; set; }
+        public DbSet<t_shooterparticipation> t_shooterparticipation { get; set; }
     }
 }

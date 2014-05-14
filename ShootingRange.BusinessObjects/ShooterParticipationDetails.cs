@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ShootingRange.BusinessObjects
 {
-  public class Group
+  public class ShooterParticipationDetails
   {
-    public int GroupId { get; set; }
-    public string GroupName { get; set; }
-    public int? GroupDescriptionId { get; set; }
+    public int ShooterParticipationId { get; set; }
+    public string ParticipationName { get; set; }
   }
 }

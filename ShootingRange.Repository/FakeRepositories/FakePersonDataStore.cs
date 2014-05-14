@@ -37,6 +37,11 @@ namespace ShootingRange.Repository.FakeRepositories
       return _repository.Find(_ => _.PersonId == id).Single();
     }
 
+    public void Revert()
+    {
+      throw new System.NotImplementedException();
+    }
+
     public void Create(Person person)
     {
       _repository.Insert(person);

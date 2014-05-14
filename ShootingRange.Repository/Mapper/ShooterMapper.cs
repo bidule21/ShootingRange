@@ -14,7 +14,6 @@ namespace ShootingRange.Repository.Mapper
     {
       entity.ShooterNumber = shooter.ShooterNumber;
       entity.PersonId = shooter.PersonId;
-      entity.GroupId = shooter.GroupId;
       return entity;
     }
   }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ShootingRange.ViewModel
 {
-  public class GroupTreeItem
+  public class ParticipationTreeItem
   {
-    public string GroupDescription { get; set; }
-    public IEnumerable<string> GroupNames { get; set; }
+    public string ParticipationDescription { get; set; }
+    public IEnumerable<string> ParticipationNames { get; set; }
   }
 }

@@ -1,183 +1,161 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using DotNetToolbox.RelayCommand;
 using ShootingRange.BusinessObjects;
-using ShootingRange.BusinessObjects.Properties;
 using ShootingRange.Common;
 using ShootingRange.ConfigurationProvider;
+using ShootingRange.Repository.Repositories;
+using ShootingRange.Service.Interface;
+using ShootingRange.UiBusinessObjects;
 
 namespace ShootingRange.ViewModel
 {
-  public enum Gender
-  {
-    None = 0,
-    Male,
-    Female
-  }
-
   public class PersonEditViewModel : INotifyPropertyChanged
   {
+    private UIEvents _uiEvents;
+    private IPersonDataStore _personDataStore;
+    private IShooterDataStore _shooterDataStore;
+    private IShooterNumberService _shooterNumberService;
+    private IWindowService _windowService;
+
     public PersonEditViewModel()
     {
+      EditPersonCommand = new RelayCommand<UiPerson>(ExecuteEditPersonCommand, CanExecuteEditPersonCommand);
+      CancelCommand = new RelayCommand<object>(ExecuteCloseCommand);
+      //CreateShooterCommand = new RelayCommand<UiPerson>(ExecuteCreateShooterCommand, CanExecuteCreateShooterCommand);
+
       if (!DesignTimeHelper.IsInDesignMode)
       {
         IConfiguration config = ConfigurationSource.Configuration;
-        UIEvents uiEvents = config.GetUIEvents();
-        uiEvents.PersonSelected += UiEventPersonSelected;   
+        _personDataStore = config.GetPersonDataStore();
+        _shooterDataStore = config.GetShooterDataStore();
+        _uiEvents = config.GetUIEvents();
+        _windowService = config.GetWindowService();
+        _shooterNumberService = config.GetShooterNumberService();
+        _uiEvents.PersonSelected += person => { UiPerson = person ?? new UiPerson(); };
+        _uiEvents.RequireSelectedPerson();
       }
     }
 
-    private void UiEventPersonSelected(Person person)
+    //private void ExecuteCreateShooterCommand(UiPerson uiPerson)
+    //{
+    //  if (CanExecuteCreateShooterCommand(uiPerson))
+    //  {
+    //    int shooterNumber = _shooterNumberService.GetShooterNumber();
+    //    Shooter shooter = new Shooter
+    //    {
+    //      PersonId = uiPerson.PersonId,
+    //      ShooterNumber = shooterNumber,
+    //      // TODO create with proper group information.
+    //    };
+
+    //    _shooterDataStore.Create(shooter);
+    //    _windowService.ShowMessage("Shooter created.", string.Format("Shooter successfully created with ID {0}", shooter.ShooterId));
+    //  }
+    //  else
+    //  {
+    //    _windowService.ShowErrorMessage("Error", "Unable to create shooter.");
+    //  }
+
+    //}
+
+    //private bool CanExecuteCreateShooterCommand(UiPerson uiPerson)
+    //{
+    //  return uiPerson != null && uiPerson.PersonId != default(int);
+    //}
+
+    private void ExecuteCloseCommand(object obj)
     {
-      FirstName = person.FirstName;
-      LastName = person.LastName;
-      Address = person.Address;
-      ZipCode = person.ZipCode;
-      City = person.City;
-      Email = person.Email;
-      Phone = person.Phone;
-      DateOfBirthTime = person.DateOfBirth;
+      _windowService.CloseEditPersonWindow();
     }
 
-    private string _firstName;
-
-    public string FirstName
+    private void ExecuteEditPersonCommand(UiPerson uiPerson)
     {
-      get { return _firstName; }
+      _personDataStore.Update(uiPerson.ToPerson());
+      _uiEvents.PersonDataStoreChanged();
+      _windowService.CloseEditPersonWindow();
+    }
+
+    private bool CanExecuteEditPersonCommand(UiPerson uiPerson)
+    {
+      return (uiPerson != null && !string.IsNullOrWhiteSpace(uiPerson.FirstName) && !string.IsNullOrWhiteSpace(uiPerson.LastName));
+    }
+
+    public ICommand EditPersonCommand { get; private set; }
+    //public ICommand CreateShooterCommand { get; private set; }
+    public ICommand CancelCommand { get; private set; }
+
+    #region Properties
+
+    private UiPerson _uiPerson;
+
+    public UiPerson UiPerson
+    {
+      get { return _uiPerson; }
       set
       {
-        if (value != _firstName)
+        if (value != _uiPerson)
         {
-          _firstName = value;
-          OnPropertyChanged("FirstName");
+          _uiPerson = value;
+          OnPropertyChanged("UiPerson");
         }
       }
     }
 
-    
-    private string _lastName;
-    public string LastName
+
+    private ObservableCollection<ParticipationTreeItem> _shootersGroups;
+    public ObservableCollection<ParticipationTreeItem> ShootersGroups
     {
-      get { return _lastName; }
+      get { return _shootersGroups; }
       set
       {
-        if (value != _lastName)
+        if (value != _shootersGroups)
         {
-          _lastName = value;
-          OnPropertyChanged("LastName");
+          _shootersGroups = value;
+          OnPropertyChanged("ShootersGroups");
         }
       }
     }
 
-    
-    private string _address;
-    public string Address
+    private ObservableCollection<ParticipationTreeItem> _availableGroups;
+
+    public ObservableCollection<ParticipationTreeItem> AvailableGroups
     {
-      get { return _address; }
+      get { return _availableGroups; }
       set
       {
-        if (value != _address)
+        if (value != _availableGroups)
         {
-          _address = value;
-          OnPropertyChanged("Address");
+          _availableGroups = value;
+          OnPropertyChanged("AvailableAvailableGroups");
         }
       }
     }
 
-    
-    private string _zipCode;
-    public string ZipCode
+
+    private ObservableCollection<UiShooter> _shooters;
+
+    public ObservableCollection<UiShooter> Shooters
     {
-      get { return _zipCode; }
+      get { return _shooters; }
       set
       {
-        if (value != _zipCode)
+        if (value != _shooters)
         {
-          _zipCode = value;
-          OnPropertyChanged("ZipCode");
+          _shooters = value;
+          OnPropertyChanged("Shooters");
         }
       }
     }
 
-    
-    private string _city;
-    public string City
-    {
-      get { return _city; }
-      set
-      {
-        if (value != _city)
-        {
-          _city = value;
-          OnPropertyChanged("City");
-        }
-      }
-    }
-
-    
-    private string _email;
-    public string Email
-    {
-      get { return _email; }
-      set
-      {
-        if (value != _email)
-        {
-          _email = value;
-          OnPropertyChanged("Email");
-        }
-      }
-    }
-
-    
-    private string _phone;
-    public string Phone
-    {
-      get { return _phone; }
-      set
-      {
-        if (value != _phone)
-        {
-          _phone = value;
-          OnPropertyChanged("Phone");
-        }
-      }
-    }
-
-    
-    private DateTime _dateOfBirth;
-    public DateTime DateOfBirthTime
-    {
-      get { return _dateOfBirth; }
-      set
-      {
-        if (value != _dateOfBirth)
-        {
-          _dateOfBirth = value;
-          OnPropertyChanged("DateOfBirthTime");
-        }
-      }
-    }
-
-    
-    private Gender _gender;
-
-    public Gender Gender
-    {
-      get { return _gender; }
-      set
-      {
-        if (value != _gender)
-        {
-          _gender = value;
-          OnPropertyChanged("Gender");
-        }
-      }
-    }
+    #endregion
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    [NotifyPropertyChangedInvocator]
+    [Annotations.NotifyPropertyChangedInvocator]
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
       PropertyChangedEventHandler handler = PropertyChanged;

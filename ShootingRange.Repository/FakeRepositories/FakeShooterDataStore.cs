@@ -26,6 +26,11 @@ namespace ShootingRange.Repository.FakeRepositories
       }
     }
 
+    public void Revert()
+    {
+      throw new System.NotImplementedException();
+    }
+
     public void Create(Shooter shooter)
     {
       _repository.Insert(shooter);
@@ -45,7 +50,6 @@ namespace ShootingRange.Repository.FakeRepositories
     {
       Shooter entity = FindById(shooter.ShooterId);
       entity.ShooterNumber = shooter.ShooterNumber;
-      entity.GroupId = shooter.GroupId;
       _repository.Commit();
     }
 
@@ -54,9 +58,9 @@ namespace ShootingRange.Repository.FakeRepositories
       _repository.Delete(shooter);
     }
 
-    public IEnumerable<Shooter> FindByShooterNumber(int shooterNumber)
+    public Shooter FindByShooterNumber(int shooterNumber)
     {
-      return _repository.Find(shooter => shooter.ShooterNumber == shooterNumber);
+      return _repository.Find(shooter => shooter.ShooterNumber == shooterNumber).First();
     }
 
     public IEnumerable<Shooter> FindByPersonId(int personId)

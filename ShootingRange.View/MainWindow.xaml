@@ -4,15 +4,17 @@
         xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
         xmlns:view="clr-namespace:ShootingRange.View"
         xmlns:viewUtils="clr-namespace:ShootingRange.ViewUtils;assembly=ShootingRange.ViewUtils"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uiBusinessObjects="clr-namespace:ShootingRange.UiBusinessObjects;assembly=ShootingRange.UiBusinessObjects"
+    mc:Ignorable="d"
         x:Class="ShootingRange.View.MainWindow"
         Title="MainWindow" Height="577.699" Width="984.627">
     <Window.Resources>
         <viewModel:MainViewModel x:Key="MainViewModel"/>
-        <DataTemplate x:Key="ShooterListItemTemplate" DataType="{x:Type viewModel:ShooterListItem}">
+        <DataTemplate x:Key="ShooterListItemTemplate" DataType="{x:Type uiBusinessObjects:UiShooter}">
             <TextBlock Text="{Binding Path=ShooterNumber}"/>
         </DataTemplate>
-        <DataTemplate x:Key="GroupListItemTemplate" DataType="{x:Type viewModel:GroupListItem}">
+        <!--<DataTemplate x:Key="GroupListItemTemplate" DataType="{x:Type viewModel:GroupListItem}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -22,22 +24,38 @@
                 <TextBlock Grid.Column="0" Text="{Binding Path=GroupDescription}"/>
                 <TextBlock Grid.Column="1" Text="{Binding Path=GroupName}"/>
             </Grid>
-        </DataTemplate>
+        </DataTemplate>-->
     </Window.Resources>
     <DockPanel DataContext="{Binding Source={StaticResource MainViewModel}}">
         <ToolBar DockPanel.Dock="Top">
             <Button Command="{Binding CreatePersonCommand}" Height="32">
                 <Image Source="Images/add_person_32.png"/>
             </Button>
-            <Button Command="{Binding OpenPersonEditCommand}" CommandParameter="{Binding SelectedPersonItem}" Height="32">
+            <Button Command="{Binding EditPersonCommand}" CommandParameter="{Binding SelectedUiPerson}" Height="32">
                 <viewUtils:AutoGreyableImage Source="Images/edit_person_32.png"/>
             </Button>
-            <Button Height="32">
-                <Image Source="Images/create_group_32.png"></Image>
+            <Button Height="32" Command="{Binding DeletePersonCommand}" CommandParameter="{Binding SelectedUiPerson}">
+                <viewUtils:AutoGreyableImage Source="Images/people_remove_32.png"/>
             </Button>
-            <Separator/>
-            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedPersonItem}">
-                <viewUtils:AutoGreyableImage Source="Images/ticket_32.png" Height="32"/>
+            <Separator Margin="0,2"/>
+            <Button Height="32" Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+                <viewUtils:AutoGreyableImage Source="Images/add_weapon_32.png"></viewUtils:AutoGreyableImage>
+            </Button>
+            <Button Height="32" Command="{Binding EditShooterCommand}" CommandParameter="{Binding SelectedUiShooter}">
+                <viewUtils:AutoGreyableImage Source="Images/edit_weapon_32.png"></viewUtils:AutoGreyableImage>
+            </Button>
+            <Button Height="32" Command="{Binding DeleteShooterCommand}" CommandParameter="{Binding SelectedUiShooter}">
+                <viewUtils:AutoGreyableImage Source="Images/remove_weapon_32.png"></viewUtils:AutoGreyableImage>
+            </Button>
+            <Separator Margin="0,2"/>
+            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+                <viewUtils:AutoGreyableImage Source="Images/add_ticket_32.png" Height="32"/>
+            </Button>
+            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+                <viewUtils:AutoGreyableImage Source="Images/edit_ticket_32.png" Height="32"/>
+            </Button>
+            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+                <viewUtils:AutoGreyableImage Source="Images/remove_ticket_32.png" Height="32"/>
             </Button>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">
@@ -53,7 +71,7 @@
             </Grid.ColumnDefinitions>
             <DockPanel>
                 <GroupBox DockPanel.Dock="Bottom" Header="Shooters" Margin="5">
-                    <ListBox Height="150" ItemsSource="{Binding ShooterListItems}" SelectedItem="{Binding SelectedShooterItem}" ItemTemplate="{StaticResource ShooterListItemTemplate}" Margin="5"/>
+                    <ListBox Height="150" ItemsSource="{Binding ShooterListItems}" SelectedItem="{Binding SelectedUiShooter}" ItemTemplate="{StaticResource ShooterListItemTemplate}" Margin="5"/>
                 </GroupBox>
                 <GroupBox Header="People" Margin="5">
                     <DockPanel>
@@ -65,26 +83,20 @@
                             <Label Grid.Column="0" Content="Search:" Margin="5"/>
                             <TextBox Grid.Column="1" Margin="5"/>
                         </Grid>
-                        <view:PersonListView Margin="5" PersonListItems="{Binding PersonListItems}" SelectedPerson="{Binding SelectedPersonItem}"/>
+                        <view:PersonListView Margin="5" UiPeople="{Binding UiPeople}" SelectedUiPerson="{Binding SelectedUiPerson}"/>
                     </DockPanel>
                 </GroupBox>
             </DockPanel>
             <DockPanel Grid.Column="1">
-                <GroupBox Header="Group" DockPanel.Dock="Bottom" Margin="5">
-                    <view:GroupTreeView Height="150" Margin="5" GroupTreeItems="{Binding GroupTreeItems}">
-
-                    </view:GroupTreeView>
+                <GroupBox Header="Participations" DockPanel.Dock="Bottom" Margin="5">
+                    <view:ParticipationTreeView Height="150" Margin="5" ParticipationTreeItems="{Binding ParticipationTreeItems}"/>
                 </GroupBox>
                 <GroupBox Header="Passes" Margin="5">
-                    <ListBox Margin="5">
-                        
-                    </ListBox>
+                    <ListBox Margin="5"/>
                 </GroupBox>
             </DockPanel>
             <DockPanel Grid.Column="2">
-                <GroupBox Header="Details" Margin="5">
-                    
-                </GroupBox>
+                <GroupBox Header="Details" Margin="5"/>
             </DockPanel>
         </Grid>
     </DockPanel>

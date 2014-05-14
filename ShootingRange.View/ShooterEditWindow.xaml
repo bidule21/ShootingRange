@@ -1,0 +1,50 @@
+﻿<Window x:Class="ShootingRange.View.ShooterEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+        Title="ShooterEditWindow" Height="342.205" Width="606.844">
+    <Window.DataContext>
+        <viewModel:ShooterEditViewModel/>
+    </Window.DataContext>
+    <DockPanel>
+        <StackPanel>
+            <StackPanel Margin="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <Label Content="Available Participations:"></Label>
+                        <ListBox SelectedItem="{Binding SelectedAvailableParticipation}" ItemsSource="{Binding AvailableParticipations}"  Height="200" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="viewModel:ParticipationListItem">
+                                    <TextBlock Text="{Binding ParticipationName}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" >
+                        <Label Content="Assigned Participations:"></Label>
+                        <ListBox SelectedItem="{Binding SelectedAssignedParticipation}" ItemsSource="{Binding AssignedParticipations}" Height="200" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="viewModel:ShooterParticipationListItem">
+                                    <TextBlock Text="{Binding ParticipationName}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <Button Content="&gt;&gt;" Margin="5" Command="{Binding AddToAssingedParticipationCommand}" CommandParameter="{Binding SelectedAvailableParticipation}"></Button>
+                        <Button Content="&lt;&lt;" Margin="5" Command="{Binding RemoveFromAssingedParticipationCommand}" CommandParameter="{Binding SelectedAssignedParticipation}"></Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,20,5,5">
+                <Button Content="OK" Width="80" Margin="3"/>
+                <Button Content="Cancel" Width="80" Margin="3" Command="{Binding CancelCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </DockPanel>
+</Window>

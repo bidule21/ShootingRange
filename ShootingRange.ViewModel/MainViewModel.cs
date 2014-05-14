@@ -18,6 +18,7 @@ using ShootingRange.Repository.FakeRepositories;
 using ShootingRange.Repository.Mapper;
 using ShootingRange.Repository.Repositories;
 using ShootingRange.Service.Interface;
+using ShootingRange.UiBusinessObjects;
 
 namespace ShootingRange.ViewModel
 {
@@ -25,7 +26,7 @@ namespace ShootingRange.ViewModel
   {
     private IPersonDataStore _personDataStore;
     private IShooterDataStore _shooterDataStore;
-    private IGroupDataStore _groupDataStore;
+    private IParticipationDataStore _participationDataStore;
     private IGroupMemberDetailsView _groupMemberDetailsView;
     private IGroupDetailsView _groupDetailsView;
     private ShootingRangeEvents _events;
@@ -40,7 +41,7 @@ namespace ShootingRange.ViewModel
       {
         _personDataStore = new FakePersonDataStore();
         _shooterDataStore = new FakeShooterDataStore();
-        _groupDataStore = new FakeGroupDataStore();
+        _participationDataStore = new FakeParticipationDataStore();
         _groupMemberDetailsView = new FakeGroupMemberDetailsView();
         _groupDetailsView = new FakeGroupDetailsView();
       }
@@ -49,7 +50,7 @@ namespace ShootingRange.ViewModel
         IConfiguration config = ConfigurationSource.Configuration;
         _personDataStore = config.GetPersonDataStore();
         _shooterDataStore = config.GetShooterDataStore();
-        _groupDataStore = config.GetGroupDataStore();
+        _participationDataStore = config.GetParticipationDataStore();
         _groupMemberDetailsView = config.GetGroupMemberDetailsView();
         _groupDetailsView = config.GetGroupDetailsView();
 
@@ -57,85 +58,180 @@ namespace ShootingRange.ViewModel
         _windowService = config.GetWindowService();
         _events = config.GetEvents();
         _uiEvents = config.GetUIEvents();
+        _uiEvents.RequireSelectedPerson += () => _uiEvents.PersonSelected(SelectedUiPerson);
+        _uiEvents.RequireSelectedShooter += () => _uiEvents.ShooterSelected(SelectedUiShooter);
+        _uiEvents.PersonDataStoreChanged += LoadPersonList;
+        _uiEvents.ShooterDataStoreChanged += LoadShooterList;
       }
 
-      IEnumerable<Person> people = new ObservableCollection<Person>(_personDataStore.GetAll());
-      PersonListItems =
-        new ObservableCollection<PersonListItem>(
-          people.Select(_ => new PersonListItem
-          {
-            PersonId = _.PersonId,
-            FirstName = _.FirstName,
-            LastName = _.LastName
-          }));
+      //IEnumerable<Person> people = new ObservableCollection<Person>(_personDataStore.GetAll());
+      LoadPersonList();
+      LoadShooterList();
+      LoadParticipationList();
+      //UiPeople =
+      //  new ObservableCollection<UiPerson>(
+      //    people.Select(_ => new UiPerson
+      //    {
+      //      PersonId = _.PersonId,
+      //      FirstName = _.FirstName,
+      //      LastName = _.LastName
+      //    }));
 
       PersonSelectionChangedCommand = new RelayCommand<int>(ExecutePersonSelectionChangedCommand);
-      OpenPersonEditCommand = new RelayCommand<PersonListItem>(ExecuteOpenPersonEditCommand, CanExecuteOpenPersonEditCommand);
+
       CreatePersonCommand = new RelayCommand<object>(ExecuteCreatePersonCommand);
-      CreateShooterCommand = new RelayCommand<PersonListItem>(ExecuteCreateShooterCommand, CanExecuteCreateShooterCommand);
+      EditPersonCommand = new RelayCommand<UiPerson>(ExecuteEditPersonCommand, CanExecuteEditPersonCommand);
+      DeletePersonCommand = new RelayCommand<UiPerson>(ExecuteDeletePersonCommand, CanExecuteDeletePersonCommand);
+      
+      CreateShooterCommand = new RelayCommand<UiPerson>(ExecuteCreateShooterCommand, CanExecuteCreateShooterCommand);
+      EditShooterCommand = new RelayCommand<UiShooter>(ExecuteEditShooterCommand, CanExecuteEditShooterCommand);
+      DeleteShooterCommand = new RelayCommand<UiShooter>(ExecuteDeleteShooterCommand, CanExecuteDeleteShooterCommand);
+
+      CreateParticipationCommand = new RelayCommand<UiShooter>(ExecuteCreateParticipationCommand,
+        CanExecuteCreateParticipationCommand);
+      //EditParticipationCommand = new RelayCommand<UiParticipation>
+      //DeleteParticipationCommand = new RelayCommand<UiParticipation>
     }
 
-    private bool CanExecuteCreateShooterCommand(PersonListItem personListItem)
-    {
-      return personListItem != null;
-    }
+    #region Commands
 
-    private void ExecuteCreateShooterCommand(PersonListItem personListItem)
-    {
-      Shooter shooter = new Shooter();
-      shooter.ShooterNumber = _shooterNumberService.GetShooterNumber();
-      shooter.PersonId = personListItem.PersonId;
-      _shooterDataStore.Create(shooter);
-      OnSelectedPersonItemChanged(personListItem);
-    }
-
-    public ICommand PersonSelectionChangedCommand { get; private set; }
-    public ICommand OpenPersonEditCommand { get; private set; }
-    public ICommand CreatePersonCommand { get; private set; }
-    public ICommand CreateShooterCommand { get; private set; }
-
-    private void ExecuteCreatePersonCommand(object obj)
-    {
-      _windowService.ShowPersonEditWindow();
-    }
-
-    private bool CanExecuteOpenPersonEditCommand(PersonListItem person)
-    {
-      return person != null;
-    }
-
-    private void ExecuteOpenPersonEditCommand(PersonListItem person)
-    {
-      _windowService.ShowPersonEditWindow();
-      Person entity = _personDataStore.FindById(person.PersonId);
-      _uiEvents.PersonSelected(entity);
-    }
+    #region Person
 
     private void ExecutePersonSelectionChangedCommand(int selectedPersonId)
     {
       _events.SelectedPersonChanged(selectedPersonId);
     }
 
+    private void ExecuteCreatePersonCommand(object obj)
+    {
+      _windowService.ShowCreatePersonWindow();
+      LoadShooterList();
+    }
+
+    private bool CanExecuteEditPersonCommand(UiPerson uiPerson)
+    {
+      return uiPerson != null;
+    }
+
+    private void ExecuteEditPersonCommand(UiPerson uiPerson)
+    {
+      _windowService.ShowEditPersonWindow();
+    }
+
+    private bool CanExecuteDeletePersonCommand(UiPerson uiPerson)
+    {
+      return uiPerson != null;
+    }
+
+    private void ExecuteDeletePersonCommand(UiPerson uiPerson)
+    {
+      _personDataStore.Delete(uiPerson.ToPerson());
+      _uiEvents.PersonDataStoreChanged();
+    }
+
+    #endregion
+
+    #region Shooter
+
+    private bool CanExecuteCreateShooterCommand(UiPerson uiPerson)
+    {
+      return uiPerson != null;
+    }
+
+    private void ExecuteCreateShooterCommand(UiPerson uiPerson)
+    {
+      _windowService.ShowCreateShooterWindow();
+    }
+
+    private bool CanExecuteEditShooterCommand(UiShooter uiShooter)
+    {
+      return uiShooter != null;
+    }
+
+    private void ExecuteEditShooterCommand(UiShooter uiShooter)
+    {
+      _windowService.ShowEditShooterWindow();
+      _uiEvents.ShooterDataStoreChanged();
+    }
+
+    private bool CanExecuteDeleteShooterCommand(UiShooter uiShooter)
+    {
+      return uiShooter != null;
+    }
+
+    private void ExecuteDeleteShooterCommand(UiShooter uiShooter)
+    {
+      try
+      {
+        _shooterDataStore.Delete(uiShooter.ToShooter());
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+        _shooterDataStore.Revert();
+      }
+      finally
+      {
+        _uiEvents.ShooterDataStoreChanged();
+      }
+    }
+
+    private void ReportException(Exception e)
+    {
+      _windowService.ShowErrorMessage("Error", e.ToString());
+    }
+
+    #endregion
+
+    #region Participation
+
+    private bool CanExecuteCreateParticipationCommand(UiShooter uiShooter)
+    {
+      return uiShooter != null;
+    }
+
+    private void ExecuteCreateParticipationCommand(UiShooter uiShooter)
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+
+    #endregion
+
+    public ICommand PersonSelectionChangedCommand { get; private set; }
+    public ICommand CreatePersonCommand { get; private set; }
+    public ICommand EditPersonCommand { get; private set; }
+    public ICommand DeletePersonCommand { get; private set; }
+
+    public ICommand CreateShooterCommand { get; private set; }
+    public ICommand EditShooterCommand { get; private set; }
+    public ICommand DeleteShooterCommand { get; private set; }
+
+    public ICommand CreateParticipationCommand { get; private set; }
+    public ICommand EditParticipationCommand { get; private set; }
+    public ICommand DeleteParticipationCommand { get; private set; }
+
     #region Properties
 
 
-    private ShooterListItem _selectedShooterItem;
-    public ShooterListItem SelectedShooterItem
+    private UiShooter _selectedUiShooter;
+    public UiShooter SelectedUiShooter
     {
-      get { return _selectedShooterItem; }
+      get { return _selectedUiShooter; }
       set
       {
-        if (value != _selectedShooterItem)
+        if (value != _selectedUiShooter)
         {
-          _selectedShooterItem = value;
-          OnPropertyChanged("SelectedShooterItem");
-          OnSelectedShooterItemChanged(_selectedShooterItem);
+          _selectedUiShooter = value;
+          OnPropertyChanged("SelectedUiShooter");
+          OnSelectedShooterItemChanged(_selectedUiShooter);
         }
       }
     }
 
-    private ObservableCollection<ShooterListItem> _shooterListItems;
-    public ObservableCollection<ShooterListItem> ShooterListItems
+    private ObservableCollection<UiShooter> _shooterListItems;
+    public ObservableCollection<UiShooter> ShooterListItems
     {
       get { return _shooterListItems; }
       set
@@ -148,47 +244,47 @@ namespace ShootingRange.ViewModel
       }
     }
 
-    private PersonListItem _selectedPersonItem;
-    public PersonListItem SelectedPersonItem
+    private UiPerson _selectedUiPerson;
+    public UiPerson SelectedUiPerson
     {
-      get { return _selectedPersonItem; }
+      get { return _selectedUiPerson; }
       set
       {
-        if (value != _selectedPersonItem)
+        if (value != _selectedUiPerson)
         {
-          _selectedPersonItem = value;
-          OnPropertyChanged("SelectedPersonItem");
+          _selectedUiPerson = value;
+          OnPropertyChanged("SelectedUiPerson");
 
-          OnSelectedPersonItemChanged(SelectedPersonItem);
+          OnSelectedPersonItemChanged(SelectedUiPerson);
         }
       }
     }
 
-    private ObservableCollection<PersonListItem> _personListItems;
+    private ObservableCollection<UiPerson> _uiPeople;
 
-    public ObservableCollection<PersonListItem> PersonListItems
+    public ObservableCollection<UiPerson> UiPeople
     {
-      get { return _personListItems; }
+      get { return _uiPeople; }
       set
       {
-        if (value != _personListItems)
+        if (value != _uiPeople)
         {
-          _personListItems = value;
-          OnPropertyChanged("PersonListItems");
+          _uiPeople = value;
+          OnPropertyChanged("UiPeople");
         }
       }
     }
 
-    private ObservableCollection<GroupTreeItem> _groupTreeItems;
-    public ObservableCollection<GroupTreeItem> GroupTreeItems
+    private ObservableCollection<ParticipationTreeItem> _participationTreeItems;
+    public ObservableCollection<ParticipationTreeItem> ParticipationTreeItems
     {
-      get { return _groupTreeItems; }
+      get { return _participationTreeItems; }
       set
       {
-        if (value != _groupTreeItems)
+        if (value != _participationTreeItems)
         {
-          _groupTreeItems = value;
-          OnPropertyChanged("GroupTreeItems");
+          _participationTreeItems = value;
+          OnPropertyChanged("ParticipationTreeItems");
         }
       }
     }
@@ -197,15 +293,15 @@ namespace ShootingRange.ViewModel
 
     #region Property changed handler
 
-    private void OnSelectedShooterItemChanged(ShooterListItem selectedShooter)
+    private void OnSelectedShooterItemChanged(UiShooter selectedUiShooter)
     {
-      LoadGroupList();
+      LoadParticipationList();
     }
 
-    private void OnSelectedPersonItemChanged(PersonListItem selectedPerson)
+    private void OnSelectedPersonItemChanged(UiPerson selectedUiPerson)
     {
       LoadShooterList();
-      LoadGroupList();
+      LoadParticipationList();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -221,52 +317,57 @@ namespace ShootingRange.ViewModel
 
     #region Loader
 
-    private void LoadGroupList()
+    private void LoadPersonList()
     {
-      Func<GroupDetails, GroupTreeItem> selector =
+      UiPeople = new ObservableCollection<UiPerson>(_personDataStore.GetAll().Select(UiBusinessObjectMapper.ToUiPerson).OrderBy(_ => _.LastName));
+    }
+
+    private void LoadParticipationList()
+    {
+      Func<ParticipationDetails, ParticipationTreeItem> selector =
         (gmd) =>
-          new GroupTreeItem
+          new ParticipationTreeItem
           {
-            GroupNames = gmd.GroupNames,
-            GroupDescription = gmd.GroupDescription
+            ParticipationNames = gmd.ParticipationNames,
+            ParticipationDescription = gmd.ParticipationDescription
           };
 
-      IEnumerable<GroupTreeItem> groupListItems;
-      if (SelectedShooterItem != null)
+      IEnumerable<ParticipationTreeItem> participationTreeItems;
+      if (SelectedUiShooter != null)
       {
-        groupListItems = _groupDetailsView.FindByShooterId(SelectedShooterItem.ShooterId).Select(selector);
+        participationTreeItems = _groupDetailsView.FindByShooterId(SelectedUiShooter.ShooterId).Select(selector);
       }
-      else if (SelectedPersonItem != null)
+      else if (SelectedUiPerson != null)
       {
-        groupListItems = _groupDetailsView.FindByPersonId(SelectedPersonItem.PersonId).Select(selector);
+        participationTreeItems = _groupDetailsView.FindByPersonId(SelectedUiPerson.PersonId).Select(selector);
       }
       else
       {
-        groupListItems = _groupDetailsView.GetAll().Select(selector);
+        participationTreeItems = _groupDetailsView.GetAll().Select(selector);
       }
 
-      GroupTreeItems = new ObservableCollection<GroupTreeItem>(groupListItems);
+      ParticipationTreeItems = new ObservableCollection<ParticipationTreeItem>(participationTreeItems.Where(_ => _.ParticipationNames.Any()));
     }
 
     private void LoadShooterList()
     {
-      Func<Shooter, ShooterListItem> selector = shooter => new ShooterListItem
+      Func<Shooter, UiShooter> selector = shooter => new UiShooter
       {
         ShooterNumber = shooter.ShooterNumber,
         ShooterId = shooter.ShooterId
       };
 
-      IEnumerable<ShooterListItem> shooterListItems;
-      if (SelectedPersonItem != null)
+      IEnumerable<UiShooter> shooterListItems;
+      if (SelectedUiPerson != null)
       {
-        shooterListItems = _shooterDataStore.FindByPersonId(SelectedPersonItem.PersonId).Select(selector);
+        shooterListItems = _shooterDataStore.FindByPersonId(SelectedUiPerson.PersonId).Select(selector);
       }
       else
       {
         shooterListItems = _shooterDataStore.GetAll().Select(selector);
       }
 
-      ShooterListItems = new ObservableCollection<ShooterListItem>(shooterListItems);
+      ShooterListItems = new ObservableCollection<UiShooter>(shooterListItems);
     }
 
     #endregion

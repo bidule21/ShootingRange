@@ -35,6 +35,11 @@ namespace ShootingRange.Repository.Repositories
       return _sqlRepository.Find(_ => _.PersonId == id).Select(_selector).Single();
     }
 
+    public void Revert()
+    {
+      _sqlRepository.Revert();
+    }
+
     public void Create(Person person)
     {
       t_person entity = new t_person();

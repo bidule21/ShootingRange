@@ -1,0 +1,99 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:ShootingRange.View"
+    mc:Ignorable="d" x:Class="ShootingRange.View.PersonCreateWindow"
+        Title="PersonCreateWindow" Height="452.5" Width="359">
+    <Window.DataContext>
+        <viewModel:PersonCreateViewModel/>
+    </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+    </Window.InputBindings>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <!--<Button Content="Neue Wettkampfanmeldung..." Height="32" Command="{Binding InscribeCompetitionCommand}" CommandParameter="{Binding UiShooter}"/>-->
+        </ToolBar>
+    <StackPanel Margin="5">
+        <StackPanel Orientation="Horizontal" Height="322">
+            <Grid Margin="5,5,5,0" Height="293" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="113"/>
+                    <ColumnDefinition Width="181"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Nachname" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Width="61.26"/>
+                <Label Grid.Column="0" Content="Vorname" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="1" Width="53.433"/>
+                <Label Grid.Column="0" Content="Strasse" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="2" Width="45.157"/>
+                <Label Grid.Column="0" Content="Postleitzahl" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="3" Width="64.43"/>
+                <Label Grid.Column="0" Content="Ort" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="4" Width="25.427"/>
+                <Label Grid.Column="0" Content="Email" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="5" Width="36.207"/>
+                <Label Grid.Column="0" Content="Telefon" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="6" Width="46.127"/>
+                <Label Grid.Column="0" Content="Geburtsdatum" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23.277" Grid.Row="7" Width="78.803"/>
+                <TextBox x:Name="LastName" HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.LastName}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="0"/>
+                <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.FirstName}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="1"/>
+                <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Address}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="2"/>
+                <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.ZipCode}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="3"/>
+                <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.City}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="4"/>
+                <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Email}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="5"/>
+                <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Phone}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="6"/>
+                <DatePicker Grid.Column="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Top" SelectedDateFormat="Short" DisplayDate="{Binding UiPerson.DateOfBirth}" Height="24" Width="160"/>
+            </Grid>
+            <!--<StackPanel Width="400">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="17*"/>
+                        <ColumnDefinition Width="8*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" Margin="5,5,2,5" ItemsSource="{Binding Shooters}"/>
+                    <Button Grid.Column="1" Content="Create Shooter" Margin="5" Command="{Binding CreateShooterCommand}"/>
+                </Grid>
+                <TabControl HorizontalAlignment="Left" Width="390" Margin="5,5,0,5" Height="272">
+                    <TabItem Header="Wettkämpfe">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="42"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="29"/>
+								<RowDefinition Height="*"/>
+							</Grid.RowDefinitions>
+							<Label Content="verfügbar"/>
+							<Label Grid.Row="0" Grid.Column="2" Content="zugewiesen"/>
+                            <view:GroupTreeView Grid.Column="0" Grid.Row="1" Margin="5" GroupTreeItems="{Binding ShootersGroups}"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                                <Button Margin="5" Width="32">
+                                    <Image Source="Images/arrow_left_32.png"/>
+                                </Button>
+                                <Button Margin="5" Width="32">
+                                    <Image Source="Images/arrow_right_32.png"/>
+                                </Button>
+                            </StackPanel>
+                            <view:GroupTreeView Grid.Row="1" Grid.Column="2" Margin="5" GroupTreeItems="{Binding AvailableGroups}"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Stiche"/>
+                </TabControl>
+            </StackPanel>-->
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,20,5,5">
+            <Button Content="OK" Width="80" Margin="3" Command="{Binding CreatePersonCommand}" CommandParameter="{Binding UiPerson}"/>
+            <Button Content="Cancel" Width="80" Margin="3" Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </StackPanel>
+    </DockPanel>
+</Window>

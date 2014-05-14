@@ -1,0 +1,24 @@
+﻿<view:ParticipationTreeView xmlns:view="clr-namespace:ShootingRange.View"
+                    xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <view:ParticipationTreeView.ParticipationTreeItems>
+    <viewModel:ParticipationTreeItem ParticipationDescription="Gruppenwettkampf">
+      <viewModel:ParticipationTreeItem.ParticipationNames>
+        <x:Array Type="sys:String">
+          <sys:String>Eichwald</sys:String>
+          <sys:String>Eichlegugger</sys:String>
+        </x:Array>
+      </viewModel:ParticipationTreeItem.ParticipationNames>
+    </viewModel:ParticipationTreeItem>
+    <viewModel:ParticipationTreeItem ParticipationDescription="Sie &amp; Er">
+      <viewModel:ParticipationTreeItem.ParticipationNames>
+          <x:Array Type="sys:String">
+          <sys:String>Estermann</sys:String>
+          <sys:String>Bossart</sys:String>
+          <sys:String><![CDATA[Pitsch & Mägi]]></sys:String>
+        </x:Array>
+      </viewModel:ParticipationTreeItem.ParticipationNames>
+    </viewModel:ParticipationTreeItem>
+  </view:ParticipationTreeView.ParticipationTreeItems>
+</view:ParticipationTreeView>

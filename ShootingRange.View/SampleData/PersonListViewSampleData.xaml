@@ -1,10 +1,10 @@
 ﻿<view:PersonListView 
     xmlns:view="clr-namespace:ShootingRange.View;assembly=ShootingRange.View"
-    xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel">
-    <view:PersonListView.PersonListItems>
-        <viewModel:PersonListItem PersonId="1" LastName="Waltenspül" FirstName="Roger"/>
-        <viewModel:PersonListItem PersonId="2" LastName="Eberli" FirstName="Daniel"/>
-        <viewModel:PersonListItem PersonId="3" LastName="Hugentobler" FirstName="Hansueli"/>
-        <viewModel:PersonListItem PersonId="4" LastName="Hülsenboden" FirstName="Fritz"/>
-    </view:PersonListView.PersonListItems>
+    xmlns:uiBusinessObjects="clr-namespace:ShootingRange.UiBusinessObjects;assembly=ShootingRange.UiBusinessObjects">
+    <view:PersonListView.UiPeople>
+        <uiBusinessObjects:UiPerson PersonId="1" LastName="Waltenspül" FirstName="Roger"/>
+        <uiBusinessObjects:UiPerson PersonId="2" LastName="Eberli" FirstName="Daniel"/>
+        <uiBusinessObjects:UiPerson PersonId="3" LastName="Hugentobler" FirstName="Hansueli"/>
+        <uiBusinessObjects:UiPerson PersonId="4" LastName="Hülsenboden" FirstName="Fritz"/>
+    </view:PersonListView.UiPeople>
 </view:PersonListView>

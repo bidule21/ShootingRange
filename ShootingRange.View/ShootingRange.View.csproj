@@ -34,6 +34,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -44,7 +46,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="GroupTreeView.xaml">
+    <Compile Include="ShooterCreateWindow.xaml.cs">
+      <DependentUpon>ShooterCreateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShooterEditWindow.xaml.cs">
+      <DependentUpon>ShooterEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ParticipationTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -52,21 +60,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PersonEditControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="Converter\PersonNameConverter.cs" />
-    <Compile Include="GroupTreeView.xaml.cs">
-      <DependentUpon>GroupTreeView.xaml</DependentUpon>
+    <Compile Include="ParticipationTreeView.xaml.cs">
+      <DependentUpon>ParticipationTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PersonEditControl.xaml.cs">
-      <DependentUpon>PersonEditControl.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="PersonCreateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PersonEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,11 +82,26 @@
     <DesignData Include="SampleData\PersonListViewSampleData.xaml">
       <SubType>Designer</SubType>
     </DesignData>
-    <DesignData Include="SampleData\GroupTreeViewSampleData.xaml">
+    <DesignData Include="SampleData\ParticipationTreeViewSampleData.xaml">
       <SubType>Designer</SubType>
     </DesignData>
+    <Page Include="ShooterCreateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShooterEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\ParticipationTreeViewDataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PersonCreateWindow.xaml.cs">
+      <DependentUpon>PersonCreateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PersonEditWindow.xaml.cs">
       <DependentUpon>PersonEditWindow.xaml</DependentUpon>
     </Compile>
@@ -115,6 +134,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.UiBusinessObjects\ShootingRange.UiBusinessObjects.csproj">
+      <Project>{F55192F5-0745-4ADA-ADD2-90EDC4E947B0}</Project>
+      <Name>ShootingRange.UiBusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.ViewModel\ShootingRange.ViewModel.csproj">
       <Project>{a869786d-0bad-4c1b-8b8f-88cf40481712}</Project>
       <Name>ShootingRange.ViewModel</Name>
@@ -135,6 +158,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ticket_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\people_remove_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arrow_left_32.png" />
+    <Resource Include="Images\arrow_right_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add_weapon_32.png" />
+    <Resource Include="Images\edit_weapon_32.png" />
+    <Resource Include="Images\remove_weapon_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add_ticket_32.png" />
+    <Resource Include="Images\edit_ticket_32.png" />
+    <Resource Include="Images\remove_ticket_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

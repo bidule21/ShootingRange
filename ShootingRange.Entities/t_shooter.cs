@@ -18,20 +18,20 @@ namespace ShootingRange.Entities
         {
             this.t_order = new HashSet<t_order>();
             this.t_session = new HashSet<t_session>();
+            this.t_shooterparticipation = new HashSet<t_shooterparticipation>();
         }
     
         public int ShooterId { get; set; }
         public int PersonId { get; set; }
-        public Nullable<int> EventId { get; set; }
+        public int EventId { get; set; }
         public Nullable<int> ClubId { get; set; }
-        public Nullable<int> GroupId { get; set; }
         public int ShooterNumber { get; set; }
     
         public virtual t_club t_club { get; set; }
         public virtual t_event t_event { get; set; }
-        public virtual t_group t_group { get; set; }
         public virtual ICollection<t_order> t_order { get; set; }
         public virtual t_person t_person { get; set; }
         public virtual ICollection<t_session> t_session { get; set; }
+        public virtual ICollection<t_shooterparticipation> t_shooterparticipation { get; set; }
     }
 }

@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
              xmlns:converter="clr-namespace:ShootingRange.View.Converter"
+             xmlns:uiBusinessObjects="clr-namespace:ShootingRange.UiBusinessObjects;assembly=ShootingRange.UiBusinessObjects"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="UserControl">
     <UserControl.Resources>
         <converter:PersonNameConverter x:Key="PersonNameConverter"></converter:PersonNameConverter>
-        <DataTemplate x:Key="PersonDataTemplate" DataType="{x:Type viewModel:PersonListItem}">
+        <DataTemplate x:Key="PersonDataTemplate" DataType="{x:Type uiBusinessObjects:UiPerson}">
             <TextBlock>
                 <TextBlock.Text>
                     <MultiBinding Converter="{StaticResource PersonNameConverter}" ConverterParameter="FormatLastFirst">
@@ -22,6 +22,6 @@
         </DataTemplate>
     </UserControl.Resources>
     <DockPanel DataContext="{Binding ElementName=UserControl}" d:DataContext="{d:DesignData Source=/SampleData/PersonListViewSampleData.xaml}">
-        <ListBox Name="ListBox" ItemsSource="{Binding PersonListItems}" SelectionChanged="OnSelectionChanged" ItemTemplate="{StaticResource PersonDataTemplate}"/>
+        <ListBox Name="ListBox" ItemsSource="{Binding UiPeople}" SelectionChanged="OnSelectionChanged" ItemTemplate="{StaticResource PersonDataTemplate}"/>
     </DockPanel>
 </UserControl>

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using ShootingRange.UiBusinessObjects;
 using ShootingRange.ViewModel;
 
 namespace ShootingRange.View
@@ -18,41 +19,41 @@ namespace ShootingRange.View
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      PersonListItem item = (PersonListItem)ListBox.SelectedItem;
-      SelectedPerson = item;
+      UiPerson item = (UiPerson)ListBox.SelectedItem;
+      SelectedUiPerson = item;
 
       e.Handled = true;
-      RoutedEventArgs args = new RoutedEventArgs(SelectedPersonChangedEvent);
+      RoutedEventArgs args = new RoutedEventArgs(SelectedUiPersonChangedEvent);
       RaiseEvent(args);
     }
 
-    public event RoutedEventHandler SelectedPersonChanged
+    public event RoutedEventHandler SelectedUiPersonChanged
     {
-      add { AddHandler(SelectedPersonChangedEvent, value); }
-      remove { RemoveHandler(SelectedPersonChangedEvent, value); }
+      add { AddHandler(SelectedUiPersonChangedEvent, value); }
+      remove { RemoveHandler(SelectedUiPersonChangedEvent, value); }
     }
 
-    public ObservableCollection<PersonListItem> PersonListItems
+    public ObservableCollection<UiPerson> UiPeople
     {
-      get { return (ObservableCollection<PersonListItem>)GetValue(PersonListItemsProperty); }
-      set { SetValue(PersonListItemsProperty, value); }
+      get { return (ObservableCollection<UiPerson>)GetValue(UiPeopleProperty); }
+      set { SetValue(UiPeopleProperty, value); }
     }
 
-    public static readonly DependencyProperty PersonListItemsProperty = DependencyProperty.Register("PersonListItems",
-      typeof(ObservableCollection<PersonListItem>),
+    public static readonly DependencyProperty UiPeopleProperty = DependencyProperty.Register("UiPeople",
+      typeof(ObservableCollection<UiPerson>),
       typeof (PersonListView));
 
-    public PersonListItem SelectedPerson
+    public UiPerson SelectedUiPerson
     {
-      get { return (PersonListItem) GetValue(SelectedPersonProperty); }
-      set { SetValue(SelectedPersonProperty, value); }
+      get { return (UiPerson) GetValue(SelectedUiPersonProperty); }
+      set { SetValue(SelectedUiPersonProperty, value); }
     }
 
-    public static readonly DependencyProperty SelectedPersonProperty = DependencyProperty.Register("SelectedPerson",
-      typeof (PersonListItem), typeof (PersonListView), new FrameworkPropertyMetadata() { BindsTwoWayByDefault = true});
+    public static readonly DependencyProperty SelectedUiPersonProperty = DependencyProperty.Register("SelectedUiPerson",
+      typeof (UiPerson), typeof (PersonListView), new FrameworkPropertyMetadata() { BindsTwoWayByDefault = true});
 
-    public static readonly RoutedEvent SelectedPersonChangedEvent =
-      EventManager.RegisterRoutedEvent("SelectedPersonChanged",
+    public static readonly RoutedEvent SelectedUiPersonChangedEvent =
+      EventManager.RegisterRoutedEvent("SelectedUiPersonChanged",
         RoutingStrategy.Bubble,
         typeof (RoutedEventHandler),
         typeof (PersonListView));

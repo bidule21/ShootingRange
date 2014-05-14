@@ -24,8 +24,12 @@ namespace ShootingRange.Repository.Repositories
         ShooterId = shooter.ShooterId,
         ShooterNumber = shooter.ShooterNumber,
         PersonId = shooter.PersonId,
-        GroupId = shooter.GroupId,
       };
+    }
+
+    public void Revert()
+    {
+      _sqlRepository.Revert();
     }
     
     public void Create(Shooter shooter)
@@ -33,6 +37,7 @@ namespace ShootingRange.Repository.Repositories
       t_shooter entity = new t_shooter();
       entity.UpdateEntity(shooter);
       _sqlRepository.Insert(entity);
+      shooter.ShooterId = entity.ShooterId;
     }
 
     public Shooter FindById(int id)
@@ -58,10 +63,10 @@ namespace ShootingRange.Repository.Repositories
       _sqlRepository.Delete(entity);
     }
 
-    public IEnumerable<Shooter> FindByShooterNumber(int shooterNumber)
+    public Shooter FindByShooterNumber(int shooterNumber)
     {
       return
-        _sqlRepository.Find(shooter => shooter.ShooterNumber == shooterNumber).Select(_selector);
+        _sqlRepository.Find(shooter => shooter.ShooterNumber == shooterNumber).Select(_selector).First();
     }
 
     public IEnumerable<Shooter> FindByPersonId(int personId)
