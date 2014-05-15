@@ -28,6 +28,10 @@ namespace ShootingRange.BarcodePrinter
         doc.EndPrint();
         doc.Close();
       }
+      else
+      {
+        throw new InvalidOperationException(string.Format("Can not open template file '{0}'", fullPath));
+      }
     }
   }
 }
