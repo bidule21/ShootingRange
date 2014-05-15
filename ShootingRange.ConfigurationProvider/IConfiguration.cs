@@ -20,5 +20,7 @@ namespace ShootingRange.ConfigurationProvider
     IShooterNumberService GetShooterNumberService();
     IShooterParticipationDataStore GetShooterParticipationDataStore();
     IShooterParticipationView GetShooterParticipationView();
+    IBarcodePrintService GetBarcodePrintService();
+    IBarcodeBuilderService GetBarcodeBuilderService();
   }
 }

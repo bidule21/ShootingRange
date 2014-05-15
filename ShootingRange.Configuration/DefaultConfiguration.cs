@@ -1,4 +1,5 @@
-﻿using ShootingRange.Common;
+﻿using ShootingRange.BarcodePrinter;
+using ShootingRange.Common;
 using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Persistence;
@@ -20,11 +21,13 @@ namespace ShootingRange.Configuration
     private IParticipationDataStore _participationDataStore;
     private IShooterNumberConfigDataStore _shooterNumberConfigDataStore;
     private IWindowService _windowService;
+    private IBarcodePrintService _barcodePrintService;
     private GroupMemberDetailsView _groupMemberDetailsView;
     private GroupDetailsView _groupDetailsView;
     private ShooterNumberService _shooterNumberService;
     private ShooterParticipationDataStore _shooterParticipationDataStore;
     private IShooterParticipationView _shooterParticipationView;
+    private IBarcodeBuilderService _barcodeBuilderService;
 
     public DefaultConfiguration()
     {
@@ -42,6 +45,8 @@ namespace ShootingRange.Configuration
       _groupDetailsView = new GroupDetailsView(entites);
       _shooterParticipationView = new ShooterParticipationView(entites);
       _windowService = new WindowService();
+      _barcodePrintService = new PtouchBarcodePrinter();
+      _barcodeBuilderService = new Barcode2Of5InterleavedService();
       _shooterNumberService = new ShooterNumberService(_shooterNumberConfigDataStore);
     }
 
@@ -93,6 +98,16 @@ namespace ShootingRange.Configuration
     public IShooterParticipationView GetShooterParticipationView()
     {
       return _shooterParticipationView;
+    }
+
+    public IBarcodePrintService GetBarcodePrintService()
+    {
+      return _barcodePrintService;
+    }
+
+    public IBarcodeBuilderService GetBarcodeBuilderService()
+    {
+      return _barcodeBuilderService;
     }
 
     public IShootingRange GetShootingRange()

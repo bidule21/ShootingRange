@@ -32,7 +32,9 @@ namespace ShootingRange.ViewModel
     private ShootingRangeEvents _events;
 
     private IWindowService _windowService;
+    private IBarcodePrintService _barcodePrintService;
     private IShooterNumberService _shooterNumberService;
+    private IBarcodeBuilderService _barcodeBuilderService;
     private UIEvents _uiEvents;
 
     public MainViewModel()
@@ -56,6 +58,8 @@ namespace ShootingRange.ViewModel
 
         _shooterNumberService = config.GetShooterNumberService();
         _windowService = config.GetWindowService();
+        _barcodePrintService = config.GetBarcodePrintService();
+        _barcodeBuilderService = config.GetBarcodeBuilderService();
         _events = config.GetEvents();
         _uiEvents = config.GetUIEvents();
         _uiEvents.RequireSelectedPerson += () => _uiEvents.PersonSelected(SelectedUiPerson);
@@ -91,6 +95,34 @@ namespace ShootingRange.ViewModel
         CanExecuteCreateParticipationCommand);
       //EditParticipationCommand = new RelayCommand<UiParticipation>
       //DeleteParticipationCommand = new RelayCommand<UiParticipation>
+
+      PrintBarcodeCommand = new RelayCommand<UiShooter>(ExecutePrintBarcodeCommand, CanExecutePrintBarcodeCommand);
+    }
+
+    private void ExecutePrintBarcodeCommand(UiShooter uiShooter)
+    {
+      try
+      {
+        Person person = _personDataStore.FindById(uiShooter.PersonId);
+        BarcodeInfo barcodeInfo = new BarcodeInfo
+        {
+          FirstName = person.FirstName,
+          LastName = person.LastName,
+          DateOfBirth = person.DateOfBirth,
+          Barcode = _barcodeBuilderService.BuildBarcode(uiShooter.ShooterNumber, uiShooter.Legalization)
+        };
+
+        _barcodePrintService.Print(barcodeInfo);
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
+    }
+
+    private bool CanExecutePrintBarcodeCommand(UiShooter uiShooter)
+    {
+      return uiShooter != null;
     }
 
     #region Commands
@@ -99,13 +131,30 @@ namespace ShootingRange.ViewModel
 
     private void ExecutePersonSelectionChangedCommand(int selectedPersonId)
     {
-      _events.SelectedPersonChanged(selectedPersonId);
+      try
+      {
+        _events.SelectedPersonChanged(selectedPersonId);
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
     }
 
     private void ExecuteCreatePersonCommand(object obj)
     {
-      _windowService.ShowCreatePersonWindow();
-      LoadShooterList();
+      try
+      {
+        _windowService.ShowCreatePersonWindow();
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
+      finally
+      {
+        LoadShooterList();
+      }
     }
 
     private bool CanExecuteEditPersonCommand(UiPerson uiPerson)
@@ -115,7 +164,14 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteEditPersonCommand(UiPerson uiPerson)
     {
-      _windowService.ShowEditPersonWindow();
+      try
+      {
+        _windowService.ShowEditPersonWindow();
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
     }
 
     private bool CanExecuteDeletePersonCommand(UiPerson uiPerson)
@@ -125,8 +181,15 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteDeletePersonCommand(UiPerson uiPerson)
     {
-      _personDataStore.Delete(uiPerson.ToPerson());
-      _uiEvents.PersonDataStoreChanged();
+      try
+      {
+        _personDataStore.Delete(uiPerson.ToPerson());
+        _uiEvents.PersonDataStoreChanged();
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
     }
 
     #endregion
@@ -140,7 +203,14 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteCreateShooterCommand(UiPerson uiPerson)
     {
-      _windowService.ShowCreateShooterWindow();
+      try
+      {
+        _windowService.ShowCreateShooterWindow();
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
     }
 
     private bool CanExecuteEditShooterCommand(UiShooter uiShooter)
@@ -150,8 +220,15 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteEditShooterCommand(UiShooter uiShooter)
     {
-      _windowService.ShowEditShooterWindow();
-      _uiEvents.ShooterDataStoreChanged();
+      try
+      {
+        _windowService.ShowEditShooterWindow();
+        _uiEvents.ShooterDataStoreChanged();
+      }
+      catch (Exception e)
+      { 
+        ReportException(e);
+      }
     }
 
     private bool CanExecuteDeleteShooterCommand(UiShooter uiShooter)
@@ -211,6 +288,8 @@ namespace ShootingRange.ViewModel
     public ICommand CreateParticipationCommand { get; private set; }
     public ICommand EditParticipationCommand { get; private set; }
     public ICommand DeleteParticipationCommand { get; private set; }
+
+    public ICommand PrintBarcodeCommand { get; private set; }
 
     #region Properties
 
@@ -353,6 +432,7 @@ namespace ShootingRange.ViewModel
     {
       Func<Shooter, UiShooter> selector = shooter => new UiShooter
       {
+        PersonId = shooter.PersonId,
         ShooterNumber = shooter.ShooterNumber,
         ShooterId = shooter.ShooterId
       };

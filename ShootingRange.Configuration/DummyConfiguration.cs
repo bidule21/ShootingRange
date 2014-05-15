@@ -81,5 +81,15 @@ namespace ShootingRange.Configuration
     {
       throw new System.NotImplementedException();
     }
+
+    public IBarcodePrintService GetBarcodePrintService()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public IBarcodeBuilderService GetBarcodeBuilderService()
+    {
+      throw new System.NotImplementedException();
+    }
   }
 }
