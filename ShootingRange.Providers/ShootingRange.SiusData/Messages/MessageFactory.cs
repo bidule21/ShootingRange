@@ -12,25 +12,25 @@ namespace ShootingRange.SiusData.Messages
       _messageHandler = messageHandler;
     }
 
-    public PrchMessage MakePrchMessage(int shooterNumber, int laneId, DateTime timestamp)
+    public PrchMessage MakePrchMessage(int shooterNumber, int laneId, int laneNumber, DateTime timestamp)
     {
-      var message = new PrchMessage(shooterNumber, laneId, timestamp);
+      var message = new PrchMessage(shooterNumber, laneId, laneNumber, timestamp);
       message.ProcessDelegate += _messageHandler.ProcessPrchMessage;
       return message;
     }
 
-    public ShotMessage MakeShotMessage(int shooterId, int laneId, DateTime timestamp, double primaryScore,
-      double secondaryScore, int shotNbr, int programNumber)
+    public ShotMessage MakeShotMessage(int shooterId, int laneId, int laneNumber, DateTime timestamp, decimal primaryScore,
+      decimal secondaryScore, int shotNbr, int programNumber)
     {
-      var message = new ShotMessage(shooterId, laneId, timestamp, primaryScore, secondaryScore, shotNbr, programNumber);
+      var message = new ShotMessage(shooterId, laneId, laneNumber, timestamp, primaryScore, secondaryScore, shotNbr, programNumber);
       message.ProcessDelegate += _messageHandler.ProcessShotMessage;
       return message;
     }
 
-    public BestShotMessage MakeBestShotMessage(int shooterId, int laneId, DateTime timestamp, double primaryScore,
-      double secondaryScore, int shotNbr, int programNumber)
+    public BestShotMessage MakeBestShotMessage(int shooterId, int laneId, int laneNumber, DateTime timestamp, decimal primaryScore,
+      decimal secondaryScore, int shotNbr, int programNumber)
     {
-      var message = new BestShotMessage(shooterId, laneId, timestamp, primaryScore, secondaryScore, shotNbr, programNumber);
+      var message = new BestShotMessage(shooterId, laneId, laneNumber, timestamp, primaryScore, secondaryScore, shotNbr, programNumber);
       message.ProcessDelegate = _messageHandler.ProcessBestShotMessage;
       return message;
     }

@@ -58,6 +58,10 @@
       <Project>{161A7067-75A0-4FF5-A614-7AE8C938515D}</Project>
       <Name>ShootingRange.Persistence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Providers\ShootingRange.SiusData\ShootingRange.SiusData.csproj">
+      <Project>{E05652AE-4264-4757-964E-611910C42771}</Project>
+      <Name>ShootingRange.SiusData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Repository\ShootingRange.Repository.csproj">
       <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>
       <Name>ShootingRange.Repository</Name>

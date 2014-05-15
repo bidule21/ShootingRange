@@ -10,7 +10,6 @@ using DotNetToolbox.RelayCommand;
 using ShootingRange.BusinessObjects;
 using ShootingRange.BusinessObjects.Properties;
 using ShootingRange.Common;
-using ShootingRange.Common.BusinessObjects;
 using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository;

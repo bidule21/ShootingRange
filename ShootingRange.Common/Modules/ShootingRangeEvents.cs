@@ -12,7 +12,7 @@
 
     public ShootingRangeModuleDelegate<ShotEventArgs> Shot { get; set; }
 
-    public ShootingRangeModuleDelegate<ProgramNumberEventArgs> ProgramNumber { get; set; }
+    public ShootingRangeModuleDelegate<PrchEventArgs> ProgramNumber { get; set; }
 
     public ShootingRangeModuleDelegate<ShooterNumberEventArgs> ShooterNumber { get; set; }
 

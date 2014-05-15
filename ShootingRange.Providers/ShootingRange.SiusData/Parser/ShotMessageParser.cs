@@ -36,12 +36,12 @@ namespace ShootingRange.SiusData.Parser
 
       SuccessHelper allOverSuccess = new SuccessHelper();
       int laneId = ValueAccessHelper.GetInt(valueList, LaneId, allOverSuccess);
-      int laneNbr = ValueAccessHelper.GetInt(valueList, LaneNumber, allOverSuccess);
+      int laneNumber = ValueAccessHelper.GetInt(valueList, LaneNumber, allOverSuccess);
       int shooterId = ValueAccessHelper.GetInt(valueList, ShooterId, allOverSuccess);
       DateTime timstamp = ValueAccessHelper.GetDateTime(valueList, DateTime, allOverSuccess);
       int shotType = ValueAccessHelper.GetInt(valueList, ShotType, allOverSuccess);
-      double primaryScore = ValueAccessHelper.GetDouble(valueList, PrimaryScore, allOverSuccess);
-      double secondaryScore = ValueAccessHelper.GetDouble(valueList, SecondaryScore, allOverSuccess);
+      decimal primaryScore = ValueAccessHelper.GetDecimal(valueList, PrimaryScore, allOverSuccess);
+      decimal secondaryScore = ValueAccessHelper.GetDecimal(valueList, SecondaryScore, allOverSuccess);
       int shotNbr = ValueAccessHelper.GetInt(valueList, ShotNbr, allOverSuccess);
       float x = ValueAccessHelper.GetFloat(valueList, X, allOverSuccess);
       float y = ValueAccessHelper.GetFloat(valueList, Y, allOverSuccess);
@@ -52,10 +52,10 @@ namespace ShootingRange.SiusData.Parser
       switch (shotType)
       {
         case 2:
-          message = _messageFactory.MakeBestShotMessage(shooterId, laneId, timstamp, primaryScore, secondaryScore, shotNbr, programNumber);
+          message = _messageFactory.MakeBestShotMessage(shooterId, laneId, laneNumber, timstamp, primaryScore, secondaryScore, shotNbr, programNumber);
           break;
         case 3:
-          message = _messageFactory.MakeShotMessage(shooterId, laneId, timstamp, primaryScore, secondaryScore, shotNbr, programNumber);
+          message = _messageFactory.MakeShotMessage(shooterId, laneId, laneNumber, timstamp, primaryScore, secondaryScore, shotNbr, programNumber);
           break;
       }
       return message;

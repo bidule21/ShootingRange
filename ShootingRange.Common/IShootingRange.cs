@@ -17,6 +17,6 @@ namespace ShootingRange.Common
     event EventHandler<ShotEventArgs> Shot;
 
     /// <summary>A program number information is received. </summary>
-    event EventHandler<ProgramNumberEventArgs> ProgramNumber;
+    event EventHandler<PrchEventArgs> Prch;
   }
 }

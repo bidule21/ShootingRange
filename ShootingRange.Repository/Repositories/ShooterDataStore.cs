@@ -71,7 +71,6 @@ namespace ShootingRange.Repository.Repositories
 
     public IEnumerable<Shooter> FindByPersonId(int personId)
     {
-      var foo = _sqlRepository.GetAll();
       return
         _sqlRepository.Find(shooter => shooter.PersonId == personId).Select(_selector);
     }

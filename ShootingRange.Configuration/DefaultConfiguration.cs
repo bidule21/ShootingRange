@@ -8,6 +8,7 @@ using ShootingRange.Repository.FakeRepositories;
 using ShootingRange.Repository.Repositories;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
+using ShootingRange.SiusData;
 
 namespace ShootingRange.Configuration
 {
@@ -17,10 +18,13 @@ namespace ShootingRange.Configuration
     private ShootingRangeEvents _events;
     private UIEvents _uiEvents;
     private IPersonDataStore _personRepository;
+    private ISessionDataStore _sessionDataStore;
     private IShooterDataStore _shooterRepository;
     private IParticipationDataStore _participationDataStore;
     private IParticipationTypeDataStore _participationTypeDataStore;
     private IShooterNumberConfigDataStore _shooterNumberConfigDataStore;
+    private IProgramItemDataStore _programItemDataStore;
+    private IShotDataStore _shotDataStore;
     private IWindowService _windowService;
     private IBarcodePrintService _barcodePrintService;
     private GroupMemberDetailsView _groupMemberDetailsView;
@@ -32,20 +36,23 @@ namespace ShootingRange.Configuration
 
     public DefaultConfiguration()
     {
-      //_shootingRange = new SiusDataFileProvider(@"20130914_132912.log");
+      _shootingRange = new SiusDataFileProvider(@"./FileSource/20130914_132912.log");
       //_shootingRange = new SiusApiProvider("http://192.168.1.4");
       _events = new ShootingRangeEvents();
       _uiEvents = new UIEvents();
-      ShootingRangeEntities entites = new ShootingRangeEntities();
-      _personRepository = new PersonDataStore(entites);
-      _shooterRepository = new ShooterDataStore(entites);
-      _participationDataStore = new ParticipationDataStore(entites);
-      _participationTypeDataStore = new ParticipationTypeDataStore(entites);
-      _shooterNumberConfigDataStore = new ShooterNumberConfigDataStore(entites);
-      _shooterParticipationDataStore = new ShooterParticipationDataStore(entites);
-      _groupMemberDetailsView = new GroupMemberDetailsView(entites);
-      _groupDetailsView = new GroupDetailsView(entites);
-      _shooterParticipationView = new ShooterParticipationView(entites);
+      ShootingRangeEntities entities = new ShootingRangeEntities();
+      _personRepository = new PersonDataStore(entities);
+      _shooterRepository = new ShooterDataStore(entities);
+      _participationDataStore = new ParticipationDataStore(entities);
+      _sessionDataStore = new SessionDataStore(entities);
+      _shotDataStore = new ShotDataStore(entities);
+      _participationTypeDataStore = new ParticipationTypeDataStore(entities);
+      _shooterNumberConfigDataStore = new ShooterNumberConfigDataStore(entities);
+      _shooterParticipationDataStore = new ShooterParticipationDataStore(entities);
+      _programItemDataStore = new ProgramItemDataStore(entities);
+      _groupMemberDetailsView = new GroupMemberDetailsView(entities);
+      _groupDetailsView = new GroupDetailsView(entities);
+      _shooterParticipationView = new ShooterParticipationView(entities);
       _windowService = new WindowService();
       _barcodePrintService = new PtouchBarcodePrinter();
       _barcodeBuilderService = new Barcode2Of5InterleavedService();
@@ -115,6 +122,21 @@ namespace ShootingRange.Configuration
     public IParticipationTypeDataStore GetParticipationTypeDataStore()
     {
       return _participationTypeDataStore;
+    }
+
+    public ISessionDataStore GetSessionDataStore()
+    {
+      return _sessionDataStore;
+    }
+
+    public IProgramItemDataStore GetProgramItemDataStore()
+    {
+      return _programItemDataStore;
+    }
+
+    public IShotDataStore GetShotDataStore()
+    {
+      return _shotDataStore;
     }
 
     public IShootingRange GetShootingRange()

@@ -17,6 +17,11 @@ namespace ShootingRange.SiusData.Parser
       return GetValue<int>(valueList, index, success);
     }
 
+    public static decimal GetDecimal(IEnumerable<string> valueList, int index, SuccessHelper success)
+    {
+      return GetValue<decimal>(valueList, index, success);
+    }
+
     public static float GetFloat(IEnumerable<string> valueList, int index, SuccessHelper success)
     {
       return GetValue<float>(valueList, index, success);

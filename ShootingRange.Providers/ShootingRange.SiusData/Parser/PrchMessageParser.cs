@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using ShootingRange.SiusData.Messages;
 
 namespace ShootingRange.SiusData.Parser
@@ -11,6 +12,7 @@ namespace ShootingRange.SiusData.Parser
     private const string Identifier = "_PRCH";
 
     private const int LaneId = 0;
+    private const int LaneNumber = 1;
     private const int ShooterNumber = 2;
     private const int Timestamp = 5;
 
@@ -28,10 +30,11 @@ namespace ShootingRange.SiusData.Parser
       SuccessHelper allOverSuccess = new SuccessHelper();
       int shooterNumber = ValueAccessHelper.GetInt(valueList, ShooterNumber, allOverSuccess);
       int laneId = ValueAccessHelper.GetInt(valueList, LaneId, allOverSuccess);
+      int laneNumber = ValueAccessHelper.GetInt(valueList, LaneNumber, allOverSuccess);
       DateTime timestamp = ValueAccessHelper.GetDateTime(valueList, Timestamp, allOverSuccess);
 
       if (!allOverSuccess.Success) return null;
-      return _messageFactory.MakePrchMessage(shooterNumber, laneId, timestamp);
+      return _messageFactory.MakePrchMessage(shooterNumber, laneId, laneNumber, timestamp);
     }
   }
 }

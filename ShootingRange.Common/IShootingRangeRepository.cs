@@ -1,4 +1,4 @@
-﻿using ShootingRange.Common.BusinessObjects;
+﻿using ShootingRange.BusinessObjects;
 
 namespace ShootingRange.Common
 {

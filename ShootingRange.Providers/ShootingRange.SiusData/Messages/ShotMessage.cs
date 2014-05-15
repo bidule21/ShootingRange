@@ -7,10 +7,11 @@ namespace ShootingRange.SiusData.Messages
   [DebuggerDisplay("Lane {LaneId}; PrimaryScore {PrimaryScore}")]
   public class ShotMessage : SiusDataMessage
   {
-    public ShotMessage(int shooterId, int laneId, DateTime timestamp, double primaryScore, double secondaryScore, int shotNbr, int programNumber)
+    public ShotMessage(int shooterId, int laneId, int laneNumber, DateTime timestamp, decimal primaryScore, decimal secondaryScore, int shotNbr, int programNumber)
     {
       ShooterId = shooterId;
       LaneId = laneId;
+      LaneNumber = laneNumber;
       Timestamp = timestamp;
       PrimaryScore = primaryScore;
       SecondaryScore = secondaryScore;
@@ -26,13 +27,14 @@ namespace ShootingRange.SiusData.Messages
 
     public DateTime Timestamp { get; private set; }
 
-    public double PrimaryScore { get; private set; }
+    public decimal PrimaryScore { get; private set; }
 
-    public double SecondaryScore { get; private set; }
+    public decimal SecondaryScore { get; private set; }
 
     public int ShotNbr { get; private set; }
 
     public int ProgramNumber { get; private set; }
+    public int LaneNumber { get; set; }
 
     public override void Process()
     {

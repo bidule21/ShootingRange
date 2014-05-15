@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using ShootingRange.Common.BusinessObjects;
+using ShootingRange.BusinessObjects;
 
 namespace ShootingRange.Engine
 {

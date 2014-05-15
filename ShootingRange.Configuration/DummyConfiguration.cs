@@ -96,5 +96,20 @@ namespace ShootingRange.Configuration
     {
       throw new System.NotImplementedException();
     }
+
+    public ISessionDataStore GetSessionDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public IProgramItemDataStore GetProgramItemDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public IShotDataStore GetShotDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
   }
 }

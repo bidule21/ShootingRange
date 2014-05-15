@@ -17,4 +17,27 @@ namespace ShootingRange.Repository.Mapper
       return entity;
     }
   }
+
+  internal static class ProgramItemMapper
+  {
+    public static t_programitem UpdateEntity(this t_programitem entity, ProgramItem programItem)
+    {
+      entity.ItemName = programItem.ProgramName;
+      entity.ProgramNumber = programItem.ProgramNumber;
+      return entity;
+    }
+  }
+
+  internal static class ShotMapper
+  {
+    public static t_shot UpdateEntity(this t_shot entity, Shot shot)
+    {
+      entity.PrimaryScore = shot.PrimaryScore;
+      entity.SecondaryScore = shot.SecondaryScore;
+      entity.ShotOrdinal = shot.Ordinal;
+      entity.ValueX = shot.ValueX;
+      entity.ValueY = shot.ValueY;
+      return entity;
+    }
+  }
 }

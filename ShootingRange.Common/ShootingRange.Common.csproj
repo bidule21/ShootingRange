@@ -34,14 +34,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessObjects\Session.cs" />
-    <Compile Include="BusinessObjects\Shot.cs" />
     <Compile Include="IShootingRange.cs" />
     <Compile Include="IShootingRangeRepository.cs" />
     <Compile Include="Modules\IShootingRangeModule.cs" />
     <Compile Include="Modules\ShootingRangeEvents.cs" />
     <Compile Include="Modules\ShootingRangeModuleDelegate.cs" />
-    <Compile Include="ProgramNumberEventArgs.cs" />
+    <Compile Include="PrchEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShooterNumberEventArgs.cs" />
     <Compile Include="ShotEventArgs.cs" />

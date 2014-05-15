@@ -39,6 +39,6 @@ namespace ShootingRange.SiusApi
 
       public event EventHandler<ShooterNumberEventArgs> ShooterNumber;
       public event EventHandler<ShotEventArgs> Shot;
-      public event EventHandler<ProgramNumberEventArgs> ProgramNumber;
+      public event EventHandler<PrchEventArgs> Prch;
     }
 }

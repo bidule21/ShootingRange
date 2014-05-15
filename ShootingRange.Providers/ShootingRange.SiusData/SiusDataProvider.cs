@@ -20,7 +20,7 @@ namespace ShootingRange.SiusData
 
     public event EventHandler<ShooterNumberEventArgs> ShooterNumber;
     public event EventHandler<ShotEventArgs> Shot;
-    public event EventHandler<ProgramNumberEventArgs> ProgramNumber;
+    public event EventHandler<PrchEventArgs> Prch;
 
     public void ProcessSiusDataMessage(string message)
     {
@@ -45,17 +45,38 @@ namespace ShootingRange.SiusData
 
     public void ProcessShotMessage(ShotMessage shotMessage)
     {
-      ShotEventArgs e = new ShotEventArgs() {PrimaryScore = shotMessage.PrimaryScore};
+      ShotEventArgs e = new ShotEventArgs
+      {
+        PrimaryScore = shotMessage.PrimaryScore,
+        SecondaryScore = shotMessage.SecondaryScore,
+        ProgramNumber = shotMessage.ProgramNumber,
+        LaneNumber = shotMessage.LaneNumber,
+        LaneId =  shotMessage.LaneId,
+      };
       OnShot(e);
     }
 
     public void ProcessPrchMessage(PrchMessage prchMessage)
     {
+      PrchEventArgs e = new PrchEventArgs
+      {
+        LaneNumber = prchMessage.LaneNumber,
+        ShooterNumber = prchMessage.ShooterNumber,
+        Timestamp = prchMessage.Timestamp,
+      };
+
+      OnPrch(e);
     }
 
     protected virtual void OnShot(ShotEventArgs e)
     {
       EventHandler<ShotEventArgs> handler = Shot;
+      if (handler != null) handler(this, e);
+    }
+
+    protected virtual void OnPrch(PrchEventArgs e)
+    {
+      EventHandler<PrchEventArgs> handler = Prch;
       if (handler != null) handler(this, e);
     }
   }
