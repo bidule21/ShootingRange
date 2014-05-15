@@ -5,10 +5,10 @@ using DotNetToolbox.RelayCommand;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Engine;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.SiusDbWriterViewModel.Properties;
 using ShootingRange.ViewModel;
-using SiusDbWriterViewModel.Annotations;
 
-namespace SiusDbWriterViewModel
+namespace ShootingRange.SiusDbWriterViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {

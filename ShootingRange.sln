@@ -59,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShootingRange.SiusDbWriter"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShootingRange.SiusDbWriterView", "ShootingRange.SiusDbWriterView\ShootingRange.SiusDbWriterView.csproj", "{3A0413FF-55E7-4A2E-B99C-14105CF56E06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiusDbWriterViewModel", "SiusDbWriterViewModel\SiusDbWriterViewModel.csproj", "{C73D0738-E2E6-4C16-9CEB-EA5F07710A49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShootingRange.SiusDbWriterViewModel", "ShootingRange.SiusDbWriterViewModel\ShootingRange.SiusDbWriterViewModel.csproj", "{C73D0738-E2E6-4C16-9CEB-EA5F07710A49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

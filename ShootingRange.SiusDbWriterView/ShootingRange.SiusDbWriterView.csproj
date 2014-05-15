@@ -94,9 +94,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SiusDbWriterViewModel\SiusDbWriterViewModel.csproj">
+    <ProjectReference Include="..\ShootingRange.SiusDbWriterViewModel\ShootingRange.SiusDbWriterViewModel.csproj">
       <Project>{C73D0738-E2E6-4C16-9CEB-EA5F07710A49}</Project>
-      <Name>SiusDbWriterViewModel</Name>
+      <Name>ShootingRange.SiusDbWriterViewModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
