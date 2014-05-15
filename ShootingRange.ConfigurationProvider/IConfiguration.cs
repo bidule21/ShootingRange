@@ -22,5 +22,6 @@ namespace ShootingRange.ConfigurationProvider
     IShooterParticipationView GetShooterParticipationView();
     IBarcodePrintService GetBarcodePrintService();
     IBarcodeBuilderService GetBarcodeBuilderService();
+    IParticipationTypeDataStore GetParticipationTypeDataStore();
   }
 }

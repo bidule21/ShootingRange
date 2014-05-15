@@ -51,6 +51,7 @@
     <Compile Include="Mapper\ShooterNumberConfigMapper.cs" />
     <Compile Include="Mapper\ShooterParticipationMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IParticipationTypeDataStore.cs" />
     <Compile Include="Repositories\IShooterNumberConfigDataStore.cs" />
     <Compile Include="Repositories\IShooterParticipationDataStore.cs" />
     <Compile Include="Repositories\IShooterParticipationView.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Repositories\IGroupMemberDetailsView.cs" />
     <Compile Include="Repositories\IPersonDataStore.cs" />
     <Compile Include="Repositories\IShooterDataStore.cs" />
+    <Compile Include="Repositories\ParticipationTypeDataStore.cs" />
     <Compile Include="Repositories\PersonDataStore.cs" />
     <Compile Include="Repositories\ShooterDataStore.cs" />
     <Compile Include="Repositories\ShooterNumberConfigDataStore.cs" />

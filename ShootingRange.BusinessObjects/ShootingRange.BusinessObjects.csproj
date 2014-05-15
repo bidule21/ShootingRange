@@ -37,6 +37,7 @@
     <Compile Include="Participation.cs" />
     <Compile Include="ParticipationDetails.cs" />
     <Compile Include="GroupMemberDetails.cs" />
+    <Compile Include="ParticipationType.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

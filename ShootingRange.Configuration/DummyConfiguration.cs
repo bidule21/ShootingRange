@@ -91,5 +91,10 @@ namespace ShootingRange.Configuration
     {
       throw new System.NotImplementedException();
     }
+
+    public IParticipationTypeDataStore GetParticipationTypeDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
   }
 }

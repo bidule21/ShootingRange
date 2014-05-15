@@ -48,13 +48,13 @@
                 <viewUtils:AutoGreyableImage Source="Images/remove_weapon_32.png"></viewUtils:AutoGreyableImage>
             </Button>
             <Separator Margin="0,2"/>
-            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+            <Button Command="{Binding CreateParticipationCommand}">
                 <viewUtils:AutoGreyableImage Source="Images/add_ticket_32.png" Height="32"/>
             </Button>
-            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+            <Button Command="{Binding EditParticipationCommand}" CommandParameter="{Binding SelectedUiShooter}">
                 <viewUtils:AutoGreyableImage Source="Images/edit_ticket_32.png" Height="32"/>
             </Button>
-            <Button Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
+            <Button Command="{Binding DeleteParticipationCommand}" CommandParameter="{Binding SelectedUiShooter}">
                 <viewUtils:AutoGreyableImage Source="Images/remove_ticket_32.png" Height="32"/>
             </Button>
             <Separator Margin="0,2"/>
@@ -100,7 +100,9 @@
                 </GroupBox>
             </DockPanel>
             <DockPanel Grid.Column="2">
-                <GroupBox Header="Details" Margin="5"/>
+                <GroupBox Header="Details" Margin="5">
+                    <TextBox TextWrapping="NoWrap" Text="{Binding DetailsView}"/>
+                </GroupBox>
             </DockPanel>
         </Grid>
     </DockPanel>

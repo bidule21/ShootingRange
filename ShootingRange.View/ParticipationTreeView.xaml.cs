@@ -15,6 +15,16 @@ namespace ShootingRange.View
       InitializeComponent();
     }
 
+    public ParticipationTreeItem SelectedItem
+    {
+      get { return (ParticipationTreeItem) GetValue(SelectedItemProperty); }
+      set { SetValue(SelectedItemProperty, value); }
+    }
+
+    public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem",
+      typeof (ParticipationTreeItem),
+      typeof (ParticipationTreeView));
+
     public ObservableCollection<ParticipationTreeItem> ParticipationTreeItems
     {
       get { return (ObservableCollection<ParticipationTreeItem>) GetValue(ParticipationTreeItemsProperty); }

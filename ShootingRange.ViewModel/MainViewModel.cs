@@ -91,8 +91,7 @@ namespace ShootingRange.ViewModel
       EditShooterCommand = new RelayCommand<UiShooter>(ExecuteEditShooterCommand, CanExecuteEditShooterCommand);
       DeleteShooterCommand = new RelayCommand<UiShooter>(ExecuteDeleteShooterCommand, CanExecuteDeleteShooterCommand);
 
-      CreateParticipationCommand = new RelayCommand<UiShooter>(ExecuteCreateParticipationCommand,
-        CanExecuteCreateParticipationCommand);
+      CreateParticipationCommand = new RelayCommand<object>(ExecuteCreateParticipationCommand);
       //EditParticipationCommand = new RelayCommand<UiParticipation>
       //DeleteParticipationCommand = new RelayCommand<UiParticipation>
 
@@ -262,14 +261,9 @@ namespace ShootingRange.ViewModel
 
     #region Participation
 
-    private bool CanExecuteCreateParticipationCommand(UiShooter uiShooter)
+    private void ExecuteCreateParticipationCommand(object obj)
     {
-      return uiShooter != null;
-    }
-
-    private void ExecuteCreateParticipationCommand(UiShooter uiShooter)
-    {
-      throw new NotImplementedException();
+      _windowService.ShowCreateParticipationWindow();
     }
 
     #endregion
@@ -424,12 +418,38 @@ namespace ShootingRange.ViewModel
       {
         participationTreeItems = _groupDetailsView.GetAll().Select(selector);
       }
-
+        
       ParticipationTreeItems = new ObservableCollection<ParticipationTreeItem>(participationTreeItems.Where(_ => _.ParticipationNames.Any()));
+    }
+
+    
+    private string _detailsView;
+    public string DetailsView
+    {
+      get { return _detailsView; }
+      set
+      {
+        if (value != _detailsView)
+        {
+          _detailsView = value;
+          OnPropertyChanged("DetailsView");
+        }
+      }
+    }
+
+    private void FillDetailsWithParticipation()
+    {
+      
     }
 
     private void LoadShooterList()
     {
+      int selectedShooterId = default (int);
+      if (SelectedUiShooter != null)
+      {
+        selectedShooterId = SelectedUiShooter.ShooterId;
+      }
+
       Func<Shooter, UiShooter> selector = shooter => new UiShooter
       {
         PersonId = shooter.PersonId,
@@ -448,6 +468,7 @@ namespace ShootingRange.ViewModel
       }
 
       ShooterListItems = new ObservableCollection<UiShooter>(shooterListItems);
+      SelectedUiShooter = ShooterListItems.SingleOrDefault(_ => _.ShooterId == selectedShooterId);
     }
 
     #endregion

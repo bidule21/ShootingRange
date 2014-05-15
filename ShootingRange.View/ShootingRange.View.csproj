@@ -46,12 +46,19 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParticipationCreateWindow.xaml.cs">
+      <DependentUpon>ParticipationCreateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShooterCreateWindow.xaml.cs">
       <DependentUpon>ShooterCreateWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShooterEditWindow.xaml.cs">
       <DependentUpon>ShooterEditWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="ParticipationCreateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ParticipationTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

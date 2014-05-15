@@ -41,9 +41,12 @@
   <ItemGroup>
     <Compile Include="DesignTimeHelper.cs" />
     <Compile Include="GroupListItem.cs" />
+    <Compile Include="ParticipationCreateViewModel.cs" />
+    <Compile Include="ParticipationDraft.cs" />
     <Compile Include="ParticipationListItem.cs" />
     <Compile Include="ParticipationTreeItem.cs" />
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="ParticipationTypeListItem.cs" />
     <Compile Include="PersonCreateViewModel.cs" />
     <Compile Include="PersonEditViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

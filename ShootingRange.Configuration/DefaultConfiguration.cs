@@ -19,6 +19,7 @@ namespace ShootingRange.Configuration
     private IPersonDataStore _personRepository;
     private IShooterDataStore _shooterRepository;
     private IParticipationDataStore _participationDataStore;
+    private IParticipationTypeDataStore _participationTypeDataStore;
     private IShooterNumberConfigDataStore _shooterNumberConfigDataStore;
     private IWindowService _windowService;
     private IBarcodePrintService _barcodePrintService;
@@ -39,6 +40,7 @@ namespace ShootingRange.Configuration
       _personRepository = new PersonDataStore(entites);
       _shooterRepository = new ShooterDataStore(entites);
       _participationDataStore = new ParticipationDataStore(entites);
+      _participationTypeDataStore = new ParticipationTypeDataStore(entites);
       _shooterNumberConfigDataStore = new ShooterNumberConfigDataStore(entites);
       _shooterParticipationDataStore = new ShooterParticipationDataStore(entites);
       _groupMemberDetailsView = new GroupMemberDetailsView(entites);
@@ -108,6 +110,11 @@ namespace ShootingRange.Configuration
     public IBarcodeBuilderService GetBarcodeBuilderService()
     {
       return _barcodeBuilderService;
+    }
+
+    public IParticipationTypeDataStore GetParticipationTypeDataStore()
+    {
+      return _participationTypeDataStore;
     }
 
     public IShootingRange GetShootingRange()

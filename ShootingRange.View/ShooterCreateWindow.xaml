@@ -42,10 +42,10 @@
                     </StackPanel>
                 </Grid>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,20,5,5">
+            <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,20,5,5">
                 <Button Content="OK" Width="80" Margin="3"/>
                 <Button Content="Cancel" Width="80" Margin="3" Command="{Binding CancelCommand}"/>
-            </StackPanel>
+            </StackPanel>-->
         </StackPanel>
     </DockPanel>
 </Window>
