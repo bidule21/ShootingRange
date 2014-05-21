@@ -11,6 +11,5 @@ namespace ShootingRange.BusinessObjects
     public int ShooterParticipationId { get; set; }
     public int ShooterId { get; set; }
     public int ParticipationId { get; set; }
-    public string ParticipationName { get; set; }
   }
 }

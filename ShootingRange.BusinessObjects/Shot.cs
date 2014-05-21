@@ -15,5 +15,6 @@ namespace ShootingRange.BusinessObjects
     public decimal? ValueY { get; set; }
     public int LaneNumber { get; set; }
     public int ShotId { get; set; }
+    public int SubtotalId { get; set; }
   }
 }

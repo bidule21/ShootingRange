@@ -52,6 +52,7 @@ namespace ShootingRange.SiusData
         ProgramNumber = shotMessage.ProgramNumber,
         LaneNumber = shotMessage.LaneNumber,
         LaneId =  shotMessage.LaneId,
+        Ordinal = shotMessage.ShotNbr,
       };
       OnShot(e);
     }

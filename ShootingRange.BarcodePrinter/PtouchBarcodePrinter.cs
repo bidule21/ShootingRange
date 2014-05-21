@@ -21,7 +21,10 @@ namespace ShootingRange.BarcodePrinter
         shooterName.Text = Convert.ToString(barcodeInfo.FirstName + " " + barcodeInfo.LastName);
 
         IObject dateOfBirth = doc.GetObject("dateOfBirth");
-        dateOfBirth.Text = Convert.ToString(barcodeInfo.DateOfBirth);
+        dateOfBirth.Text = Convert.ToString(barcodeInfo.DateOfBirth.ToString("dd.MM.yyyy"));
+
+        IObject groupName = doc.GetObject("groupName");
+        groupName.Text = Convert.ToString(barcodeInfo.GroupInfo);
 
         doc.StartPrint("", PrintOptionConstants.bpoDefault);
         doc.PrintOut(1, PrintOptionConstants.bpoDefault);

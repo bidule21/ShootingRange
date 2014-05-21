@@ -8,14 +8,17 @@ namespace ShootingRange.ConfigurationProvider
 {
   public interface IConfiguration
   {
+    ISsvShooterDataWriterService GetSsvShooterDataWriterService();
     IShootingRange GetShootingRange();
     ShootingRangeEvents GetEvents();
     UIEvents GetUIEvents();
     IPersonDataStore GetPersonDataStore();
     IShooterDataStore GetShooterDataStore();
     IParticipationDataStore GetParticipationDataStore();
+    ISessionSubtotalDataStore GetSessionSubtotalDataStore();
     IGroupMemberDetailsView GetGroupMemberDetailsView();
     IGroupDetailsView GetGroupDetailsView();
+    ISessionDetailsView GetSessionDetailsView();
     IWindowService GetWindowService();
     IShooterNumberService GetShooterNumberService();
     IShooterParticipationDataStore GetShooterParticipationDataStore();

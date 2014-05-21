@@ -37,6 +37,7 @@ namespace ShootingRange.Repository.Mapper
       entity.ShotOrdinal = shot.Ordinal;
       entity.ValueX = shot.ValueX;
       entity.ValueY = shot.ValueY;
+      entity.SubtotalId = shot.SubtotalId;
       return entity;
     }
   }

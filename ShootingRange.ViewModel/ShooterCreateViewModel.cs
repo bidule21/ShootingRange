@@ -28,6 +28,7 @@ namespace ShootingRange.ViewModel
     private IShooterParticipationView _shooterParticipationView;
     private IParticipationDataStore _participationDataStore;
     private IShooterParticipationDataStore _shooterParticipationDataStore;
+    private ISsvShooterDataWriterService _ssvShooterDataWriterService;
 
     public ShooterCreateViewModel()
     {
@@ -51,6 +52,7 @@ namespace ShootingRange.ViewModel
         _shooterNumberService = config.GetShooterNumberService();
         _shooterDataStore = config.GetShooterDataStore();
         _shooterParticipationView = config.GetShooterParticipationView();
+        _ssvShooterDataWriterService = config.GetSsvShooterDataWriterService();
         LoadAvailableParticipationList();
         LoadAssignedParticipationList();
       }
@@ -97,6 +99,12 @@ namespace ShootingRange.ViewModel
         shooter.ShooterNumber = _shooterNumberService.GetShooterNumber();
         shooter.PersonId = uiPerson.PersonId;
         _shooterDataStore.Create(shooter);
+        _ssvShooterDataWriterService.WriteShooterData(new SsvShooterData
+        {
+          FirstName = uiPerson.FirstName,
+          LastName = uiPerson.LastName,
+          LicenseNumber = (uint)shooter.ShooterNumber
+        });
         UiShooter = UiBusinessObjectMapper.ToUiShooter(_shooterDataStore.FindByShooterNumber(shooter.ShooterNumber));
       }
       catch (Exception e)

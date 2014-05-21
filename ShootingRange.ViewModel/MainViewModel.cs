@@ -28,6 +28,9 @@ namespace ShootingRange.ViewModel
     private IParticipationDataStore _participationDataStore;
     private IGroupMemberDetailsView _groupMemberDetailsView;
     private IGroupDetailsView _groupDetailsView;
+    private IShooterParticipationDataStore _shooterParticipationDataStore;
+    private IShooterParticipationView _shooterParticipationView;
+    private ISessionDetailsView _sessionDetailsView;
     private ShootingRangeEvents _events;
 
     private IWindowService _windowService;
@@ -52,8 +55,11 @@ namespace ShootingRange.ViewModel
         _personDataStore = config.GetPersonDataStore();
         _shooterDataStore = config.GetShooterDataStore();
         _participationDataStore = config.GetParticipationDataStore();
+        _shooterParticipationDataStore = config.GetShooterParticipationDataStore();
         _groupMemberDetailsView = config.GetGroupMemberDetailsView();
+        _shooterParticipationView = config.GetShooterParticipationView();
         _groupDetailsView = config.GetGroupDetailsView();
+        _sessionDetailsView = config.GetSessionDetailsView();
 
         _shooterNumberService = config.GetShooterNumberService();
         _windowService = config.GetWindowService();
@@ -102,11 +108,13 @@ namespace ShootingRange.ViewModel
       try
       {
         Person person = _personDataStore.FindById(uiShooter.PersonId);
+        ShooterParticipationDetails particiapDetails = _shooterParticipationView.FindByShooterId(uiShooter.ShooterId).FirstOrDefault();
         BarcodeInfo barcodeInfo = new BarcodeInfo
         {
           FirstName = person.FirstName,
           LastName = person.LastName,
           DateOfBirth = person.DateOfBirth,
+          GroupInfo = particiapDetails == null ? string.Empty : string.Format("Gruppenwettkampf:\r\n{0}", particiapDetails.ParticipationName),
           Barcode = _barcodeBuilderService.BuildBarcode(uiShooter.ShooterNumber, uiShooter.Legalization)
         };
 
@@ -347,19 +355,65 @@ namespace ShootingRange.ViewModel
       }
     }
 
-    private ObservableCollection<ParticipationTreeItem> _participationTreeItems;
-    public ObservableCollection<ParticipationTreeItem> ParticipationTreeItems
+    private ShooterParticipationListItem _selectedUiShooterParticipation;
+
+    public ShooterParticipationListItem SelectedUiShooterParticipation
     {
-      get { return _participationTreeItems; }
+      get { return _selectedUiShooterParticipation; }
       set
       {
-        if (value != _participationTreeItems)
+        if (value != _selectedUiShooterParticipation)
         {
-          _participationTreeItems = value;
-          OnPropertyChanged("ParticipationTreeItems");
+          _selectedUiShooterParticipation = value;
+          OnPropertyChanged("SelectedUiShooterParticipation");
+          OnSelectedShooterParticipationItemChanged(SelectedUiShooterParticipation);
         }
       }
     }
+
+    private ObservableCollection<ShooterParticipationListItem> _participations;
+
+    public ObservableCollection<ShooterParticipationListItem> Participations
+    {
+      get { return _participations; }
+      set
+      {
+        if (value != _participations)
+        {
+          _participations = value;
+          OnPropertyChanged("Participations");
+        }
+      }
+    } 
+
+    //private ObservableCollection<ParticipationTreeItem> _participationTreeItems;
+    //public ObservableCollection<ParticipationTreeItem> ParticipationTreeItems
+    //{
+    //  get { return _participationTreeItems; }
+    //  set
+    //  {
+    //    if (value != _participationTreeItems)
+    //    {
+    //      _participationTreeItems = value;
+    //      OnPropertyChanged("ParticipationTreeItems");
+    //    }
+    //  }
+    //}
+
+    private ObservableCollection<SessionTreeViewItem> _sessionTreeViewItems;
+
+    public ObservableCollection<SessionTreeViewItem> SessionTreeViewItems
+    {
+      get { return _sessionTreeViewItems; }
+      set
+      {
+        if (value != _sessionTreeViewItems)
+        {
+          _sessionTreeViewItems = value;
+          OnPropertyChanged("SessionTreeViewItems");
+        }
+      }
+    } 
 
     #endregion
 
@@ -368,12 +422,64 @@ namespace ShootingRange.ViewModel
     private void OnSelectedShooterItemChanged(UiShooter selectedUiShooter)
     {
       LoadParticipationList();
+      if (selectedUiShooter != null)
+      {
+        StringBuilder detailsStringBuilder = new StringBuilder();
+
+        Person person = _personDataStore.FindById(selectedUiShooter.PersonId);
+        detailsStringBuilder.AppendFormat("{0}, {1} [{2}] : {3} [{4}]\r\n{5}\r\n", person.LastName, person.FirstName,
+          person.PersonId, selectedUiShooter.ShooterNumber, selectedUiShooter.ShooterId, person.DateOfBirth.ToString("dd.MM.yyyy"));
+        detailsStringBuilder.AppendLine();
+        IEnumerable<SessionDetails> sessionDetails = _sessionDetailsView.FindByShooterId(selectedUiShooter.ShooterId).OrderBy(_ => _.ProgramNumber).ToList();
+
+        foreach (SessionDetails sessionDetail in sessionDetails)
+        {
+          detailsStringBuilder.AppendFormat("{0} [{1}] = {2}\r\n", sessionDetail.SessionDescription, sessionDetail.SessionId, sessionDetail.Shots.Sum(_ => _.PrimaryScore));
+        }
+
+        DetailsView = detailsStringBuilder.ToString();
+
+        SessionTreeViewItems =
+          new ObservableCollection<SessionTreeViewItem>(sessionDetails.Select(_ => new SessionTreeViewItem
+          {
+            SessionHeader =
+              _.SessionDescription + " (" + _.Shots.Count() + "): " + _.Shots.Sum(shot => shot.PrimaryScore),
+            Shots = _.Shots.OrderBy(shot => shot.Ordinal).Select(shot => string.Format("{0}\t{1}", shot.Ordinal, shot.PrimaryScore))
+          }));
+      }
     }
 
     private void OnSelectedPersonItemChanged(UiPerson selectedUiPerson)
     {
       LoadShooterList();
       LoadParticipationList();
+      SelectFirstShooter();
+    }
+
+    private void SelectFirstShooter()
+    {
+      SelectedUiShooter = ShooterListItems.FirstOrDefault();
+    }
+
+    private void OnSelectedShooterParticipationItemChanged(ShooterParticipationListItem selectedUiShooterParticipation)
+    {
+      if (selectedUiShooterParticipation != null)
+      {
+        ShooterParticipation shooterParticipation = _shooterParticipationDataStore.FindById(selectedUiShooterParticipation.ShooterParticipationId);
+        IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.FindByParticipationId(shooterParticipation.ParticipationId).ToList();
+
+        StringBuilder detailsStringBuilder = new StringBuilder();
+        detailsStringBuilder.AppendFormat("{0}\r\n", selectedUiShooterParticipation.ParticipationName);
+        foreach (ShooterParticipation participation in shooterParticipations)
+        {
+          Shooter shooter = _shooterDataStore.FindById(participation.ShooterId);
+          Person person = _personDataStore.FindById(shooter.PersonId);
+          ShooterParticipation innerShooterParticipation = _shooterParticipationDataStore.FindByShooterId(shooter.ShooterId).First();
+          detailsStringBuilder.AppendFormat("\t{0}, {1} [{2}]\r\n", person.LastName, person.FirstName, innerShooterParticipation.ShooterParticipationId);
+        }
+
+        DetailsView = detailsStringBuilder.ToString();
+      }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -404,21 +510,49 @@ namespace ShootingRange.ViewModel
             ParticipationDescription = gmd.ParticipationDescription
           };
 
-      IEnumerable<ParticipationTreeItem> participationTreeItems;
+      //IEnumerable<ParticipationTreeItem> participationTreeItems;
+      List<ShooterParticipationDetails> participations = new List<ShooterParticipationDetails>();
       if (SelectedUiShooter != null)
       {
-        participationTreeItems = _groupDetailsView.FindByShooterId(SelectedUiShooter.ShooterId).Select(selector);
+        //participationTreeItems = _groupDetailsView.FindByShooterId(SelectedUiShooter.ShooterId).Select(selector);
+        //participations = _shooterParticipationView.FindByShooterId(SelectedUiShooter.ShooterId);
+        IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.FindByShooterId(SelectedUiShooter.ShooterId).ToList();
+        foreach (ShooterParticipation shooterParticipation in shooterParticipations)
+        {
+          Participation participation = _participationDataStore.FindById(shooterParticipation.ParticipationId);
+          participations.Add(new ShooterParticipationDetails
+          {
+            ParticipationName = participation.ParticipationName,
+            ShooterParticipationId = shooterParticipation.ShooterParticipationId
+          });
+        }
+
       }
-      else if (SelectedUiPerson != null)
-      {
-        participationTreeItems = _groupDetailsView.FindByPersonId(SelectedUiPerson.PersonId).Select(selector);
-      }
+      //else if (SelectedUiPerson != null)
+      //{
+      //  //participationTreeItems = _groupDetailsView.FindByPersonId(SelectedUiPerson.PersonId).Select(selector);
+      //}
       else
       {
-        participationTreeItems = _groupDetailsView.GetAll().Select(selector);
+        //participationTreeItems = _groupDetailsView.GetAll().Select(selector);
+        IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.GetAll().ToList();
+        foreach (ShooterParticipation shooterParticipation in shooterParticipations)
+        {
+          Participation participation = _participationDataStore.FindById(shooterParticipation.ParticipationId);
+          participations.Add(new ShooterParticipationDetails
+          {
+            ParticipationName = participation.ParticipationName,
+            ShooterParticipationId = shooterParticipation.ShooterParticipationId
+          });
+        }
       }
-        
-      ParticipationTreeItems = new ObservableCollection<ParticipationTreeItem>(participationTreeItems.Where(_ => _.ParticipationNames.Any()));
+      
+      Participations = new ObservableCollection<ShooterParticipationListItem>(participations.OrderBy(_ => _.ParticipationName).Select(_ => new ShooterParticipationListItem
+      {
+        ParticipationName = _.ParticipationName,
+        ShooterParticipationId = _.ShooterParticipationId,
+      }));
+      //ParticipationTreeItems = new ObservableCollection<ParticipationTreeItem>(participationTreeItems.Where(_ => _.ParticipationNames.Any()));
     }
 
     

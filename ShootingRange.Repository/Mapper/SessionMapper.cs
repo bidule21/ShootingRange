@@ -15,6 +15,18 @@ namespace ShootingRange.Repository.Mapper
       entity.LaneNumber = session.LaneNumber;
       entity.ShooterId = session.ShooterId;
       entity.ProgramItemId = session.ProgramItemId;
+      entity.Timestamp = session.Timestamp;
+      return entity;
+    }
+  }
+
+  internal static class SessionSubtotalMapper
+  {
+    public static t_sessionsubtotal UpdateEntity(this t_sessionsubtotal entity, SubSession sessionSubtotal)
+    {
+      entity.SessionId = sessionSubtotal.SessionId;
+      entity.BestShotId = sessionSubtotal.BestShotId;
+      entity.SubtotalOrdinal = sessionSubtotal.Ordinal;
       return entity;
     }
   }

@@ -55,6 +55,8 @@
     <Compile Include="Repositories\IParticipationTypeDataStore.cs" />
     <Compile Include="Repositories\IProgramItemDataStore.cs" />
     <Compile Include="Repositories\ISessionDataStore.cs" />
+    <Compile Include="Repositories\ISessionDetailsView.cs" />
+    <Compile Include="Repositories\ISessionSubtotalDataStore.cs" />
     <Compile Include="Repositories\IShooterNumberConfigDataStore.cs" />
     <Compile Include="Repositories\IShooterParticipationDataStore.cs" />
     <Compile Include="Repositories\IShooterParticipationView.cs" />
@@ -73,6 +75,8 @@
     <Compile Include="Repositories\PersonDataStore.cs" />
     <Compile Include="Repositories\ProgramItemDataStore.cs" />
     <Compile Include="Repositories\SessionDataStore.cs" />
+    <Compile Include="Repositories\SessionDetailsView.cs" />
+    <Compile Include="Repositories\SessionSubtotalDataStore.cs" />
     <Compile Include="Repositories\ShooterDataStore.cs" />
     <Compile Include="Repositories\ShooterNumberConfigDataStore.cs" />
     <Compile Include="Repositories\ShooterParticipationDataStore.cs" />

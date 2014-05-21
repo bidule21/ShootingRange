@@ -52,6 +52,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionTreeViewItem.cs" />
     <Compile Include="ShooterCreateViewModel.cs" />
     <Compile Include="ShooterEditViewModel.cs" />
     <Compile Include="ShooterParticipationListItem.cs" />

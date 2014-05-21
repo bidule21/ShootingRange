@@ -10,5 +10,6 @@ namespace ShootingRange.Common
     public decimal? SecondaryScore { get; set; }
     public int LaneNumber { get; set; }
     public int ProgramNumber { get; set; }
+    public int Ordinal { get; set; }
   }
 }

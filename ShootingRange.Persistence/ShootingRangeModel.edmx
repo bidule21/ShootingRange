@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ShootingRange.Persistence.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ShootingRange.Persistence.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="t_bestshot">
           <Key>
             <PropertyRef Name="BestShotId" />
@@ -103,6 +103,7 @@
           <Property Name="ProgramItemId" Type="int" Nullable="false" />
           <Property Name="ShooterId" Type="int" Nullable="false" />
           <Property Name="LaneNumber" Type="int" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" />
         </EntityType>
         <EntityType Name="t_sessionsubtotal">
           <Key>
@@ -425,7 +426,8 @@
             <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ShootingRange.Persistence" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -453,12 +455,11 @@
             <PropertyRef Name="EventId" />
           </Key>
           <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" />
           <Property Name="EventName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StartDate" Type="DateTime" />
           <Property Name="EndDate" Type="DateTime" />
-          <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_EventId" FromRole="t_event" ToRole="t_shooter" />
-          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="t_shooternumberconfig" Relationship="ShootingRange.Persistence.t_Event_ShooterNumberConfigId" FromRole="t_event" ToRole="t_shooternumberconfig" />
+          <NavigationProperty Name="t_shooternumberconfig" Relationship="Self.t_Event_ShooterNumberConfigId" FromRole="t_event" ToRole="t_shooternumberconfig" />
         </EntityType>
         <EntityType Name="t_order">
           <Key>
@@ -480,6 +481,24 @@
           <Property Name="Price" Type="Decimal" />
           <NavigationProperty Name="t_order" Relationship="Self.t_Order_OrderItemId" FromRole="t_orderitem" ToRole="t_order" />
           <NavigationProperty Name="t_programitem" Relationship="Self.t_OrderItem_ProgramItemId" FromRole="t_orderitem" ToRole="t_programitem" />
+        </EntityType>
+        <EntityType Name="t_participation">
+          <Key>
+            <PropertyRef Name="ParticipationId" />
+          </Key>
+          <Property Name="ParticipationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParticipationName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ParticipationDescriptionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_participationdescription" Relationship="Self.t_Participation_ParticipationDescriptionId" FromRole="t_participation" ToRole="t_participationdescription" />
+          <NavigationProperty Name="t_shooterparticipation" Relationship="Self.t_ShooterParticipation_ParticipationId" FromRole="t_participation" ToRole="t_shooterparticipation" />
+        </EntityType>
+        <EntityType Name="t_participationdescription">
+          <Key>
+            <PropertyRef Name="ParticipationDescriptionId" />
+          </Key>
+          <Property Name="ParticipationDescriptionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="t_participation" Relationship="Self.t_Participation_ParticipationDescriptionId" FromRole="t_participationdescription" ToRole="t_participation" />
         </EntityType>
         <EntityType Name="t_person">
           <Key>
@@ -526,6 +545,7 @@
           <Property Name="ProgramItemId" Type="Int32" Nullable="false" />
           <Property Name="ShooterId" Type="Int32" Nullable="false" />
           <Property Name="LaneNumber" Type="Int32" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" />
           <NavigationProperty Name="t_programitem" Relationship="Self.t_Session_ProgramItemId" FromRole="t_session" ToRole="t_programitem" />
           <NavigationProperty Name="t_shooter" Relationship="Self.t_Session_ShooterId" FromRole="t_session" ToRole="t_shooter" />
           <NavigationProperty Name="t_sessionsubtotal" Relationship="Self.t_Subtotal_SessionId" FromRole="t_session" ToRole="t_sessionsubtotal" />
@@ -552,11 +572,29 @@
           <Property Name="ClubId" Type="Int32" />
           <Property Name="ShooterNumber" Type="Int32" Nullable="false" />
           <NavigationProperty Name="t_club" Relationship="Self.t_Shooter_ClubId" FromRole="t_shooter" ToRole="t_club" />
-          <NavigationProperty Name="t_event" Relationship="Self.t_Shooter_EventId" FromRole="t_shooter" ToRole="t_event" />
           <NavigationProperty Name="t_order" Relationship="Self.t_Order_ShooterId" FromRole="t_shooter" ToRole="t_order" />
           <NavigationProperty Name="t_person" Relationship="Self.t_Shooter_PersonId" FromRole="t_shooter" ToRole="t_person" />
           <NavigationProperty Name="t_session" Relationship="Self.t_Session_ShooterId" FromRole="t_shooter" ToRole="t_session" />
-          <NavigationProperty Name="t_shooterparticipation" Relationship="ShootingRange.Persistence.t_ShooterParticipation_ShooterId" FromRole="t_shooter" ToRole="t_shooterparticipation" />
+          <NavigationProperty Name="t_shooterparticipation" Relationship="Self.t_ShooterParticipation_ShooterId" FromRole="t_shooter" ToRole="t_shooterparticipation" />
+        </EntityType>
+        <EntityType Name="t_shooternumberconfig">
+          <Key>
+            <PropertyRef Name="ShooterNumberConfigId" />
+          </Key>
+          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastGivenShooterNumber" Type="Int32" Nullable="false" />
+          <Property Name="ShooterNumberIncrement" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_event" Relationship="Self.t_Event_ShooterNumberConfigId" FromRole="t_shooternumberconfig" ToRole="t_event" />
+        </EntityType>
+        <EntityType Name="t_shooterparticipation">
+          <Key>
+            <PropertyRef Name="ShooterParticipationId" />
+          </Key>
+          <Property Name="ShooterParticipationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShooterId" Type="Int32" Nullable="false" />
+          <Property Name="ParticipationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="t_participation" Relationship="Self.t_ShooterParticipation_ParticipationId" FromRole="t_shooterparticipation" ToRole="t_participation" />
+          <NavigationProperty Name="t_shooter" Relationship="Self.t_ShooterParticipation_ShooterId" FromRole="t_shooterparticipation" ToRole="t_shooter" />
         </EntityType>
         <EntityType Name="t_shot">
           <Key>
@@ -608,15 +646,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="t_Shooter_EventId">
-          <End Role="t_event" Type="Self.t_event" Multiplicity="1" />
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+        <Association Name="t_Event_ShooterNumberConfigId">
+          <End Role="t_shooternumberconfig" Type="Self.t_shooternumberconfig" Multiplicity="1" />
+          <End Role="t_event" Type="Self.t_event" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="t_event">
-              <PropertyRef Name="EventId" />
+            <Principal Role="t_shooternumberconfig">
+              <PropertyRef Name="ShooterNumberConfigId" />
             </Principal>
-            <Dependent Role="t_shooter">
-              <PropertyRef Name="EventId" />
+            <Dependent Role="t_event">
+              <PropertyRef Name="ShooterNumberConfigId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -653,6 +691,30 @@
             </Principal>
             <Dependent Role="t_orderitem">
               <PropertyRef Name="ProgramItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_Participation_ParticipationDescriptionId">
+          <End Role="t_participationdescription" Type="Self.t_participationdescription" Multiplicity="1" />
+          <End Role="t_participation" Type="Self.t_participation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_participationdescription">
+              <PropertyRef Name="ParticipationDescriptionId" />
+            </Principal>
+            <Dependent Role="t_participation">
+              <PropertyRef Name="ParticipationDescriptionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="t_ShooterParticipation_ParticipationId">
+          <End Role="t_participation" Type="Self.t_participation" Multiplicity="1" />
+          <End Role="t_shooterparticipation" Type="Self.t_shooterparticipation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_participation">
+              <PropertyRef Name="ParticipationId" />
+            </Principal>
+            <Dependent Role="t_shooterparticipation">
+              <PropertyRef Name="ParticipationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -728,18 +790,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="t_ShooterParticipation_ShooterId">
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooterparticipation" Type="Self.t_shooterparticipation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="t_shooter">
+              <PropertyRef Name="ShooterId" />
+            </Principal>
+            <Dependent Role="t_shooterparticipation">
+              <PropertyRef Name="ShooterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ShootingRangeEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="t_bestshot" EntityType="Self.t_bestshot" />
           <EntitySet Name="t_club" EntityType="Self.t_club" />
           <EntitySet Name="t_event" EntityType="Self.t_event" />
           <EntitySet Name="t_order" EntityType="Self.t_order" />
           <EntitySet Name="t_orderitem" EntityType="Self.t_orderitem" />
+          <EntitySet Name="t_participation" EntityType="Self.t_participation" />
+          <EntitySet Name="t_participationdescription" EntityType="Self.t_participationdescription" />
           <EntitySet Name="t_person" EntityType="Self.t_person" />
           <EntitySet Name="t_programitem" EntityType="Self.t_programitem" />
           <EntitySet Name="t_programsubtotal" EntityType="Self.t_programsubtotal" />
           <EntitySet Name="t_session" EntityType="Self.t_session" />
           <EntitySet Name="t_sessionsubtotal" EntityType="Self.t_sessionsubtotal" />
           <EntitySet Name="t_shooter" EntityType="Self.t_shooter" />
+          <EntitySet Name="t_shooternumberconfig" EntityType="Self.t_shooternumberconfig" />
+          <EntitySet Name="t_shooterparticipation" EntityType="Self.t_shooterparticipation" />
           <EntitySet Name="t_shot" EntityType="Self.t_shot" />
           <AssociationSet Name="t_Deepshot_ShotId" Association="Self.t_Deepshot_ShotId">
             <End Role="t_shot" EntitySet="t_shot" />
@@ -753,9 +831,9 @@
             <End Role="t_club" EntitySet="t_club" />
             <End Role="t_shooter" EntitySet="t_shooter" />
           </AssociationSet>
-          <AssociationSet Name="t_Shooter_EventId" Association="Self.t_Shooter_EventId">
+          <AssociationSet Name="t_Event_ShooterNumberConfigId" Association="Self.t_Event_ShooterNumberConfigId">
+            <End Role="t_shooternumberconfig" EntitySet="t_shooternumberconfig" />
             <End Role="t_event" EntitySet="t_event" />
-            <End Role="t_shooter" EntitySet="t_shooter" />
           </AssociationSet>
           <AssociationSet Name="t_Order_OrderItemId" Association="Self.t_Order_OrderItemId">
             <End Role="t_orderitem" EntitySet="t_orderitem" />
@@ -768,6 +846,14 @@
           <AssociationSet Name="t_OrderItem_ProgramItemId" Association="Self.t_OrderItem_ProgramItemId">
             <End Role="t_programitem" EntitySet="t_programitem" />
             <End Role="t_orderitem" EntitySet="t_orderitem" />
+          </AssociationSet>
+          <AssociationSet Name="t_Participation_ParticipationDescriptionId" Association="Self.t_Participation_ParticipationDescriptionId">
+            <End Role="t_participationdescription" EntitySet="t_participationdescription" />
+            <End Role="t_participation" EntitySet="t_participation" />
+          </AssociationSet>
+          <AssociationSet Name="t_ShooterParticipation_ParticipationId" Association="Self.t_ShooterParticipation_ParticipationId">
+            <End Role="t_participation" EntitySet="t_participation" />
+            <End Role="t_shooterparticipation" EntitySet="t_shooterparticipation" />
           </AssociationSet>
           <AssociationSet Name="t_Shooter_PersonId" Association="Self.t_Shooter_PersonId">
             <End Role="t_person" EntitySet="t_person" />
@@ -793,112 +879,11 @@
             <End Role="t_sessionsubtotal" EntitySet="t_sessionsubtotal" />
             <End Role="t_shot" EntitySet="t_shot" />
           </AssociationSet>
-          <EntitySet Name="t_shooternumberconfig" EntityType="ShootingRange.Persistence.t_shooternumberconfig" />
-          <AssociationSet Name="t_Event_ShooterNumberConfigId" Association="ShootingRange.Persistence.t_Event_ShooterNumberConfigId">
-            <End Role="t_shooternumberconfig" EntitySet="t_shooternumberconfig" />
-            <End Role="t_event" EntitySet="t_event" />
-          </AssociationSet>
-          <EntitySet Name="t_participation" EntityType="ShootingRange.Persistence.t_participation" />
-          <EntitySet Name="t_participationdescription" EntityType="ShootingRange.Persistence.t_participationdescription" />
-          <EntitySet Name="t_shooterparticipation" EntityType="ShootingRange.Persistence.t_shooterparticipation" />
-          <AssociationSet Name="t_Participation_ParticipationDescriptionId" Association="ShootingRange.Persistence.t_Participation_ParticipationDescriptionId">
-            <End Role="t_participationdescription" EntitySet="t_participationdescription" />
-            <End Role="t_participation" EntitySet="t_participation" />
-          </AssociationSet>
-          <AssociationSet Name="t_ShooterParticipation_ParticipationId" Association="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId">
-            <End Role="t_participation" EntitySet="t_participation" />
-            <End Role="t_shooterparticipation" EntitySet="t_shooterparticipation" />
-          </AssociationSet>
-          <AssociationSet Name="t_ShooterParticipation_ShooterId" Association="ShootingRange.Persistence.t_ShooterParticipation_ShooterId">
+          <AssociationSet Name="t_ShooterParticipation_ShooterId" Association="Self.t_ShooterParticipation_ShooterId">
             <End Role="t_shooter" EntitySet="t_shooter" />
             <End Role="t_shooterparticipation" EntitySet="t_shooterparticipation" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="t_shooternumberconfig">
-          <Key>
-            <PropertyRef Name="ShooterNumberConfigId" />
-          </Key>
-          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LastGivenShooterNumber" Type="Int32" Nullable="false" />
-          <Property Name="ShooterNumberIncrement" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="t_event" Relationship="ShootingRange.Persistence.t_Event_ShooterNumberConfigId" FromRole="t_shooternumberconfig" ToRole="t_event" />
-        </EntityType>
-        <Association Name="t_Event_ShooterNumberConfigId">
-          <End Type="ShootingRange.Persistence.t_shooternumberconfig" Role="t_shooternumberconfig" Multiplicity="1" />
-          <End Type="ShootingRange.Persistence.t_event" Role="t_event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_shooternumberconfig">
-              <PropertyRef Name="ShooterNumberConfigId" />
-            </Principal>
-            <Dependent Role="t_event">
-              <PropertyRef Name="ShooterNumberConfigId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="t_participation">
-          <Key>
-            <PropertyRef Name="ParticipationId" />
-          </Key>
-          <Property Name="ParticipationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ParticipationName" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="ParticipationDescriptionId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="t_participationdescription" Relationship="ShootingRange.Persistence.t_Participation_ParticipationDescriptionId" FromRole="t_participation" ToRole="t_participationdescription" />
-          <NavigationProperty Name="t_shooterparticipation" Relationship="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId" FromRole="t_participation" ToRole="t_shooterparticipation" />
-        </EntityType>
-        <EntityType Name="t_participationdescription">
-          <Key>
-            <PropertyRef Name="ParticipationDescriptionId" />
-          </Key>
-          <Property Name="ParticipationDescriptionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="t_participation" Relationship="ShootingRange.Persistence.t_Participation_ParticipationDescriptionId" FromRole="t_participationdescription" ToRole="t_participation" />
-        </EntityType>
-        <EntityType Name="t_shooterparticipation">
-          <Key>
-            <PropertyRef Name="ShooterParticipationId" />
-          </Key>
-          <Property Name="ShooterParticipationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShooterId" Type="Int32" Nullable="false" />
-          <Property Name="ParticipationId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="t_participation" Relationship="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId" FromRole="t_shooterparticipation" ToRole="t_participation" />
-          <NavigationProperty Name="t_shooter" Relationship="ShootingRange.Persistence.t_ShooterParticipation_ShooterId" FromRole="t_shooterparticipation" ToRole="t_shooter" />
-        </EntityType>
-        <Association Name="t_Participation_ParticipationDescriptionId">
-          <End Type="ShootingRange.Persistence.t_participationdescription" Role="t_participationdescription" Multiplicity="1" />
-          <End Type="ShootingRange.Persistence.t_participation" Role="t_participation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_participationdescription">
-              <PropertyRef Name="ParticipationDescriptionId" />
-            </Principal>
-            <Dependent Role="t_participation">
-              <PropertyRef Name="ParticipationDescriptionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="t_ShooterParticipation_ParticipationId">
-          <End Type="ShootingRange.Persistence.t_participation" Role="t_participation" Multiplicity="1" />
-          <End Type="ShootingRange.Persistence.t_shooterparticipation" Role="t_shooterparticipation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_participation">
-              <PropertyRef Name="ParticipationId" />
-            </Principal>
-            <Dependent Role="t_shooterparticipation">
-              <PropertyRef Name="ParticipationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="t_ShooterParticipation_ShooterId">
-          <End Type="ShootingRange.Persistence.t_shooter" Role="t_shooter" Multiplicity="1" />
-          <End Type="ShootingRange.Persistence.t_shooterparticipation" Role="t_shooterparticipation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_shooter">
-              <PropertyRef Name="ShooterId" />
-            </Principal>
-            <Dependent Role="t_shooterparticipation">
-              <PropertyRef Name="ShooterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -926,8 +911,8 @@
           <EntitySetMapping Name="t_event">
             <EntityTypeMapping TypeName="ShootingRange.Persistence.t_event">
               <MappingFragment StoreEntitySet="t_event">
-                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
                 <ScalarProperty Name="EventName" ColumnName="EventName" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
@@ -950,6 +935,23 @@
                 <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
                 <ScalarProperty Name="ItemName" ColumnName="ItemName" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_participation">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_participation">
+              <MappingFragment StoreEntitySet="t_participation">
+                <ScalarProperty Name="ParticipationId" ColumnName="ParticipationId" />
+                <ScalarProperty Name="ParticipationName" ColumnName="ParticipationName" />
+                <ScalarProperty Name="ParticipationDescriptionId" ColumnName="ParticipationDescriptionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_participationdescription">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_participationdescription">
+              <MappingFragment StoreEntitySet="t_participationdescription">
+                <ScalarProperty Name="ParticipationDescriptionId" ColumnName="ParticipationDescriptionId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -995,6 +997,7 @@
                 <ScalarProperty Name="ProgramItemId" ColumnName="ProgramItemId" />
                 <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
                 <ScalarProperty Name="LaneNumber" ColumnName="LaneNumber" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1019,6 +1022,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="t_shooternumberconfig">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shooternumberconfig">
+              <MappingFragment StoreEntitySet="t_shooternumberconfig">
+                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
+                <ScalarProperty Name="LastGivenShooterNumber" ColumnName="LastGivenShooterNumber" />
+                <ScalarProperty Name="ShooterNumberIncrement" ColumnName="ShooterNumberIncrement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="t_shooterparticipation">
+            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shooterparticipation">
+              <MappingFragment StoreEntitySet="t_shooterparticipation">
+                <ScalarProperty Name="ShooterParticipationId" ColumnName="ShooterParticipationId" />
+                <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
+                <ScalarProperty Name="ParticipationId" ColumnName="ParticipationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="t_shot">
             <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shot">
               <MappingFragment StoreEntitySet="t_shot">
@@ -1029,41 +1050,6 @@
                 <ScalarProperty Name="SecondaryScore" ColumnName="SecondaryScore" />
                 <ScalarProperty Name="ValueX" ColumnName="ValueX" />
                 <ScalarProperty Name="ValueY" ColumnName="ValueY" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_shooternumberconfig">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shooternumberconfig">
-              <MappingFragment StoreEntitySet="t_shooternumberconfig">
-                <ScalarProperty Name="ShooterNumberIncrement" ColumnName="ShooterNumberIncrement" />
-                <ScalarProperty Name="LastGivenShooterNumber" ColumnName="LastGivenShooterNumber" />
-                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_participation">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_participation">
-              <MappingFragment StoreEntitySet="t_participation">
-                <ScalarProperty Name="ParticipationDescriptionId" ColumnName="ParticipationDescriptionId" />
-                <ScalarProperty Name="ParticipationName" ColumnName="ParticipationName" />
-                <ScalarProperty Name="ParticipationId" ColumnName="ParticipationId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_participationdescription">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_participationdescription">
-              <MappingFragment StoreEntitySet="t_participationdescription">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ParticipationDescriptionId" ColumnName="ParticipationDescriptionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_shooterparticipation">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_shooterparticipation">
-              <MappingFragment StoreEntitySet="t_shooterparticipation">
-                <ScalarProperty Name="ParticipationId" ColumnName="ParticipationId" />
-                <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
-                <ScalarProperty Name="ShooterParticipationId" ColumnName="ShooterParticipationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1084,7 +1070,7 @@
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="true" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

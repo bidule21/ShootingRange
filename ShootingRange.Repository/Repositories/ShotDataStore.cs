@@ -15,18 +15,17 @@ namespace ShootingRange.Repository.Repositories
   {
     private SqlRepository<t_shot> _sqlRepository;
     private Func<t_shot, Shot> _selector;
-
     public ShotDataStore(DbContext context)
     {
       _sqlRepository = new SqlRepository<t_shot>(context);
       _selector = shot => new Shot
-      {
-        PrimaryScore = shot.PrimaryScore,
-        SecondaryScore = shot.SecondaryScore,
-        Ordinal = shot.ShotOrdinal,
-        ValueX = shot.ValueX,
-        ValueY = shot.ValueY,
-      };
+    {
+      PrimaryScore = shot.PrimaryScore,
+      SecondaryScore = shot.SecondaryScore,
+      Ordinal = shot.ShotOrdinal,
+      ValueX = shot.ValueX,
+      ValueY = shot.ValueY,
+    };
     }
    
     public void Revert()

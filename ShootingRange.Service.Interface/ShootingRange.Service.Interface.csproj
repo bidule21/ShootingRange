@@ -38,8 +38,10 @@
     <Compile Include="IBarcodeBuilderService.cs" />
     <Compile Include="IBarcodePrintService.cs" />
     <Compile Include="IShooterNumberService.cs" />
+    <Compile Include="ISsvShooterDataWriterService.cs" />
     <Compile Include="IWindowService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SsvShooterData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

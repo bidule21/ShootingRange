@@ -4,40 +4,39 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="fc29944c9c984ab58602b23d94e2351b" Name="Diagram1" ZoomLevel="97">
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_bestshot" Width="1.5" PointX="12" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_club" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_event" Width="1.5" PointX="0.5" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_order" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_orderitem" Width="1.5" PointX="8.875" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_person" Width="1.5" PointX="0.75" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programitem" Width="1.5" PointX="7.125" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programsubtotal" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_session" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_sessionsubtotal" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooter" Width="1.5" PointX="2.875" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shot" Width="1.5" PointX="9.75" PointY="5" IsExpanded="true" />
+      <Diagram DiagramId="a6b249680e41410689998f67f9417abe" Name="Diagram1">
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_bestshot" Width="1.5" PointX="12" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_club" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_event" Width="1.5" PointX="10" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_order" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_orderitem" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participation" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participationdescription" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_person" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programitem" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programsubtotal" Width="1.5" PointX="5.25" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_session" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_sessionsubtotal" Width="1.5" PointX="7.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooter" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooternumberconfig" Width="1.5" PointX="7.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooterparticipation" Width="1.5" PointX="5.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shot" Width="1.5" PointX="9.75" PointY="5.25" IsExpanded="true" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Deepshot_ShotId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Subtotal_BestShotId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_ClubId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_EventId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Event_ShooterNumberConfigId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Order_OrderItemId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Order_ShooterId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_OrderItem_ProgramItemId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Participation_ParticipationDescriptionId" ManuallyRouted="false" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_PersonId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_ProgramSubtotal_ProgramItemId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Session_ProgramItemId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Session_ShooterId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Subtotal_SessionId" ManuallyRouted="false" />
         <AssociationConnector Association="ShootingRange.Persistence.t_Shot_SubtotalId" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooternumberconfig" Width="1.5" PointX="0.5" PointY="1.75" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Event_ShooterNumberConfigId" ></AssociationConnector>
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participation" Width="1.5" PointX="6.25" PointY="14.125" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participationdescription" Width="1.5" PointX="4" PointY="14.375" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooterparticipation" Width="1.5" PointX="2.5" PointY="8.875" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Participation_ParticipationDescriptionId" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ShooterId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ShooterId" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

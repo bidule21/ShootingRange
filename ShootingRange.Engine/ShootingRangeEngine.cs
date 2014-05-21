@@ -13,18 +13,22 @@ namespace ShootingRange.Engine
   {
     private IShotDataStore _shotDataStore;
     private ISessionDataStore _sessionDataStore;
+    private ISessionSubtotalDataStore _sessionSubtotalDataStore;
     private IProgramItemDataStore _programItemDataStore;
     private IShooterDataStore _shooterDataStore;
     private ShootingRangeEvents _events;
     private readonly IShootingRange _shootingRange;
 
     private Dictionary<int, Session> _sessionsAwaitingProgramNumber;
+    private Dictionary<int, Session> _sessionsOngoing;
 
     public ShootingRangeEngine(IConfiguration configuration)
     {
       _sessionsAwaitingProgramNumber = new Dictionary<int, Session>();
+      _sessionsOngoing = new Dictionary<int, Session>();
 
       _sessionDataStore = configuration.GetSessionDataStore();
+      _sessionSubtotalDataStore = configuration.GetSessionSubtotalDataStore();
       _programItemDataStore = configuration.GetProgramItemDataStore();
       _shotDataStore = configuration.GetShotDataStore();
       _shooterDataStore = configuration.GetShooterDataStore();
@@ -62,18 +66,25 @@ namespace ShootingRange.Engine
 
           Session session = _sessionsAwaitingProgramNumber[e.LaneNumber];
           _sessionsAwaitingProgramNumber.Remove(e.LaneNumber);
+          _sessionsOngoing.Add(e.LaneNumber, session);
           session.ProgramItemId = programItem.ProgramItemId;
           _sessionDataStore.Create(session);
+
+          SubSession subSession = session.CreateSubSession();
+          _sessionSubtotalDataStore.Create(subSession);
+
+          AddShotToSubsession(e, subSession);
         }
-
-        Shot shot = new Shot
+        else if (_sessionsOngoing.ContainsKey(e.LaneNumber))
         {
-          PrimaryScore = e.PrimaryScore,
-          SecondaryScore = e.SecondaryScore,
-          LaneNumber = e.LaneNumber
-        };
-
-        _shotDataStore.Create(shot);
+          Session session = _sessionsOngoing[e.LaneNumber];
+          SubSession subSession = session.CurrentSubsession();
+          AddShotToSubsession(e, subSession);
+        }
+        else
+        {
+          throw new InvalidOperationException("Session is not available.");          
+        }
       }
       catch (Exception exc)
       {
@@ -81,18 +92,36 @@ namespace ShootingRange.Engine
       }
     }
 
+    private void AddShotToSubsession(ShotEventArgs e, SubSession subSession)
+    {
+      Shot shot = new Shot
+      {
+        PrimaryScore = e.PrimaryScore,
+        SecondaryScore = e.SecondaryScore,
+        LaneNumber = e.LaneNumber,
+        SubtotalId = subSession.SessionSubtotalId,
+        Ordinal = e.Ordinal,
+      };
+      _shotDataStore.Create(shot);
+    }
+
     private void ShootingRangeOnPrch(object sender, PrchEventArgs e)
     {
       try
       {
         Shooter shooter = _shooterDataStore.FindByShooterNumber(e.ShooterNumber);
-        _sessionsAwaitingProgramNumber[e.LaneNumber] = new Session
+
+        if (_sessionsOngoing.ContainsKey(e.LaneNumber))
+        {
+          _sessionsOngoing.Remove(e.LaneNumber);
+        }
+
+        _sessionsAwaitingProgramNumber.Add(e.LaneNumber, new Session
         {
           LaneNumber = e.LaneNumber,
           ShooterId = shooter.ShooterId,
           Timestamp = e.Timestamp,
-          ProgramItemId = e.ProgramNumber,
-        };
+        });
       }
       catch (Exception exc)
       {

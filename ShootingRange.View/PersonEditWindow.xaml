@@ -45,7 +45,7 @@
                 <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.City}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="4"/>
                 <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Email}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="5"/>
                 <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Phone}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="6"/>
-                <DatePicker Grid.Column="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Top" SelectedDateFormat="Short" DisplayDate="{Binding DateOfBirthTime}" Height="24" Width="160"/>
+                <DatePicker Grid.Column="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Top" SelectedDateFormat="Short" DisplayDate="{Binding UiPerson.DateOfBirth}" Height="24" Width="160"/>
             </Grid>
             <!--<StackPanel Width="400">
                 <Grid>

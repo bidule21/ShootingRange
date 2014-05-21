@@ -74,6 +74,10 @@
       <Project>{24f04412-edbf-45db-81b6-a590e7903469}</Project>
       <Name>ShootingRange.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.SsvFileWriter\ShootingRange.SsvFileWriter.csproj">
+      <Project>{FD26373B-A47E-4DD6-8415-28D5E710E4BE}</Project>
+      <Name>ShootingRange.SsvFileWriter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

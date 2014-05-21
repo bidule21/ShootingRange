@@ -21,7 +21,13 @@ namespace ShootingRange.Repository.Repositories
       {
         PersonId = person.PersonId,
         FirstName = person.FirstName,
-        LastName = person.LastName
+        LastName = person.LastName,
+        Address = person.Street,
+        //ZipCode = person.Zip
+        City = person.City,
+        Email =  person.Email,
+        Phone = person.Phone,
+        DateOfBirth = person.BirthDate ?? new DateTime(),
       };
     }
 

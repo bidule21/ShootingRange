@@ -22,6 +22,11 @@ namespace ShootingRange.Configuration
       _windowService = new WindowService();
     }
 
+    public ISsvShooterDataWriterService GetSsvShooterDataWriterService()
+    {
+      throw new System.NotImplementedException();
+    }
+
     public IShootingRange GetShootingRange()
     {
       throw new System.NotImplementedException();
@@ -52,6 +57,11 @@ namespace ShootingRange.Configuration
       return new FakeParticipationDataStore();
     }
 
+    public ISessionSubtotalDataStore GetSessionSubtotalDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
     public IGroupMemberDetailsView GetGroupMemberDetailsView()
     {
       return new FakeGroupMemberDetailsView();
@@ -60,6 +70,11 @@ namespace ShootingRange.Configuration
     public IGroupDetailsView GetGroupDetailsView()
     {
       return new FakeGroupDetailsView();
+    }
+
+    public ISessionDetailsView GetSessionDetailsView()
+    {
+      throw new System.NotImplementedException();
     }
 
     public IWindowService GetWindowService()

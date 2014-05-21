@@ -93,10 +93,28 @@
             </DockPanel>
             <DockPanel Grid.Column="1">
                 <GroupBox Header="Participations" DockPanel.Dock="Bottom" Margin="5">
-                    <view:ParticipationTreeView Height="150" Margin="5" ParticipationTreeItems="{Binding ParticipationTreeItems}"/>
+                    <!--<view:ParticipationTreeView Height="150" Margin="5" ParticipationTreeItems="{Binding ParticipationTreeItems}"/>-->
+                    <ListBox Height="150" ItemsSource="{Binding Participations}" SelectedItem="{Binding SelectedUiShooterParticipation}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type viewModel:ShooterParticipationListItem}">
+                                <TextBlock Text="{Binding ParticipationName}"></TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </GroupBox>
                 <GroupBox Header="Passes" Margin="5">
-                    <ListBox Margin="5"/>
+                    <TreeView ItemsSource="{Binding SessionTreeViewItems}" Margin="5">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type viewModel:SessionTreeViewItem}" ItemsSource="{Binding Shots}">
+                                <TextBlock Text="{Binding SessionHeader}"/>
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <HierarchicalDataTemplate>
+                                        <TextBlock Text="{Binding}"/>
+                                    </HierarchicalDataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
                 </GroupBox>
             </DockPanel>
             <DockPanel Grid.Column="2">
