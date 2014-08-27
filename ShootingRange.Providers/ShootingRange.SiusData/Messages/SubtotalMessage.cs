@@ -7,10 +7,11 @@ namespace ShootingRange.SiusData.Messages
   {
     public ShootingRangeModuleDelegate<SubtotalMessage> ProcessDelegate { get; set; }
 
-    public SubtotalMessage(int shooterId, int laneId, DateTime timestamp, double primaryTotal, double secondaryTotal)
+    public SubtotalMessage(int shooterId, int laneId, int laneNumber, DateTime timestamp, double primaryTotal, double secondaryTotal)
     {
       ShooterId = shooterId;
       LaneId = laneId;
+      LaneNumber = laneNumber;
       Timestamp = timestamp;
       PrimaryTotal = primaryTotal;
       SecondaryTotal = secondaryTotal;
@@ -19,6 +20,7 @@ namespace ShootingRange.SiusData.Messages
 
     public int ShooterId { get; private set; }
     public int LaneId { get; private set; }
+    public int LaneNumber { get; private set; }
     public DateTime Timestamp { get; private set; }
     public double PrimaryTotal { get; private set; }
     public double SecondaryTotal { get; private set; }

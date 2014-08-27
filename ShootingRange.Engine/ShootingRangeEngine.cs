@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Management.Instrumentation;
 using System.Timers;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Common;
@@ -16,6 +18,7 @@ namespace ShootingRange.Engine
     private ISessionSubtotalDataStore _sessionSubtotalDataStore;
     private IProgramItemDataStore _programItemDataStore;
     private IShooterDataStore _shooterDataStore;
+    private IPersonDataStore _personDataStore;
     private ShootingRangeEvents _events;
     private readonly IShootingRange _shootingRange;
 
@@ -32,11 +35,14 @@ namespace ShootingRange.Engine
       _programItemDataStore = configuration.GetProgramItemDataStore();
       _shotDataStore = configuration.GetShotDataStore();
       _shooterDataStore = configuration.GetShooterDataStore();
+      _personDataStore = configuration.GetPersonDataStore();
 
       _shootingRange = configuration.GetShootingRange();
       _shootingRange.ShooterNumber += ShootingRangeOnShooterNumber;
       _shootingRange.Prch += ShootingRangeOnPrch;
       _shootingRange.Shot += ShootingRangeOnShot;
+      _shootingRange.BestShot += ShootingRangeOnBestShot;
+      _shootingRange.Subt += ShootingRangeOnSubt;
 
       _events = configuration.GetEvents();
     }
@@ -44,6 +50,27 @@ namespace ShootingRange.Engine
     public void ConnectToSius()
     { 
       _shootingRange.Initialize();
+    }
+
+    private void ShootingRangeOnSubt(object sender, SubtEventArgs e)
+    {
+      if (_sessionsOngoing.ContainsKey(e.LaneNumber))
+      {
+        Session session = _sessionsOngoing[e.LaneNumber];
+        session.CreateSubSession();
+      }
+    }
+
+    private void ShootingRangeOnBestShot(object sender, ShotEventArgs e)
+    {
+      if (_sessionsOngoing.ContainsKey(e.LaneNumber))
+      {
+        SubSession currentSubSession = _sessionsOngoing[e.LaneNumber].CurrentSubsession();
+        Shot shot =
+          _shotDataStore.FindBySubSessionId(currentSubSession.SessionSubtotalId).Single(_ => _.Ordinal == e.Ordinal);
+        currentSubSession.BestShotId = shot.ShotId;
+        _sessionSubtotalDataStore.Update(currentSubSession);
+      }
     }
 
     /// <summary>Stores the shot data to the repository and invokes module extension points.</summary>
@@ -79,6 +106,8 @@ namespace ShootingRange.Engine
         {
           Session session = _sessionsOngoing[e.LaneNumber];
           SubSession subSession = session.CurrentSubsession();
+          if (subSession.SessionSubtotalId == 0)
+            _sessionSubtotalDataStore.Create(subSession);
           AddShotToSubsession(e, subSession);
         }
         else
@@ -110,6 +139,10 @@ namespace ShootingRange.Engine
       try
       {
         Shooter shooter = _shooterDataStore.FindByShooterNumber(e.ShooterNumber);
+        if (shooter == null)
+        {
+          shooter = CreateUnknownShooter(e.ShooterNumber);
+        }
 
         if (_sessionsOngoing.ContainsKey(e.LaneNumber))
         {
@@ -120,7 +153,6 @@ namespace ShootingRange.Engine
         {
           LaneNumber = e.LaneNumber,
           ShooterId = shooter.ShooterId,
-          Timestamp = e.Timestamp,
         });
       }
       catch (Exception exc)
@@ -129,9 +161,19 @@ namespace ShootingRange.Engine
       }
     }
 
+    private Shooter CreateUnknownShooter(int shooterNumber)
+    {
+      Person person = _personDataStore.FindByLastName("unknown").First();
+      Shooter shooter = new Shooter();
+      shooter.PersonId = person.PersonId;
+      shooter.ShooterNumber = shooterNumber;
+      _shooterDataStore.Create(shooter);
+      return shooter;
+    }
+
     private void ShootingRangeOnShooterNumber(object sender, ShooterNumberEventArgs e)
     {
-      //_events.ShooterNumber(e);
+     // Shooter shooter = _shooterDataStore.FindByShooterNumber(e.);
     }
   }
 }

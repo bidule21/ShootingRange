@@ -66,7 +66,7 @@ namespace ShootingRange.Repository.Repositories
     public Shooter FindByShooterNumber(int shooterNumber)
     {
       return
-        _sqlRepository.Find(shooter => shooter.ShooterNumber == shooterNumber).Select(_selector).First();
+        _sqlRepository.Find(shooter => shooter.ShooterNumber == shooterNumber).Select(_selector).FirstOrDefault();
     }
 
     public IEnumerable<Shooter> FindByPersonId(int personId)

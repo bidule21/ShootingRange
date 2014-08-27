@@ -43,10 +43,10 @@ namespace ShootingRange.SiusData.Messages
       return message;
     }
 
-    public SubtotalMessage MakeSubtotalMessage(int shooterId, int laneId, DateTime timestamp, int primaryTotal,
+    public SubtotalMessage MakeSubtotalMessage(int shooterId, int laneId, int laneNumber, DateTime timestamp, int primaryTotal,
       int secondaryTotal)
     {
-      var message = new SubtotalMessage(shooterId, laneId, timestamp, primaryTotal, secondaryTotal);
+      var message = new SubtotalMessage(shooterId, laneId, laneNumber, timestamp, primaryTotal, secondaryTotal);
       message.ProcessDelegate += _messageHandler.ProcessSubtotalMessage;
       return message;
     }

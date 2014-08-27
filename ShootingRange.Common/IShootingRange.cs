@@ -16,7 +16,13 @@ namespace ShootingRange.Common
     /// <summary>A shot information is received. </summary>
     event EventHandler<ShotEventArgs> Shot;
 
+    /// <summary>A best shot of a series information is received. </summary>
+    event EventHandler<ShotEventArgs> BestShot;
+
     /// <summary>A program number information is received. </summary>
     event EventHandler<PrchEventArgs> Prch;
+
+    /// <summary>A subtotal is received. </summary>
+    event EventHandler<SubtEventArgs> Subt;
   }
 }

@@ -9,5 +9,6 @@ namespace ShootingRange.Repository.Repositories
 {
   public interface IShotDataStore : IDataStore<Shot, int>
   {
+    IEnumerable<Shot> FindBySubSessionId(int subSessionId);
   }
 }

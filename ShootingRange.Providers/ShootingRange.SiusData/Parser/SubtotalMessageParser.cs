@@ -11,6 +11,7 @@ namespace ShootingRange.SiusData.Parser
     private const string Identifier = "_SUBT";
 
     private const int LaneId = 0;
+    private const int LaneNumber = 1;
     private const int ShooterId = 2;
     private const int Timestamp = 5;
     private const int PrimaryScore = 8;
@@ -28,13 +29,14 @@ namespace ShootingRange.SiusData.Parser
 
       SuccessHelper allOverSuccess = new SuccessHelper();
       int laneId = ValueAccessHelper.GetInt(valueList, LaneId, allOverSuccess);
+      int laneNumber = ValueAccessHelper.GetInt(valueList, LaneNumber, allOverSuccess);
       int shooterId = ValueAccessHelper.GetInt(valueList, ShooterId, allOverSuccess);
       int primaryScore = ValueAccessHelper.GetInt(valueList, PrimaryScore, allOverSuccess);
       int secondaryScore = ValueAccessHelper.GetInt(valueList, SecondaryScore, allOverSuccess);
       DateTime timestamp = ValueAccessHelper.GetDateTime(valueList, Timestamp, allOverSuccess);
 
       if (!allOverSuccess.Success) return null;
-      return _messageFactory.MakeSubtotalMessage(shooterId, laneId, timestamp, primaryScore, secondaryScore);
+      return _messageFactory.MakeSubtotalMessage(shooterId, laneId, laneNumber, timestamp, primaryScore, secondaryScore);
     }
   }
 }

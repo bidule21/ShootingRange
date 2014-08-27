@@ -10,7 +10,6 @@ namespace ShootingRange.BusinessObjects
     public int ShooterId { get; set; }
     public int LaneNumber { get; set; }
     public int ProgramItemId { get; set; }
-    public DateTime Timestamp { get; set; }
 
     private List<SubSession> _subSessions;
 

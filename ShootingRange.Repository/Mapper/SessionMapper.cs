@@ -15,7 +15,6 @@ namespace ShootingRange.Repository.Mapper
       entity.LaneNumber = session.LaneNumber;
       entity.ShooterId = session.ShooterId;
       entity.ProgramItemId = session.ProgramItemId;
-      entity.Timestamp = session.Timestamp;
       return entity;
     }
   }

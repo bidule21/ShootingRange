@@ -20,14 +20,23 @@ namespace ShootingRange.SiusData
 
     public event EventHandler<ShooterNumberEventArgs> ShooterNumber;
     public event EventHandler<ShotEventArgs> Shot;
+    public event EventHandler<ShotEventArgs> BestShot;
     public event EventHandler<PrchEventArgs> Prch;
+    public event EventHandler<SubtEventArgs> Subt;
 
     public void ProcessSiusDataMessage(string message)
     {
       IEnumerable<SiusDataMessage> messages =_parser.Parse(message);
       foreach (SiusDataMessage siusDataMessage in messages)
       {
-        siusDataMessage.Process();
+        try
+        {
+          siusDataMessage.Process();
+        }
+        catch (Exception e)
+        {
+          Console.WriteLine(e.Message);
+        }
       }
     }
 
@@ -37,10 +46,28 @@ namespace ShootingRange.SiusData
 
     public void ProcessSubtotalMessage(SubtotalMessage subtotalMessage)
     {
+      SubtEventArgs e = new SubtEventArgs
+      {
+        LaneId = subtotalMessage.LaneId,
+        LaneNumber = subtotalMessage.LaneNumber
+      };
+
+      OnSubt(e);
     }
 
     public void ProcessBestShotMessage(BestShotMessage bestShotMessage)
     {
+      ShotEventArgs e = new ShotEventArgs
+      {
+        PrimaryScore = bestShotMessage.PrimaryScore,
+        SecondaryScore = bestShotMessage.SecondaryScore,
+        ProgramNumber = bestShotMessage.ProgramNumber,
+        LaneNumber = bestShotMessage.LaneNumber,
+        LaneId = bestShotMessage.LaneId,
+        Ordinal = bestShotMessage.ShotNbr,
+      };
+
+      OnBestShot(e);
     }
 
     public void ProcessShotMessage(ShotMessage shotMessage)
@@ -63,10 +90,21 @@ namespace ShootingRange.SiusData
       {
         LaneNumber = prchMessage.LaneNumber,
         ShooterNumber = prchMessage.ShooterNumber,
-        Timestamp = prchMessage.Timestamp,
       };
 
       OnPrch(e);
+    }
+
+    protected virtual void OnSubt(SubtEventArgs e)
+    {
+      EventHandler<SubtEventArgs> handler = Subt;
+      if (handler != null) handler(this, e);
+    }
+
+    protected virtual void OnBestShot(ShotEventArgs e)
+    {
+      EventHandler<ShotEventArgs> handler = BestShot;
+      if (handler != null) handler(this, e);
     }
 
     protected virtual void OnShot(ShotEventArgs e)

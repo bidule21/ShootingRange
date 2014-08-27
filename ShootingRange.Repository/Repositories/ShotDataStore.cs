@@ -20,6 +20,7 @@ namespace ShootingRange.Repository.Repositories
       _sqlRepository = new SqlRepository<t_shot>(context);
       _selector = shot => new Shot
     {
+      ShotId = shot.ShotId,
       PrimaryScore = shot.PrimaryScore,
       SecondaryScore = shot.SecondaryScore,
       Ordinal = shot.ShotOrdinal,
@@ -62,6 +63,11 @@ namespace ShootingRange.Repository.Repositories
     {
       t_shot entity = _sqlRepository.Find(_ => _.ShotId == shot.ShotId).Single();
       _sqlRepository.Delete(entity);
+    }
+
+    public IEnumerable<Shot> FindBySubSessionId(int subSessionId)
+    {
+      return _sqlRepository.Find(shot => shot.SubtotalId == subSessionId).Select(_selector);
     }
   }
 }

@@ -40,9 +40,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="t_bestshot.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="t_club.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
