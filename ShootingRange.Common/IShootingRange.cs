@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShootingRange.Common
 {
@@ -9,6 +6,9 @@ namespace ShootingRange.Common
   public interface IShootingRange
   {
     void Initialize();
+
+    /// <summary>Log a message. </summary>
+    event EventHandler<LogEventArgs> Log;
 
     /// <summary>A shooter number information is received. </summary>
     event EventHandler<ShooterNumberEventArgs> ShooterNumber;
@@ -24,5 +24,15 @@ namespace ShootingRange.Common
 
     /// <summary>A subtotal is received. </summary>
     event EventHandler<SubtEventArgs> Subt;
+  }
+
+  public class LogEventArgs : EventArgs
+  {
+    public string Message { get; private set; }
+
+    public LogEventArgs(string message)
+    {
+      Message = message;
+    }
   }
 }

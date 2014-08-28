@@ -9,21 +9,28 @@ namespace ShootingRange.SiusData
 
     public SiusDataFileProvider(string filePath)
     {
-      string fullPath = Path.GetFullPath(filePath);
-      if (!File.Exists(fullPath))
-        throw new ArgumentException(string.Format("File {0} not found.", fullPath), "filePath");
-        
-      _filePath = fullPath;
-      }
+      _filePath = filePath;
+    }
 
     public override void Initialize()
     {
+      string fullPath = Path.GetFullPath(_filePath);
+      if (!File.Exists(fullPath))
+        throw new InvalidOperationException(string.Format("File {0} not found.", fullPath));
+
       using (var reader = new StreamReader(_filePath))
       {
         string line;
         while ((line = reader.ReadLine()) != null)
         {
-          ProcessSiusDataMessage(line);
+          try
+          {
+            ProcessSiusDataMessage(line);
+          }
+          catch (Exception e)
+          {
+            LogMessage(string.Format("Error processing message: {0}. Error: {1}", line, e.Message));
+          }
         }
       }
     }

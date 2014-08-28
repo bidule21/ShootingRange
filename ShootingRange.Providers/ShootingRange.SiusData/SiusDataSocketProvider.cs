@@ -6,15 +6,24 @@ namespace ShootingRange.SiusData
 {
   public class SiusDataSocketProvider : SiusDataProvider, IShootingRange
   {
+    private readonly string _address;
+    private readonly int _port;
     private SiusTcpDataReader dataReader;
 
-    public SiusDataSocketProvider()
+    public SiusDataSocketProvider(string address, int port)
     {
-      dataReader = new SiusTcpDataReader("127.0.0.1", 4000);
+      _address = address;
+      _port = port;
     }
 
     public override void Initialize()
     {
+      if (dataReader != null)
+      {
+        dataReader.Dispose();
+        dataReader = null;
+      }
+      dataReader = new SiusTcpDataReader(_address, _port);
       dataReader.SiusDataReceived += DataReaderOnSiusDataReceived;
       dataReader.Connect();
     }
@@ -24,7 +33,14 @@ namespace ShootingRange.SiusData
       string[] split = siusDataReceivedEventArgs.Message.Split(new string[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries);
       foreach (string s in split)
       {
-        ProcessSiusDataMessage(s);        
+        try
+        {
+          ProcessSiusDataMessage(s);        
+        }
+        catch (Exception e)
+        {
+          LogMessage(string.Format("Error processing message: {0}. Error: {1}", s, e.Message));
+        }
       }
     }
   }

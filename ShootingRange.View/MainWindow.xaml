@@ -29,37 +29,37 @@
     <DockPanel DataContext="{Binding Source={StaticResource MainViewModel}}">
         <ToolBar DockPanel.Dock="Top">
             <Button Command="{Binding CreatePersonCommand}" Height="32">
-                <Image Source="Images/add_person_32.png"/>
+                <Image Source="Images/add_person_32.png" ToolTip="Create Person"/>
             </Button>
             <Button Command="{Binding EditPersonCommand}" CommandParameter="{Binding SelectedUiPerson}" Height="32">
-                <viewUtils:AutoGreyableImage Source="Images/edit_person_32.png"/>
+                <viewUtils:AutoGreyableImage Source="Images/edit_person_32.png" ToolTip="Edit Person"/>
             </Button>
             <Button Height="32" Command="{Binding DeletePersonCommand}" CommandParameter="{Binding SelectedUiPerson}">
-                <viewUtils:AutoGreyableImage Source="Images/people_remove_32.png"/>
+                <viewUtils:AutoGreyableImage Source="Images/people_remove_32.png" ToolTip="Delete Person"/>
             </Button>
             <Separator Margin="0,2"/>
             <Button Height="32" Command="{Binding CreateShooterCommand}" CommandParameter="{Binding SelectedUiPerson}">
-                <viewUtils:AutoGreyableImage Source="Images/add_weapon_32.png"></viewUtils:AutoGreyableImage>
+                <viewUtils:AutoGreyableImage Source="Images/add_weapon_32.png" ToolTip="Create Shooter"></viewUtils:AutoGreyableImage>
             </Button>
             <Button Height="32" Command="{Binding EditShooterCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <viewUtils:AutoGreyableImage Source="Images/edit_weapon_32.png"></viewUtils:AutoGreyableImage>
+                <viewUtils:AutoGreyableImage Source="Images/edit_weapon_32.png" ToolTip="Edit Shooter"></viewUtils:AutoGreyableImage>
             </Button>
             <Button Height="32" Command="{Binding DeleteShooterCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <viewUtils:AutoGreyableImage Source="Images/remove_weapon_32.png"></viewUtils:AutoGreyableImage>
+                <viewUtils:AutoGreyableImage Source="Images/remove_weapon_32.png" ToolTip="Delete Shooter"></viewUtils:AutoGreyableImage>
             </Button>
             <Separator Margin="0,2"/>
             <Button Command="{Binding CreateParticipationCommand}">
-                <viewUtils:AutoGreyableImage Source="Images/add_ticket_32.png" Height="32"/>
+                <viewUtils:AutoGreyableImage Source="Images/add_ticket_32.png" Height="32" ToolTip="Create Participation"/>
             </Button>
             <Button Command="{Binding EditParticipationCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <viewUtils:AutoGreyableImage Source="Images/edit_ticket_32.png" Height="32"/>
+                <viewUtils:AutoGreyableImage Source="Images/edit_ticket_32.png" Height="32" ToolTip="Edit Participation"/>
             </Button>
             <Button Command="{Binding DeleteParticipationCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <viewUtils:AutoGreyableImage Source="Images/remove_ticket_32.png" Height="32"/>
+                <viewUtils:AutoGreyableImage Source="Images/remove_ticket_32.png" Height="32" ToolTip="Delete Participation"/>
             </Button>
             <Separator Margin="0,2"/>
 			<Button Command="{Binding PrintBarcodeCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <viewUtils:AutoGreyableImage Source="Images/barcode_32.png" Height="32"/>
+                <viewUtils:AutoGreyableImage Source="Images/barcode_32.png" Height="32" ToolTip="Print Barcode"/>
             </Button>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom">
