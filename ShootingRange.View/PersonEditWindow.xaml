@@ -4,6 +4,7 @@
         xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:ShootingRange.View"
+    xmlns:converter="clr-namespace:ShootingRange.View.Converter"
     mc:Ignorable="d" x:Class="ShootingRange.View.PersonEditWindow"
         Title="PersonCreateWindow" Height="409" Width="350">
     <Window.DataContext>
@@ -45,7 +46,15 @@
                 <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.City}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="4"/>
                 <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Email}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="5"/>
                 <TextBox HorizontalAlignment="Right" Height="23" TextWrapping="Wrap" Text="{Binding UiPerson.Phone}" VerticalAlignment="Top" Width="160" Grid.Column="1" Grid.Row="6"/>
-                <DatePicker Grid.Column="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Top" SelectedDateFormat="Short" DisplayDate="{Binding UiPerson.DateOfBirth}" Height="24" Width="160"/>
+                <DatePicker Grid.Column="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Top" SelectedDateFormat="Short" SelectedDate="{Binding UiPerson.DateOfBirth}" Height="24" Width="160">
+                    <DatePicker.Text>
+                        <Binding Path="UiPerson.DateOfBirth" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.Converter>
+                                <converter:DateConverter/>
+                            </Binding.Converter>
+                        </Binding>
+                    </DatePicker.Text>
+                </DatePicker>
             </Grid>
             <!--<StackPanel Width="400">
                 <Grid>

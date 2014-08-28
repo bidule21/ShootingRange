@@ -46,6 +46,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\DateConverter.cs" />
     <Compile Include="ParticipationCreateWindow.xaml.cs">
       <DependentUpon>ParticipationCreateWindow.xaml</DependentUpon>
     </Compile>

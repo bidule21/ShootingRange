@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Microsoft.Practices.Unity;
 using ShootingRange.Configuration;
 using ShootingRange.ConfigurationProvider;

@@ -36,7 +36,7 @@ namespace ShootingRange.ViewModel
         _shooterDataStore = config.GetShooterDataStore();
         _uiEvents = config.GetUIEvents();
         _windowService = config.GetWindowService();
-        _shooterNumberService = config.GetShooterNumberService();
+        //_shooterNumberService = config.GetShooterNumberService();
       }
 
       UiPerson = new UiPerson();

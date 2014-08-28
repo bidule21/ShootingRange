@@ -89,7 +89,8 @@ namespace ShootingRange.Service
 
     public bool ShowYesNoMessasge(string caption, string message)
     {
-      throw new System.NotImplementedException();
+      MessageBoxResult result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+      return result == MessageBoxResult.Yes;
     }
 
     public void ShowInscribeCompetitionDialog()

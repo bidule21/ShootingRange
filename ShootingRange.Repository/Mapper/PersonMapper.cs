@@ -10,7 +10,7 @@ namespace ShootingRange.Repository.Mapper
       entity.FirstName = person.FirstName;
       entity.LastName = person.LastName;
       entity.Street = person.Address;
-      //entity.Zip = person.ZipCode;
+      entity.Zip = person.ZipCode;
       entity.City = person.City;
       entity.Email = person.Email;
       entity.Phone = person.Phone;

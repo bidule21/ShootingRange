@@ -1,21 +1,23 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using ShootingRange.UiBusinessObjects.Annotations;
 
 namespace ShootingRange.UiBusinessObjects
 {
+  [DebuggerDisplay("{LastName} {FirstName}")]
   public class UiPerson : INotifyPropertyChanged
   {
     private int _personId;
     private string _firstName;
     private string _lastName;
     private string _address;
-    private string _zipCode;
+    private int? _zipCode;
     private string _city;
     private string _email;
     private string _phone;
-    private DateTime _dateOfBirth;
+    private DateTime? _dateOfBirth;
     private Gender _gender;
 
     public int PersonId
@@ -70,7 +72,7 @@ namespace ShootingRange.UiBusinessObjects
       }
     }
 
-    public string ZipCode
+    public int? ZipCode
     {
       get { return _zipCode; }
       set
@@ -122,7 +124,7 @@ namespace ShootingRange.UiBusinessObjects
       }
     }
 
-    public DateTime DateOfBirth
+    public DateTime? DateOfBirth
     {
       get { return _dateOfBirth; }
       set
