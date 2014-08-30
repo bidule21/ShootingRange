@@ -61,5 +61,10 @@ namespace ShootingRange.Repository.Repositories
       t_session entity = _sqlRepository.Find(_ => _.SessionId == session.SessionId).Single();
       _sqlRepository.Delete(entity);
     }
+
+    public IEnumerable<Session> FindByShooterId(int shooterId)
+    {
+      return _sqlRepository.Find(_ => _.ShooterId == shooterId).Select(_selector);
+    }
   }
 }

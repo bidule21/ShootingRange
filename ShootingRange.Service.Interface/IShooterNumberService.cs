@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ShootingRange.Repository.Repositories;
 
 namespace ShootingRange.Service.Interface
 {
   public interface IShooterNumberService
   {
     int GetShooterNumber();
+    void Configure(IShooterDataStore shooterDataStore);
   }
 }

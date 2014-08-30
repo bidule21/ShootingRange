@@ -29,6 +29,7 @@ namespace ShootingRange.ViewModel
     private IShooterParticipationDataStore _shooterParticipationDataStore;
     private IShooterParticipationView _shooterParticipationView;
     private ISessionDetailsView _sessionDetailsView;
+    private ISsvShooterDataWriterService _shooterDataWriterService;
     private ShootingRangeEvents _events;
 
     private IWindowService _windowService;
@@ -58,6 +59,7 @@ namespace ShootingRange.ViewModel
         _shooterParticipationView = config.GetShooterParticipationView();
         _groupDetailsView = config.GetGroupDetailsView();
         _sessionDetailsView = config.GetSessionDetailsView();
+        _shooterDataWriterService = config.GetSsvShooterDataWriterService();
 
         _shooterNumberService = config.GetShooterNumberService();
         _windowService = config.GetWindowService();
@@ -74,6 +76,7 @@ namespace ShootingRange.ViewModel
       LoadPersonList();
       LoadShooterList();
       LoadParticipationList();
+      _shooterNumberService.Configure(_shooterDataStore);
 
       //IEnumerable<Person> people = new ObservableCollection<Person>(_personDataStore.GetAll());
 
@@ -99,6 +102,7 @@ namespace ShootingRange.ViewModel
       //DeleteParticipationCommand = new RelayCommand<UiParticipation>
 
       PrintBarcodeCommand = new RelayCommand<UiShooter>(ExecutePrintBarcodeCommand, CanExecutePrintBarcodeCommand);
+      EditPassCommand = new RelayCommand<SessionDetails>(ExecuteEditPassCommand);
     }
 
     #region Commands
@@ -138,6 +142,18 @@ namespace ShootingRange.ViewModel
       }
     }
 
+    private void ExecuteEditPassCommand(SessionDetails obj)
+    {
+      try
+      {
+        _windowService.ShowEditPassWindow();
+      }
+      catch (Exception e)
+      {
+        ReportException(e);
+      }
+    }
+
     private bool CanExecuteDeletePersonCommand(UiPerson uiPerson)
     {
       return uiPerson != null;
@@ -147,17 +163,22 @@ namespace ShootingRange.ViewModel
     {
       try
       {
-        bool yes = _windowService.ShowYesNoMessasge("Delete Person", string.Format("Do you really want to delete '{0} {1}'?", uiPerson.LastName, uiPerson.FirstName));
+        bool yes = _windowService.ShowYesNoMessasge("Delete Person",
+          string.Format("Do you really want to delete '{0} {1}'?", uiPerson.LastName, uiPerson.FirstName));
 
         if (yes)
         {
           _personDataStore.Delete(uiPerson.ToPerson());
-          _uiEvents.PersonDataStoreChanged();
         }
       }
       catch (Exception e)
       {
         ReportException(e);
+        _personDataStore.Revert();
+      }
+      finally
+      {
+        _uiEvents.PersonDataStoreChanged();
       }
     }
 
@@ -174,12 +195,35 @@ namespace ShootingRange.ViewModel
     {
       try
       {
-        _windowService.ShowCreateShooterWindow();
+        Shooter shooter = new Shooter();
+        shooter.ShooterNumber = _shooterNumberService.GetShooterNumber();
+        shooter.PersonId = uiPerson.PersonId;
+        _shooterDataStore.Create(shooter);
+        _shooterDataWriterService.WriteShooterData(new SsvShooterData
+        {
+          FirstName = uiPerson.FirstName,
+          LastName = uiPerson.LastName,
+          LicenseNumber = (uint)shooter.ShooterNumber
+        });
       }
       catch (Exception e)
       {
         ReportException(e);
+        _shooterDataStore.Revert();
       }
+      finally
+      {
+        _uiEvents.ShooterDataStoreChanged();
+      }
+
+      //try
+      //{
+      //  _windowService.ShowCreateShooterWindow();
+      //}
+      //catch (Exception e)
+      //{
+      //  ReportException(e);
+      //}
     }
 
     private bool CanExecuteEditShooterCommand(UiShooter uiShooter)
@@ -253,14 +297,19 @@ namespace ShootingRange.ViewModel
     {
       try
       {
-        Person person = _personDataStore.FindById(uiShooter.PersonId);
+        Person person = uiShooter.PersonId == null
+          ? new Person() {FirstName = "unknown", LastName = "unknown"}
+          : _personDataStore.FindById((int) uiShooter.PersonId);
         ShooterParticipationDetails particiapDetails = _shooterParticipationView.FindByShooterId(uiShooter.ShooterId).FirstOrDefault();
         BarcodeInfo barcodeInfo = new BarcodeInfo
         {
           FirstName = person.FirstName,
           LastName = person.LastName,
           DateOfBirth = person.DateOfBirth,
-          GroupInfo = particiapDetails == null ? string.Empty : string.Format("Gruppenwettkampf:\r\n{0}", particiapDetails.ParticipationName),
+          GroupInfo =
+            particiapDetails == null
+              ? string.Empty
+              : string.Format("Gruppenwettkampf:\r\n{0}", particiapDetails.ParticipationName),
           Barcode = _barcodeBuilderService.BuildBarcode(uiShooter.ShooterNumber, uiShooter.Legalization)
         };
 
@@ -291,6 +340,7 @@ namespace ShootingRange.ViewModel
     public ICommand DeleteParticipationCommand { get; private set; }
 
     public ICommand PrintBarcodeCommand { get; private set; }
+    public ICommand EditPassCommand { get; private set; }
 
     #endregion
 
@@ -456,7 +506,9 @@ namespace ShootingRange.ViewModel
       {
         StringBuilder detailsStringBuilder = new StringBuilder();
 
-        Person person = _personDataStore.FindById(selectedUiShooter.PersonId);
+        Person person = selectedUiShooter.PersonId == null
+          ? new Person() {FirstName = "unknown", LastName = "unknown"}
+          : _personDataStore.FindById((int) selectedUiShooter.PersonId);
         detailsStringBuilder.AppendFormat("{0}, {1} [{2}] : {3} [{4}]\r\n{5}\r\n", person.LastName, person.FirstName,
           person.PersonId, selectedUiShooter.ShooterNumber, selectedUiShooter.ShooterId, person.DateOfBirth != null ? ((DateTime)person.DateOfBirth).ToString("dd.MM.yyyy") : string.Empty);
         detailsStringBuilder.AppendLine();
@@ -464,17 +516,30 @@ namespace ShootingRange.ViewModel
 
         foreach (SessionDetails sessionDetail in sessionDetails)
         {
-          detailsStringBuilder.AppendFormat("{0} [{1}] = {2}\r\n", sessionDetail.SessionDescription, sessionDetail.SessionId, sessionDetail.Shots.Sum(_ => _.PrimaryScore));
+          detailsStringBuilder.AppendFormat("{0} [{1}] = {2}\r\n",
+            sessionDetail.SessionDescription,
+            sessionDetail.SessionId,
+            sessionDetail.SubSessions.Sum(sd => sd.Shots.Sum(_ => _.PrimaryScore)));
         }
 
         DetailsView = detailsStringBuilder.ToString();
 
         SessionTreeViewItems =
-          new ObservableCollection<SessionTreeViewItem>(sessionDetails.Select(_ => new SessionTreeViewItem
+          new ObservableCollection<SessionTreeViewItem>(sessionDetails.Select(sd => new SessionTreeViewItem
           {
             SessionHeader =
-              _.SessionDescription + " (" + _.Shots.Count() + "): " + _.Shots.Sum(shot => shot.PrimaryScore),
-            Shots = _.Shots.OrderBy(shot => shot.Ordinal).Select(shot => string.Format("{0}\t{1}", shot.Ordinal, shot.PrimaryScore))
+              sd.SessionDescription + " (" + sd.SubSessions.Sum(_ => _.Shots.Count()) + "): " +
+              sd.SubSessions.Sum(_ => _.Shots.Sum(shot => shot.PrimaryScore)),
+            Subsessions =
+              sd.SubSessions.Select(
+                ss =>
+                  new Subsession
+                  {
+                    Shots =
+                      ss.Shots.OrderBy(shot => shot.Ordinal)
+                        .Select(shot => string.Format("{0}\t{1}", shot.Ordinal, shot.PrimaryScore)),
+                    SubsessionHeader = string.Format("Gruppe {0} | T={1}", ss.Ordinal, ss.Shots.Sum(_ => _.PrimaryScore))
+                  })
           }));
       }
     }
@@ -498,8 +563,10 @@ namespace ShootingRange.ViewModel
         foreach (ShooterParticipation participation in shooterParticipations)
         {
           Shooter shooter = _shooterDataStore.FindById(participation.ShooterId);
-          Person person = _personDataStore.FindById(shooter.PersonId);
           ShooterParticipation innerShooterParticipation = _shooterParticipationDataStore.FindByShooterId(shooter.ShooterId).First();
+          Person person = shooter.PersonId == null
+            ? new Person() {FirstName = "unknown", LastName = "unknown"}
+            : _personDataStore.FindById((int) shooter.PersonId);
           detailsStringBuilder.AppendFormat("\t{0}, {1} [{2}]\r\n", person.LastName, person.FirstName, innerShooterParticipation.ShooterParticipationId);
         }
 

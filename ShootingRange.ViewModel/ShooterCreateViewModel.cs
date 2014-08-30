@@ -93,29 +93,29 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteCreateShooterCommand(UiPerson uiPerson)
     {
-      try
-      {
-        Shooter shooter = new Shooter();
-        shooter.ShooterNumber = _shooterNumberService.GetShooterNumber();
-        shooter.PersonId = uiPerson.PersonId;
-        _shooterDataStore.Create(shooter);
-        _ssvShooterDataWriterService.WriteShooterData(new SsvShooterData
-        {
-          FirstName = uiPerson.FirstName,
-          LastName = uiPerson.LastName,
-          LicenseNumber = (uint)shooter.ShooterNumber
-        });
-        UiShooter = UiBusinessObjectMapper.ToUiShooter(_shooterDataStore.FindByShooterNumber(shooter.ShooterNumber));
-      }
-      catch (Exception e)
-      {
-        ReportException(e);
-        _shooterDataStore.Revert();
-      }
-      finally
-      {
-        _uiEvents.ShooterDataStoreChanged();
-      }
+      //try
+      //{
+      //  Shooter shooter = new Shooter();
+      //  shooter.ShooterNumber = _shooterNumberService.GetShooterNumber();
+      //  shooter.PersonId = uiPerson.PersonId;
+      //  _shooterDataStore.Create(shooter);
+      //  _ssvShooterDataWriterService.WriteShooterData(new SsvShooterData
+      //  {
+      //    FirstName = uiPerson.FirstName,
+      //    CurrentShooterLabel = uiPerson.CurrentShooterLabel,
+      //    LicenseNumber = (uint)shooter.ShooterNumber
+      //  });
+      //  UiShooter = UiBusinessObjectMapper.ToUiShooter(_shooterDataStore.FindByShooterNumber(shooter.ShooterNumber));
+      //}
+      //catch (Exception e)
+      //{
+      //  ReportException(e);
+      //  _shooterDataStore.Revert();
+      //}
+      //finally
+      //{
+      //  _uiEvents.ShooterDataStoreChanged();
+      //}
     }
 
     private bool CanExecuteAddtoAssignedParticipationCommand(ParticipationListItem participation)

@@ -14,16 +14,6 @@
           <Property Name="Zip" Type="int" />
           <Property Name="City" Type="varchar" MaxLength="45" />
         </EntityType>
-        <EntityType Name="t_event">
-          <Key>
-            <PropertyRef Name="EventId" />
-          </Key>
-          <Property Name="EventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ShooterNumberConfigId" Type="int" Nullable="false" />
-          <Property Name="EventName" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="StartDate" Type="date" />
-          <Property Name="EndDate" Type="date" />
-        </EntityType>
         <EntityType Name="t_order">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -47,7 +37,7 @@
           </Key>
           <Property Name="ParticipationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ParticipationName" Type="varchar" MaxLength="45" Nullable="false" />
-          <Property Name="ParticipationDescriptionId" Type="int" Nullable="false" />
+          <Property Name="ParticipationDescriptionId" Type="int" />
         </EntityType>
         <EntityType Name="t_participationdescription">
           <Key>
@@ -93,7 +83,7 @@
             <PropertyRef Name="SessionId" />
           </Key>
           <Property Name="SessionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProgramItemId" Type="int" Nullable="false" />
+          <Property Name="ProgramItemId" Type="int" />
           <Property Name="ShooterId" Type="int" Nullable="false" />
           <Property Name="LaneNumber" Type="int" Nullable="false" />
         </EntityType>
@@ -111,8 +101,7 @@
             <PropertyRef Name="ShooterId" />
           </Key>
           <Property Name="ShooterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PersonId" Type="int" Nullable="false" />
-          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="PersonId" Type="int" />
           <Property Name="ClubId" Type="int" />
           <Property Name="ShooterNumber" Type="int" Nullable="false" />
         </EntityType>
@@ -144,20 +133,10 @@
           <Property Name="ValueX" Type="decimal" Precision="10" Scale="0" />
           <Property Name="ValueY" Type="decimal" Precision="10" Scale="0" />
         </EntityType>
-        <Association Name="t_Event_ShooterNumberConfigId">
-          <End Role="t_shooternumberconfig" Type="Self.t_shooternumberconfig" Multiplicity="1" />
-          <End Role="t_event" Type="Self.t_event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_shooternumberconfig">
-              <PropertyRef Name="ShooterNumberConfigId" />
-            </Principal>
-            <Dependent Role="t_event">
-              <PropertyRef Name="ShooterNumberConfigId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="t_Order_OrderItemId">
-          <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="1" />
+          <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_orderitem">
@@ -169,7 +148,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Order_ShooterId">
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_shooter">
@@ -193,7 +174,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Participation_ParticipationDescriptionId">
-          <End Role="t_participationdescription" Type="Self.t_participationdescription" Multiplicity="1" />
+          <End Role="t_participationdescription" Type="Self.t_participationdescription" Multiplicity="0..1" />
           <End Role="t_participation" Type="Self.t_participation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_participationdescription">
@@ -205,7 +186,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_ProgramSubtotal_ProgramItemId">
-          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1" />
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_programsubtotal" Type="Self.t_programsubtotal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_programitem">
@@ -217,7 +200,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Session_ProgramItemId">
-          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="1" />
+          <End Role="t_programitem" Type="Self.t_programitem" Multiplicity="0..1" />
           <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_programitem">
@@ -229,7 +212,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Session_ShooterId">
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_shooter">
@@ -253,7 +238,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Shooter_PersonId">
-          <End Role="t_person" Type="Self.t_person" Multiplicity="1" />
+          <End Role="t_person" Type="Self.t_person" Multiplicity="0..1" />
           <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_person">
@@ -265,7 +250,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_ShooterParticipation_ParticipationId">
-          <End Role="t_participation" Type="Self.t_participation" Multiplicity="1" />
+          <End Role="t_participation" Type="Self.t_participation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_shooterparticipation" Type="Self.t_shooterparticipation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_participation">
@@ -277,7 +264,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_ShooterParticipation_ShooterId">
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_shooterparticipation" Type="Self.t_shooterparticipation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_shooter">
@@ -289,7 +278,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Shot_SubtotalId">
-          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="1" />
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_shot" Type="Self.t_shot" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_sessionsubtotal">
@@ -313,7 +304,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Subtotal_SessionId">
-          <End Role="t_session" Type="Self.t_session" Multiplicity="1" />
+          <End Role="t_session" Type="Self.t_session" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_session">
@@ -326,7 +319,6 @@
         </Association>
         <EntityContainer Name="ShootingRangePersistenceStoreContainer">
           <EntitySet Name="t_club" EntityType="Self.t_club" Schema="shootingrange" store:Type="Tables" />
-          <EntitySet Name="t_event" EntityType="Self.t_event" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_order" EntityType="Self.t_order" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_orderitem" EntityType="Self.t_orderitem" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_participation" EntityType="Self.t_participation" Schema="shootingrange" store:Type="Tables" />
@@ -340,10 +332,6 @@
           <EntitySet Name="t_shooternumberconfig" EntityType="Self.t_shooternumberconfig" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_shooterparticipation" EntityType="Self.t_shooterparticipation" Schema="shootingrange" store:Type="Tables" />
           <EntitySet Name="t_shot" EntityType="Self.t_shot" Schema="shootingrange" store:Type="Tables" />
-          <AssociationSet Name="t_Event_ShooterNumberConfigId" Association="Self.t_Event_ShooterNumberConfigId">
-            <End Role="t_shooternumberconfig" EntitySet="t_shooternumberconfig" />
-            <End Role="t_event" EntitySet="t_event" />
-          </AssociationSet>
           <AssociationSet Name="t_Order_OrderItemId" Association="Self.t_Order_OrderItemId">
             <End Role="t_orderitem" EntitySet="t_orderitem" />
             <End Role="t_order" EntitySet="t_order" />
@@ -414,17 +402,6 @@
           <Property Name="Zip" Type="Int32" />
           <Property Name="City" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="t_shooter" Relationship="Self.t_Shooter_ClubId" FromRole="t_club" ToRole="t_shooter" />
-        </EntityType>
-        <EntityType Name="t_event">
-          <Key>
-            <PropertyRef Name="EventId" />
-          </Key>
-          <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" />
-          <Property Name="EventName" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" />
-          <Property Name="EndDate" Type="DateTime" />
-          <NavigationProperty Name="t_shooternumberconfig" Relationship="Self.t_Event_ShooterNumberConfigId" FromRole="t_event" ToRole="t_shooternumberconfig" />
         </EntityType>
         <EntityType Name="t_order">
           <Key>
@@ -531,8 +508,7 @@
             <PropertyRef Name="ShooterId" />
           </Key>
           <Property Name="ShooterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PersonId" Type="Int32" Nullable="false" />
-          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="PersonId" Type="Int32" />
           <Property Name="ClubId" Type="Int32" />
           <Property Name="ShooterNumber" Type="Int32" Nullable="false" />
           <NavigationProperty Name="t_club" Relationship="Self.t_Shooter_ClubId" FromRole="t_shooter" ToRole="t_club" />
@@ -548,7 +524,6 @@
           <Property Name="ShooterNumberConfigId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LastGivenShooterNumber" Type="Int32" Nullable="false" />
           <Property Name="ShooterNumberIncrement" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="t_event" Relationship="Self.t_Event_ShooterNumberConfigId" FromRole="t_shooternumberconfig" ToRole="t_event" />
         </EntityType>
         <EntityType Name="t_shooterparticipation">
           <Key>
@@ -586,18 +561,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="t_Event_ShooterNumberConfigId">
-          <End Role="t_shooternumberconfig" Type="Self.t_shooternumberconfig" Multiplicity="1" />
-          <End Role="t_event" Type="Self.t_event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="t_shooternumberconfig">
-              <PropertyRef Name="ShooterNumberConfigId" />
-            </Principal>
-            <Dependent Role="t_event">
-              <PropertyRef Name="ShooterNumberConfigId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="t_Order_OrderItemId">
           <End Role="t_orderitem" Type="Self.t_orderitem" Multiplicity="1" />
           <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
@@ -611,7 +574,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Order_ShooterId">
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" >
+          </End>
           <End Role="t_order" Type="Self.t_order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_shooter">
@@ -659,8 +623,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Shooter_PersonId">
-          <End Role="t_person" Type="Self.t_person" Multiplicity="1" />
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" />
+          <End Role="t_person" Type="Self.t_person" Multiplicity="0..1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="*" >
+          </End>
           <ReferentialConstraint>
             <Principal Role="t_person">
               <PropertyRef Name="PersonId" />
@@ -695,7 +662,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Session_ShooterId">
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_session" Type="Self.t_session" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_shooter">
@@ -707,7 +676,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Subtotal_SessionId">
-          <End Role="t_session" Type="Self.t_session" Multiplicity="1" />
+          <End Role="t_session" Type="Self.t_session" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_session">
@@ -719,7 +690,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_Shot_SubtotalId">
-          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="1" />
+          <End Role="t_sessionsubtotal" Type="Self.t_sessionsubtotal" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="t_shot" Type="Self.t_shot" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_sessionsubtotal">
@@ -731,7 +704,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="t_ShooterParticipation_ShooterId">
-          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" />
+          <End Role="t_shooter" Type="Self.t_shooter" Multiplicity="1" >
+          </End>
           <End Role="t_shooterparticipation" Type="Self.t_shooterparticipation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="t_shooter">
@@ -744,7 +718,6 @@
         </Association>
         <EntityContainer Name="ShootingRangeEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="t_club" EntityType="Self.t_club" />
-          <EntitySet Name="t_event" EntityType="Self.t_event" />
           <EntitySet Name="t_order" EntityType="Self.t_order" />
           <EntitySet Name="t_orderitem" EntityType="Self.t_orderitem" />
           <EntitySet Name="t_participation" EntityType="Self.t_participation" />
@@ -761,10 +734,6 @@
           <AssociationSet Name="t_Shooter_ClubId" Association="Self.t_Shooter_ClubId">
             <End Role="t_club" EntitySet="t_club" />
             <End Role="t_shooter" EntitySet="t_shooter" />
-          </AssociationSet>
-          <AssociationSet Name="t_Event_ShooterNumberConfigId" Association="Self.t_Event_ShooterNumberConfigId">
-            <End Role="t_shooternumberconfig" EntitySet="t_shooternumberconfig" />
-            <End Role="t_event" EntitySet="t_event" />
           </AssociationSet>
           <AssociationSet Name="t_Order_OrderItemId" Association="Self.t_Order_OrderItemId">
             <End Role="t_orderitem" EntitySet="t_orderitem" />
@@ -844,17 +813,6 @@
                 <ScalarProperty Name="ClubName" ColumnName="ClubName" />
                 <ScalarProperty Name="Zip" ColumnName="Zip" />
                 <ScalarProperty Name="City" ColumnName="City" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="t_event">
-            <EntityTypeMapping TypeName="ShootingRange.Persistence.t_event">
-              <MappingFragment StoreEntitySet="t_event">
-                <ScalarProperty Name="EventId" ColumnName="EventId" />
-                <ScalarProperty Name="ShooterNumberConfigId" ColumnName="ShooterNumberConfigId" />
-                <ScalarProperty Name="EventName" ColumnName="EventName" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -954,7 +912,6 @@
               <MappingFragment StoreEntitySet="t_shooter">
                 <ScalarProperty Name="ShooterId" ColumnName="ShooterId" />
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
-                <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="ClubId" ColumnName="ClubId" />
                 <ScalarProperty Name="ShooterNumber" ColumnName="ShooterNumber" />
               </MappingFragment>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ShootingRange.Repository.Repositories;
 using ShootingRange.Service.Interface;
 
 namespace ShootingRange.Service
@@ -12,6 +13,11 @@ namespace ShootingRange.Service
     public int GetShooterNumber()
     {
       return _shooterNumber++;
+    }
+
+    public void Configure(IShooterDataStore shooterDataStore)
+    {
+      throw new NotImplementedException();
     }
   }
 }

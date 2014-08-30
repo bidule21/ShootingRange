@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShootingRange.BusinessObjects;
+using ShootingRange.Repository.Repositories;
 using ShootingRange.UiBusinessObjects;
 
 namespace ShootingRange.ViewModel
@@ -40,14 +42,40 @@ namespace ShootingRange.ViewModel
       return new Shooter()
       {
         ShooterId = uiShooter.ShooterId,
-        ShooterNumber = uiShooter.ShooterNumber
+        ShooterNumber = uiShooter.ShooterNumber,
+        PersonId = uiShooter.PersonId
       };
     }
 
     public static Func<Shooter, UiShooter> ToUiShooter = shooter => new UiShooter()
     {
       ShooterId = shooter.ShooterId,
-      ShooterNumber = shooter.ShooterNumber
+      ShooterNumber = shooter.ShooterNumber,
+      PersonId = shooter.PersonId
     };
+
+    public static Func<Session, UiSession> ToUiSession = session => new UiSession
+    {
+      LaneNumber = session.LaneNumber,
+      SessionId = session.SessionId,
+      ShooterId = session.ShooterId,
+      ProgramItemId = session.ProgramItemId
+    };
+
+    public static Func<UiSession, Session> ToSession = uiSession => new Session()
+    {
+      LaneNumber = uiSession.LaneNumber,
+      SessionId = uiSession.SessionId,
+      ShooterId = uiSession.ShooterId,
+      ProgramItemId = uiSession.ProgramItemId
+    
+    };
+
+    public static UiShooter FetchPerson(this UiShooter shooter, Person person)
+    {
+      shooter.FirstName = person.FirstName;
+      shooter.LastName = person.LastName;
+      return shooter;
+    }
   }
 }

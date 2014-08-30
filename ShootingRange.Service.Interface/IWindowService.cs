@@ -18,5 +18,7 @@
     void ShowMessage(string caption, string message);
     void ShowInscribeCompetitionDialog();
 
+    void ShowEditPassWindow();
+    void CloseEditPassWindow();
   }
 }

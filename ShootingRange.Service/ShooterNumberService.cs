@@ -1,4 +1,7 @@
-﻿using ShootingRange.BusinessObjects;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
 using ShootingRange.Service.Interface;
 
@@ -21,6 +24,18 @@ namespace ShootingRange.Service
       config.LastGivenShooterNumber = nextShooterNumber;
       _shooterNumberConfigDataStore.Update(config);
       return nextShooterNumber;
+    }
+
+    public void Configure(IShooterDataStore shooterDataStore)
+    {
+      IEnumerable<Shooter> shooters = shooterDataStore.GetAll().ToArray();
+      if (shooters.Any())
+      {
+        int highestShooterNumber = shooters.Max(_ => _.ShooterNumber);
+        ShooterNumberConfig config = _shooterNumberConfigDataStore.FindById(ConfigId);
+        config.LastGivenShooterNumber = highestShooterNumber;
+        _shooterNumberConfigDataStore.Update(config);
+      }
     }
   }
 }

@@ -27,7 +27,6 @@ namespace ShootingRange.Persistence
         }
     
         public DbSet<t_club> t_club { get; set; }
-        public DbSet<t_event> t_event { get; set; }
         public DbSet<t_order> t_order { get; set; }
         public DbSet<t_orderitem> t_orderitem { get; set; }
         public DbSet<t_participation> t_participation { get; set; }

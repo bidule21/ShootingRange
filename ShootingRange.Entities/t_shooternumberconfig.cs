@@ -14,15 +14,8 @@ namespace ShootingRange.Entities
     
     public partial class t_shooternumberconfig
     {
-        public t_shooternumberconfig()
-        {
-            this.t_event = new HashSet<t_event>();
-        }
-    
         public int ShooterNumberConfigId { get; set; }
         public int LastGivenShooterNumber { get; set; }
         public int ShooterNumberIncrement { get; set; }
-    
-        public virtual ICollection<t_event> t_event { get; set; }
     }
 }

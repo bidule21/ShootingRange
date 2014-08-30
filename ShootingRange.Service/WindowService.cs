@@ -11,6 +11,7 @@ namespace ShootingRange.Service
     private ShooterCreateWindow _shooterCreateWindow;
     private ShooterEditWindow _shooterEditWindow;
     private ParticipationCreateWindow _participationCreateWindow;
+    private EditPassWindow _editPassWindow;
 
     #region Person
 
@@ -71,6 +72,17 @@ namespace ShootingRange.Service
     public void CloseCreateParticipationWindow()
     {
       CloseWindow(_participationCreateWindow);
+    }
+
+    public void ShowEditPassWindow()
+    {
+      _editPassWindow = new EditPassWindow();
+      _editPassWindow.ShowDialog();
+    }
+
+    public void CloseEditPassWindow()
+    {
+      CloseWindow(_editPassWindow);
     }
 
     #endregion

@@ -43,9 +43,6 @@
     <Compile Include="t_club.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="t_event.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="t_order.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>

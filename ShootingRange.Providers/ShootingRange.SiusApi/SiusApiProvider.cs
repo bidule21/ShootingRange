@@ -32,6 +32,8 @@ namespace ShootingRange.SiusApi
 
       }
 
+      public event EventHandler<LogEventArgs> Log;
+
       private void ClientOnRciMessageReceived(object sender, RCIEventArgs rciEventArgs)
       {
         throw new NotImplementedException();
@@ -39,6 +41,8 @@ namespace ShootingRange.SiusApi
 
       public event EventHandler<ShooterNumberEventArgs> ShooterNumber;
       public event EventHandler<ShotEventArgs> Shot;
+      public event EventHandler<ShotEventArgs> BestShot;
       public event EventHandler<PrchEventArgs> Prch;
+      public event EventHandler<SubtEventArgs> Subt;
     }
 }

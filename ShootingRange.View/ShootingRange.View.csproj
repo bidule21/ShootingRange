@@ -47,6 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\DateConverter.cs" />
+    <Compile Include="Converter\PersonNameShooterNumberConverter.cs" />
+    <Compile Include="EditPassWindow.xaml.cs">
+      <DependentUpon>EditPassWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ParticipationCreateWindow.xaml.cs">
       <DependentUpon>ParticipationCreateWindow.xaml</DependentUpon>
     </Compile>
@@ -56,6 +60,10 @@
     <Compile Include="ShooterEditWindow.xaml.cs">
       <DependentUpon>ShooterEditWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="EditPassWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ParticipationCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -186,6 +194,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\barcode_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\man_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\receipt_48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

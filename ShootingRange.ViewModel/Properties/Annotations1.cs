@@ -108,7 +108,7 @@ namespace ShootingRange.ViewModel.Annotations
   ///   private string _name;
   ///   public string Name {
   ///     get { return _name; }
-  ///     set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+  ///     set { _name = value; NotifyChanged("CurrentShooterLabel"); /* Warning */ }
   ///   }
   /// }
   /// </code>

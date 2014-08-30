@@ -179,7 +179,12 @@ namespace ShootingRange.Engine
 
     private Shooter CreateUnknownShooter(int shooterNumber)
     {
-      Person person = _personDataStore.FindByLastName("unknown").First();
+      Person person = new Person()
+      {
+        FirstName = "unknown",
+        LastName = "unknown"
+      };
+      _personDataStore.Create(person);
       Shooter shooter = new Shooter();
       shooter.PersonId = person.PersonId;
       shooter.ShooterNumber = shooterNumber;

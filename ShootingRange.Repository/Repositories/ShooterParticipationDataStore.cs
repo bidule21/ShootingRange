@@ -38,6 +38,7 @@ namespace ShootingRange.Repository.Repositories
       t_shooterparticipation entity = new t_shooterparticipation();
       entity.UpdateEntity(shooterParticipation);
       _sqlRepository.Insert(entity);
+      shooterParticipation.ShooterParticipationId = entity.ShooterParticipationId;
     }
 
     public ShooterParticipation FindById(int id)

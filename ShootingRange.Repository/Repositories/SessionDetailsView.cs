@@ -30,23 +30,28 @@ namespace ShootingRange.Repository.Repositories
     {
       IEnumerable<SessionDetails> view = from session in _sessions
         join shooter in _shooters on session.ShooterId equals shooter.ShooterId
-        join sessionSubtotal in _sessionSubtotals on session.SessionId equals sessionSubtotal.SessionId
         join programItem in _programItems on session.ProgramItemId equals programItem.ProgramItemId
-        join shot in _shots on sessionSubtotal.SessionSubtotalId equals shot.SubtotalId into shots
+        join sessionSubtotal in _sessionSubtotals on session.SessionId equals sessionSubtotal.SessionId into subSessions
         select new SessionDetails
         {
           SessionId = session.SessionId,
           ProgramNumber = programItem.ProgramNumber,
           ShooterNumber = shooter.ShooterNumber,
           SessionDescription = programItem.ItemName,
-          Shots = shots.Select(shot => new Shot
-          {
-            PrimaryScore = shot.PrimaryScore,
-            SecondaryScore = shot.SecondaryScore,
-            Ordinal = shot.ShotOrdinal,
-            ValueX = shot.ValueX,
-            ValueY = shot.ValueY,
-          })
+          SubSessions = from subSession in subSessions
+            select new SubSessionDetails
+            {
+              Ordinal = subSession.SubtotalOrdinal,
+              Shots = from shot in subSession.t_shot
+                select new Shot()
+                {
+                  PrimaryScore = shot.PrimaryScore,
+                  SecondaryScore = shot.SecondaryScore,
+                  Ordinal = shot.ShotOrdinal,
+                  ValueX = shot.ValueX,
+                  ValueY = shot.ValueY,
+                }
+            }
         };
 
       return view;
@@ -57,24 +62,28 @@ namespace ShootingRange.Repository.Repositories
       IEnumerable<SessionDetails> view = from session in _sessions
         join shooter in _shooters on session.ShooterId equals shooter.ShooterId
         where shooter.ShooterId == shooterId
-        join sessionSubtotal in _sessionSubtotals on session.SessionId equals sessionSubtotal.SessionId
         join programItem in _programItems on session.ProgramItemId equals programItem.ProgramItemId
-
-        join shot in _shots on sessionSubtotal.SessionSubtotalId equals shot.SubtotalId into shots
+        join sessionSubtotal in _sessionSubtotals on session.SessionId equals sessionSubtotal.SessionId into subSessions
         select new SessionDetails
         {
           SessionId = session.SessionId,
           ProgramNumber = programItem.ProgramNumber,
           ShooterNumber = shooter.ShooterNumber,
           SessionDescription = programItem.ItemName,
-          Shots = shots.Select(shot => new Shot
-          {
-            PrimaryScore = shot.PrimaryScore,
-            SecondaryScore = shot.SecondaryScore,
-            Ordinal = shot.ShotOrdinal,
-            ValueX = shot.ValueX,
-            ValueY = shot.ValueY,
-          })
+          SubSessions = from subSession in subSessions
+            select new SubSessionDetails
+            {
+              Ordinal = subSession.SubtotalOrdinal,
+              Shots = from shot in subSession.t_shot
+                      select new Shot()
+                      {
+                        PrimaryScore = shot.PrimaryScore,
+                        SecondaryScore = shot.SecondaryScore,
+                        Ordinal = shot.ShotOrdinal,
+                        ValueX = shot.ValueX,
+                        ValueY = shot.ValueY,
+                      }
+            }
         };
 
       return view;

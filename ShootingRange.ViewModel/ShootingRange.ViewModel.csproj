@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DesignTimeHelper.cs" />
+    <Compile Include="EditPassViewModel.cs" />
     <Compile Include="GroupListItem.cs" />
     <Compile Include="ParticipationCreateViewModel.cs" />
     <Compile Include="ParticipationDraft.cs" />

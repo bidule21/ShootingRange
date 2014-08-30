@@ -22,8 +22,7 @@ namespace ShootingRange.Entities
         }
     
         public int ShooterId { get; set; }
-        public int PersonId { get; set; }
-        public int EventId { get; set; }
+        public Nullable<int> PersonId { get; set; }
         public Nullable<int> ClubId { get; set; }
         public int ShooterNumber { get; set; }
     

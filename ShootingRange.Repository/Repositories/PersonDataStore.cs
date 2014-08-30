@@ -51,6 +51,7 @@ namespace ShootingRange.Repository.Repositories
       t_person entity = new t_person();
       entity.UpdateEntity(person);
       _sqlRepository.Insert(entity);
+      person.PersonId = entity.PersonId;
     }
 
     public void Update(Person person)

@@ -72,10 +72,11 @@ namespace ShootingRange.SiusDbWriterViewModel
         IConfiguration config = ConfigurationSource.Configuration;
         _engine = new ShootingRangeEngine(config);
         _engine.Log += EngineOnLog;
-        _engine.ConnectToSius();
 
         if (StartProcessingOnConnect)
           ExecuteStartProcessingCommand(null);
+
+        _engine.ConnectToSius();
       }
       catch (Exception e)
       {
