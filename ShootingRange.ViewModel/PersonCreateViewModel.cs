@@ -9,6 +9,7 @@ using ShootingRange.BusinessObjects;
 using ShootingRange.Common;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 using ShootingRange.UiBusinessObjects;
 

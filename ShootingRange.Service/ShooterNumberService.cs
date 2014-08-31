@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 
 namespace ShootingRange.Service

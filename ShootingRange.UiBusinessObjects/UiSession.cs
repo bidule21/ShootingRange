@@ -10,7 +10,7 @@ namespace ShootingRange.UiBusinessObjects
   {
     public int SessionId { get; set; }
     public int ShooterId { get; set; }
-    public int ProgramItemId { get; set; }
+    public int? ProgramItemId { get; set; }
 
     public string ProgramDescription { get; set; }
     public int LaneNumber { get; set; }

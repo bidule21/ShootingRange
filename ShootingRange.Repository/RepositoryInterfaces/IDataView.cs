@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ShootingRange.Repository.Repositories
+namespace ShootingRange.Repository.RepositoryInterfaces
 {
   public interface IDataView<TEntity>
   {

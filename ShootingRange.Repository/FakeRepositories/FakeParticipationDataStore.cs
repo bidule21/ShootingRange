@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Repository;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.FakeRepositories
 {
@@ -19,7 +20,7 @@ namespace ShootingRange.Repository.FakeRepositories
 
       Participation[] groups = new[]
       {
-        new Participation {ParticipationId = 1, ParticipationName = "Eichenlaub", ParticipationDescriptionId = 1}
+        new Participation {ParticipationId = 1, ParticipationName = "Eichenlaub"}
       };
 
       foreach (var g in groups)
@@ -52,7 +53,6 @@ namespace ShootingRange.Repository.FakeRepositories
     {
       Participation entity = FindById(group.ParticipationId);
       entity.ParticipationName = group.ParticipationName;
-      entity.ParticipationDescriptionId = group.ParticipationDescriptionId;
       _repository.Commit();
     }
 
@@ -65,11 +65,6 @@ namespace ShootingRange.Repository.FakeRepositories
     {
       return
         _repository.Find(g => string.Compare(g.ParticipationName, participationName, StringComparison.OrdinalIgnoreCase) == 0);
-    }
-
-    public IEnumerable<Participation> FindByParticipationDescriptionId(int participationDescriptionId)
-    {
-      return _repository.Find(g => g.ParticipationDescriptionId == participationDescriptionId);
     }
   }
 }

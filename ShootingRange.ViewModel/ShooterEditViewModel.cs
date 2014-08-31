@@ -12,6 +12,7 @@ using ShootingRange.BusinessObjects;
 using ShootingRange.Common;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 using ShootingRange.UiBusinessObjects;
 using ShootingRange.UiBusinessObjects.Annotations;
@@ -29,6 +30,9 @@ namespace ShootingRange.ViewModel
     private IShooterParticipationView _shooterParticipationView;
     private IParticipationDataStore _participationDataStore;
     private IShooterParticipationDataStore _shooterParticipationDataStore;
+    private IShooterCollectionDataStore _shooterCollectionDataStore;
+    private IPersonDataStore _personDataStore;
+    private ICollectionShooterDataStore _collectionShooterDataStore;
 
     public ShooterEditViewModel()
     {
@@ -38,6 +42,8 @@ namespace ShootingRange.ViewModel
         new RelayCommand<ShooterParticipationListItem>(ExecuteRemoveFromAssignedParticipationCommand,
           CanExecuteRemoveFromAssignedParticipationCommand);
       CancelCommand = new RelayCommand<object>(ExecuteCloseCommand);
+      AssignShooterCollectionCommand = new RelayCommand<UiShooterCollection>(ExecuteAssignShooterCommand,
+        CanExecuteAssignShooterCommand);
 
       if (!DesignTimeHelper.IsInDesignMode)
       {
@@ -45,14 +51,52 @@ namespace ShootingRange.ViewModel
         _participationDataStore = config.GetParticipationDataStore();
         _windowService = config.GetWindowService();
         _shooterParticipationDataStore = config.GetShooterParticipationDataStore();
+        _collectionShooterDataStore = config.GetCollectionShooterDataStore();
+        _personDataStore = config.GetPersonDataStore();
         _uiEvents = config.GetUIEvents();
         _uiEvents.ShooterSelected += shooter => { UiShooter = shooter; };
         _uiEvents.RequireSelectedShooter();
         _shooterNumberService = config.GetShooterNumberService();
         _shooterDataStore = config.GetShooterDataStore();
         _shooterParticipationView = config.GetShooterParticipationView();
+        _shooterCollectionDataStore = config.GetShooterCollectionDataStore();
         LoadAvailableParticipationList();
         LoadAssignedParticipationList();
+
+        UiShooterCollections = new ObservableCollection<UiShooterCollection>(_shooterCollectionDataStore.GetAll().Select(UiBusinessObjectMapper.ToUiShooterCollection).OrderBy(_ => _.CollectionName));
+      }
+    }
+
+    private bool CanExecuteAssignShooterCommand(UiShooterCollection obj)
+    {
+      return obj != null && UiShooter != null;
+    }
+
+    private void ExecuteAssignShooterCommand(UiShooterCollection obj)
+    {
+      CollectionShooter collectionShooter = new CollectionShooter
+      {
+        ShooterId = UiShooter.ShooterId,
+        ShooterCollectionId = UiShooterCollection.ShooterCollectionId
+      };
+
+      _collectionShooterDataStore.Create(collectionShooter);
+    }
+
+    public ICommand AssignShooterCollectionCommand { get; set; }
+
+    
+    private bool _isGroupAssignmentEnabled;
+    public bool IsGroupAssignmentEnabled
+    {
+      get { return _isGroupAssignmentEnabled; }
+      set
+      {
+        if (value != _isGroupAssignmentEnabled)
+        {
+          _isGroupAssignmentEnabled = value;
+          OnPropertyChanged("IsGroupAssignmentEnabled");
+        }
       }
     }
 
@@ -66,6 +110,35 @@ namespace ShootingRange.ViewModel
       AvailableParticipations = new ObservableCollection<ParticipationListItem>(_participationDataStore.GetAll().Select(selector));
     }
 
+    
+    private ObservableCollection<UiShooterCollection> _uiShooterCollections;
+    public ObservableCollection<UiShooterCollection> UiShooterCollections
+    {
+      get { return _uiShooterCollections; }
+      set
+      {
+        if (value != _uiShooterCollections)
+        {
+          _uiShooterCollections = value;
+          OnPropertyChanged("UiShooterCollections");
+        }
+      }
+    }
+
+    private UiShooterCollection _uiShooterCollection;
+    public UiShooterCollection UiShooterCollection
+    {
+      get { return _uiShooterCollection; }
+      set
+      {
+        if (value != _uiShooterCollection)
+        {
+          _uiShooterCollection = value;
+          OnPropertyChanged("UiShooterCollection");
+        }
+      }
+    }
+
     private UiShooter _uiShooter;
     public UiShooter UiShooter
     {
@@ -75,7 +148,27 @@ namespace ShootingRange.ViewModel
         if (value != _uiShooter)
         {
           _uiShooter = value;
+          if (_uiShooter != null && _personDataStore != null)
+          {
+            _uiShooter.FetchPerson(_personDataStore);
+            UiShooterInfo = string.Format("{0} {1} ({2})", _uiShooter.FirstName, _uiShooter.LastName, _uiShooter.ShooterNumber);
+          }
           OnPropertyChanged("UiShooter");
+        }
+      }
+    }
+
+
+    private string _uiShooterInfo;
+    public string UiShooterInfo
+    {
+      get { return _uiShooterInfo; }
+      set
+      {
+        if (value != _uiShooterInfo)
+        {
+          _uiShooterInfo = value;
+          OnPropertyChanged("UiShooterInfo");
         }
       }
     }
@@ -106,9 +199,21 @@ namespace ShootingRange.ViewModel
         ParticipationId = participation.ParticipationId
       };
 
-      _shooterParticipationDataStore.Create(sp);
-      LoadAvailableParticipationList();
-      LoadAssignedParticipationList();
+      try
+      {
+        _shooterParticipationDataStore.Create(sp);
+
+      }
+      catch (Exception e)
+      {
+        _shooterParticipationDataStore.Revert();
+        ReportException(e);
+      }
+      finally
+      {
+        LoadAssignedParticipationList();
+        LoadAvailableParticipationList();
+      }
     }
 
 
@@ -129,6 +234,7 @@ namespace ShootingRange.ViewModel
       }
       catch (Exception e)
       {
+        _shooterParticipationDataStore.Revert();
         ReportException(e);
       }
       finally
@@ -184,8 +290,17 @@ namespace ShootingRange.ViewModel
         if (value != _selectedAssignedParticipation)
         {
           _selectedAssignedParticipation = value;
+          FetchShooterCollection();
           OnPropertyChanged("SelectedAssignedParticipation");
         }
+      }
+    }
+
+    private void FetchShooterCollection()
+    {
+      if (_selectedAssignedParticipation != null)
+      {
+        //UiShooterCollection = _shooterCollectionDataStore.FindById(_selectedAssignedParticipation.ShooterParticipationId)
       }
     }
 

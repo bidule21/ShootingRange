@@ -14,6 +14,7 @@ using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.FakeRepositories;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 using ShootingRange.UiBusinessObjects;
 

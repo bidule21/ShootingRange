@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.FakeRepositories
 {

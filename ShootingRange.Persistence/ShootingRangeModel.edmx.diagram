@@ -5,34 +5,39 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a6b249680e41410689998f67f9417abe" Name="Diagram1">
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_club" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_order" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_orderitem" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participation" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participationdescription" Width="1.5" PointX="0.75" PointY="11.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_person" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programitem" Width="1.5" PointX="0.5" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programsubtotal" Width="1.5" PointX="3" PointY="14" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_session" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_sessionsubtotal" Width="1.5" PointX="7.5" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooter" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooternumberconfig" Width="1.5" PointX="7.75" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooterparticipation" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shot" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_ClubId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Order_OrderItemId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Order_ShooterId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_OrderItem_ProgramItemId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Participation_ParticipationDescriptionId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_PersonId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_ProgramSubtotal_ProgramItemId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Session_ProgramItemId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Session_ShooterId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Subtotal_SessionId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Shot_SubtotalId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ShooterId" ManuallyRouted="false" />
-        <AssociationConnector Association="ShootingRange.Persistence.t_Subtotal_BestShotId1" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_club" Width="1.5" PointX="0.75" PointY="2.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_collectionshooter" Width="1.5" PointX="5.25" PointY="2.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_order" Width="1.5" PointX="5.25" PointY="5.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_orderitem" Width="1.5" PointX="3" PointY="9.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_participation" Width="1.5" PointX="3" PointY="12.5" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_person" Width="1.5" PointX="0.75" PointY="4.875" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programitem" Width="1.5" PointX="0.75" PointY="9.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_programsubtotal" Width="1.5" PointX="3" PointY="15.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_session" Width="1.5" PointX="8.25" PointY="5.25" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_sessionsubtotal" Width="1.5" PointX="10.5" PointY="5.25" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooter" Width="1.5" PointX="3" PointY="5" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shootercollection" Width="1.5" PointX="3" PointY="2.5" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shootercollectionparticipation" Width="1.5" PointX="8.25" PointY="8.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooternumberconfig" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shooterparticipation" Width="1.5" PointX="5.25" PointY="8.375" />
+        <EntityTypeShape EntityType="ShootingRange.Persistence.t_shot" Width="1.5" PointX="12.75" PointY="5.125" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_ClubId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_CollectionShooter_ShooterCollectionId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_CollectionShooter_ShooterId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Order_OrderItemId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Order_ShooterId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_OrderItem_ProgramItemId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterCollectionParticipation_ParticipationId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ParticipationId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Shooter_PersonId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ProgramSubtotal_ProgramItemId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Session_ProgramItemId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Session_ShooterId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Subtotal_SessionId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Shot_SubtotalId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_Subtotal_BestShotId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterParticipation_ShooterId" />
+        <AssociationConnector Association="ShootingRange.Persistence.t_ShooterCollectionParticipation_ShooterCollectionId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

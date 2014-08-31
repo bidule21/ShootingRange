@@ -4,6 +4,7 @@ using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Persistence;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 using ShootingRange.SiusData;
@@ -20,7 +21,6 @@ namespace ShootingRange.Configuration
     private ISessionDataStore _sessionDataStore;
     private IShooterDataStore _shooterRepository;
     private IParticipationDataStore _participationDataStore;
-    private IParticipationTypeDataStore _participationTypeDataStore;
     private IShooterNumberConfigDataStore _shooterNumberConfigDataStore;
     private ISessionSubtotalDataStore _sessionSubtotalDataStore;
     private IProgramItemDataStore _programItemDataStore;
@@ -35,6 +35,9 @@ namespace ShootingRange.Configuration
     private ISessionDetailsView  _sessionDetailsView;
     private IBarcodeBuilderService _barcodeBuilderService;
     private ISsvShooterDataWriterService _ssvShooterDataWriterService;
+    private IShooterCollectionDataStore _shooterCollectionDataStore;
+    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
+    private ICollectionShooterDataStore _collectionShooterDataStore;
 
     public DefaultConfiguration()
     {
@@ -51,7 +54,6 @@ namespace ShootingRange.Configuration
       _sessionDataStore = new SessionDataStore(entities);
       _shotDataStore = new ShotDataStore(entities);
       _sessionDetailsView = new SessionDetailsView(entities);
-      _participationTypeDataStore = new ParticipationTypeDataStore(entities);
       _shooterNumberConfigDataStore = new ShooterNumberConfigDataStore(entities);
       _shooterParticipationDataStore = new ShooterParticipationDataStore(entities);
       _sessionSubtotalDataStore = new SessionSubtotalDataStore(entities);
@@ -63,6 +65,9 @@ namespace ShootingRange.Configuration
       _barcodePrintService = new PtouchBarcodePrinter();
       _barcodeBuilderService = new Barcode2Of5InterleavedService();
       _shooterNumberService = new ShooterNumberService(_shooterNumberConfigDataStore);
+      _shooterCollectionParticipationDataStore = new ShooterCollectionParticipationDataStore(entities);
+      _shooterCollectionDataStore = new ShooterCollectionDataStore(entities);
+      _collectionShooterDataStore = new CollectionShooterDataStore(entities);
       _ssvShooterDataWriterService = new SsvFileWriter(@"C:\Sius\SiusData\SSVDaten\SSV_schuetzen.txt");
     }
 
@@ -136,11 +141,6 @@ namespace ShootingRange.Configuration
       return _barcodeBuilderService;
     }
 
-    public IParticipationTypeDataStore GetParticipationTypeDataStore()
-    {
-      return _participationTypeDataStore;
-    }
-
     public ISessionDataStore GetSessionDataStore()
     {
       return _sessionDataStore;
@@ -154,6 +154,21 @@ namespace ShootingRange.Configuration
     public IShotDataStore GetShotDataStore()
     {
       return _shotDataStore;
+    }
+
+    public IShooterCollectionDataStore GetShooterCollectionDataStore()
+    {
+      return _shooterCollectionDataStore;
+    }
+
+    public IShooterCollectionParticipationDataStore GetShooterCollectionParticipationDataStore()
+    {
+      return _shooterCollectionParticipationDataStore;
+    }
+
+    public ICollectionShooterDataStore GetCollectionShooterDataStore()
+    {
+      return _collectionShooterDataStore;
     }
 
     public ISsvShooterDataWriterService GetSsvShooterDataWriterService()

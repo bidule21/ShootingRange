@@ -20,7 +20,7 @@ namespace ShootingRange.Entities
         }
     
         public int SessionId { get; set; }
-        public int ProgramItemId { get; set; }
+        public Nullable<int> ProgramItemId { get; set; }
         public int ShooterId { get; set; }
         public int LaneNumber { get; set; }
     

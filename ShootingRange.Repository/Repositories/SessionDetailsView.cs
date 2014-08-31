@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Entities;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.Repositories
 {

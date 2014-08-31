@@ -16,6 +16,7 @@ namespace ShootingRange.Entities
     {
         public t_shooter()
         {
+            this.t_collectionshooter = new HashSet<t_collectionshooter>();
             this.t_order = new HashSet<t_order>();
             this.t_session = new HashSet<t_session>();
             this.t_shooterparticipation = new HashSet<t_shooterparticipation>();
@@ -27,6 +28,7 @@ namespace ShootingRange.Entities
         public int ShooterNumber { get; set; }
     
         public virtual t_club t_club { get; set; }
+        public virtual ICollection<t_collectionshooter> t_collectionshooter { get; set; }
         public virtual ICollection<t_order> t_order { get; set; }
         public virtual t_person t_person { get; set; }
         public virtual ICollection<t_session> t_session { get; set; }

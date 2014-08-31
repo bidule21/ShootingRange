@@ -45,6 +45,7 @@
     <Compile Include="UiSession.cs" />
     <Compile Include="UiShooter.cs" />
     <Compile Include="UiPerson.cs" />
+    <Compile Include="UiShooterCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

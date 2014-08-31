@@ -2,6 +2,7 @@
 using ShootingRange.Common.Modules;
 using ShootingRange.Repository;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 
 namespace ShootingRange.ConfigurationProvider
@@ -25,9 +26,11 @@ namespace ShootingRange.ConfigurationProvider
     IShooterParticipationView GetShooterParticipationView();
     IBarcodePrintService GetBarcodePrintService();
     IBarcodeBuilderService GetBarcodeBuilderService();
-    IParticipationTypeDataStore GetParticipationTypeDataStore();
     ISessionDataStore GetSessionDataStore();
     IProgramItemDataStore GetProgramItemDataStore();
     IShotDataStore GetShotDataStore();
+    IShooterCollectionDataStore GetShooterCollectionDataStore();
+    IShooterCollectionParticipationDataStore GetShooterCollectionParticipationDataStore();
+    ICollectionShooterDataStore GetCollectionShooterDataStore();
   }
 }

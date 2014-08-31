@@ -9,6 +9,7 @@ using ShootingRange.Common;
 using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Engine
 {

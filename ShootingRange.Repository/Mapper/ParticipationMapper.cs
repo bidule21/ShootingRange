@@ -7,8 +7,7 @@ namespace ShootingRange.Repository.Mapper
   {
     public static t_participation UpdateEntity(this t_participation entity, Participation participation)
     {
-      entity.ParticipationName = participation.ParticipationName;
-      entity.ParticipationDescriptionId = participation.ParticipationDescriptionId;
+      entity.Description = participation.ParticipationName;
 
       return entity;
     }

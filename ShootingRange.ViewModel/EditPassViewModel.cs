@@ -14,6 +14,7 @@ using ShootingRange.BusinessObjects;
 using ShootingRange.Common;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 using ShootingRange.UiBusinessObjects;
 using ShootingRange.UiBusinessObjects.Annotations;
@@ -106,7 +107,13 @@ namespace ShootingRange.ViewModel
           }
           int shooterId = shooter.ShooterId;
           List<UiSession> session = _sessionDatastore.FindByShooterId(shooterId).Select(UiBusinessObjectMapper.ToUiSession).ToList();
-          session.ForEach(_ => _.ProgramDescription = string.Format("{0}", _programItemDatastore.FindById(_.ProgramItemId).ProgramName));
+          session.ForEach(_ =>
+          {
+            if (_.ProgramItemId != null)
+              _.ProgramDescription = string.Format("{0}",
+                _programItemDatastore.FindById((int) _.ProgramItemId).ProgramName);
+          });
+
           UiSessions = new ObservableCollection<UiSession>(session);
           SelectedUiSession = UiSessions.FirstOrDefault();
         }

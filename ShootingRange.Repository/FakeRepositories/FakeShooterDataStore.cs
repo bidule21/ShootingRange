@@ -3,6 +3,7 @@ using System.Linq;
 using Repository;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.FakeRepositories
 {

@@ -27,16 +27,18 @@ namespace ShootingRange.Persistence
         }
     
         public DbSet<t_club> t_club { get; set; }
+        public DbSet<t_collectionshooter> t_collectionshooter { get; set; }
         public DbSet<t_order> t_order { get; set; }
         public DbSet<t_orderitem> t_orderitem { get; set; }
         public DbSet<t_participation> t_participation { get; set; }
-        public DbSet<t_participationdescription> t_participationdescription { get; set; }
         public DbSet<t_person> t_person { get; set; }
         public DbSet<t_programitem> t_programitem { get; set; }
         public DbSet<t_programsubtotal> t_programsubtotal { get; set; }
         public DbSet<t_session> t_session { get; set; }
         public DbSet<t_sessionsubtotal> t_sessionsubtotal { get; set; }
         public DbSet<t_shooter> t_shooter { get; set; }
+        public DbSet<t_shootercollection> t_shootercollection { get; set; }
+        public DbSet<t_shootercollectionparticipation> t_shootercollectionparticipation { get; set; }
         public DbSet<t_shooternumberconfig> t_shooternumberconfig { get; set; }
         public DbSet<t_shooterparticipation> t_shooterparticipation { get; set; }
         public DbSet<t_shot> t_shot { get; set; }

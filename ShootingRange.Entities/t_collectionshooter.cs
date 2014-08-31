@@ -12,16 +12,13 @@ namespace ShootingRange.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class t_participationdescription
+    public partial class t_collectionshooter
     {
-        public t_participationdescription()
-        {
-            this.t_participation = new HashSet<t_participation>();
-        }
+        public int CollectionShooterId { get; set; }
+        public int ShooterId { get; set; }
+        public int ShooterCollectionId { get; set; }
     
-        public int ParticipationDescriptionId { get; set; }
-        public string Description { get; set; }
-    
-        public virtual ICollection<t_participation> t_participation { get; set; }
+        public virtual t_shootercollection t_shootercollection { get; set; }
+        public virtual t_shooter t_shooter { get; set; }
     }
 }

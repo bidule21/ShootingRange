@@ -8,6 +8,7 @@ using Repository;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Entities;
 using ShootingRange.Repository.Mapper;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.Repositories
 {

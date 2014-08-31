@@ -43,6 +43,9 @@
     <Compile Include="t_club.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_collectionshooter.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_order.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
@@ -50,9 +53,6 @@
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_participation.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_participationdescription.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_person.cs">
@@ -71,6 +71,12 @@
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_shooter.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shootercollection.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_shootercollectionparticipation.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_shooternumberconfig.cs">

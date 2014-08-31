@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.UiBusinessObjects;
 
 namespace ShootingRange.ViewModel
@@ -77,5 +78,22 @@ namespace ShootingRange.ViewModel
       shooter.LastName = person.LastName;
       return shooter;
     }
+
+    public static UiShooter FetchPerson(this UiShooter shooter, IPersonDataStore personDataStore)
+    {
+      if (shooter.PersonId != null)
+      {
+        shooter.FetchPerson(personDataStore.FindById((int)shooter.PersonId));
+      }
+
+      return shooter;
+    }
+
+    public static Func<ShooterCollection, UiShooterCollection> ToUiShooterCollection =
+      shooterCollection => new UiShooterCollection
+      {
+        ShooterCollectionId = shooterCollection.ShooterCollectionId,
+        CollectionName = shooterCollection.CollectionName
+      };
   }
 }

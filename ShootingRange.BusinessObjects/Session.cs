@@ -9,7 +9,7 @@ namespace ShootingRange.BusinessObjects
     public int SessionId { get; set; }
     public int ShooterId { get; set; }
     public int LaneNumber { get; set; }
-    public int ProgramItemId { get; set; }
+    public int? ProgramItemId { get; set; }
 
     private List<SubSession> _subSessions;
 

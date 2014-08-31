@@ -6,6 +6,7 @@ using ShootingRange.BusinessObjects;
 using ShootingRange.Persistence;
 using ShootingRange.Repository;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.RepositoryTest
 {

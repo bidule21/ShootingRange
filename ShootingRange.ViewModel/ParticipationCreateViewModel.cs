@@ -8,6 +8,7 @@ using DotNetToolbox.RelayCommand;
 using ShootingRange.BusinessObjects;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 using ShootingRange.UiBusinessObjects.Annotations;
 
@@ -15,8 +16,9 @@ namespace ShootingRange.ViewModel
 {
   public class ParticipationCreateViewModel : INotifyPropertyChanged
   {
-    private IParticipationTypeDataStore _participationTypeDataStore;
     private IParticipationDataStore _participationDataStore;
+    private IShooterCollectionDataStore _shooterCollectionDataStore;
+    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
     private IWindowService _windowService;
 
     public ParticipationCreateViewModel()
@@ -24,8 +26,9 @@ namespace ShootingRange.ViewModel
       if (!DesignTimeHelper.IsInDesignMode)
       {
         IConfiguration config = ConfigurationSource.Configuration;
-        _participationTypeDataStore = config.GetParticipationTypeDataStore();
         _participationDataStore = config.GetParticipationDataStore();
+        _shooterCollectionDataStore = config.GetShooterCollectionDataStore();
+        _shooterCollectionParticipationDataStore = config.GetShooterCollectionParticipationDataStore();
         _windowService = config.GetWindowService();
         LoadParticipationTypeList();
       }
@@ -41,13 +44,19 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteCreateParticipationCommand(ParticipationDraft participationDraft)
     {
-      Participation participation = new Participation
+      ShooterCollection shooterCollection = new ShooterCollection
       {
-        ParticipationDescriptionId = participationDraft.ParticipationType.ParticipationTypeId,
-        ParticipationName = participationDraft.ParticipationName
+        CollectionName = participationDraft.ParticipationName
+      };
+      _shooterCollectionDataStore.Create(shooterCollection);
+
+      ShooterCollectionParticipation collectionParticipation = new ShooterCollectionParticipation
+      {
+        ParticipationId = participationDraft.ParticipationType.ParticipationTypeId,
+        ShooterCollectionId = shooterCollection.ShooterCollectionId
       };
 
-      _participationDataStore.Create(participation);
+      _shooterCollectionParticipationDataStore.Create(collectionParticipation);
       _windowService.CloseCreateParticipationWindow();
     }
 
@@ -62,13 +71,13 @@ namespace ShootingRange.ViewModel
 
     private void LoadParticipationTypeList()
     {
-      Func<ParticipationType, ParticipationTypeListItem> selector = participationType => new ParticipationTypeListItem
+      Func<Participation, ParticipationTypeListItem> selector = participationType => new ParticipationTypeListItem
       {
-        ParticipationTypeId = participationType.ParticipationTypeId,
-        ParticipationTypeName = participationType.ParticipationTypeName
+        ParticipationTypeId = participationType.ParticipationId,
+        ParticipationTypeName = participationType.ParticipationName
       };
 
-      AvailableParticipationTypes = new ObservableCollection<ParticipationTypeListItem>(_participationTypeDataStore.GetAll().Select(selector));
+      AvailableParticipationTypes = new ObservableCollection<ParticipationTypeListItem>(_participationDataStore.GetAll().Select(selector));
     }
 
     

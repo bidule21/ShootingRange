@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Entities;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.Repositories
 {
@@ -27,7 +28,7 @@ namespace ShootingRange.Repository.Repositories
         select new ShooterParticipationDetails
         {
           ShooterParticipationId = sp.ShooterParticipationId,
-          ParticipationName = p.ParticipationName
+          ParticipationName = p.Description
         };
     }
 
@@ -39,7 +40,7 @@ namespace ShootingRange.Repository.Repositories
         select new ShooterParticipationDetails
         {
           ShooterParticipationId = sp.ShooterParticipationId,
-          ParticipationName = p.ParticipationName
+          ParticipationName = p.Description
         };
     }
   }

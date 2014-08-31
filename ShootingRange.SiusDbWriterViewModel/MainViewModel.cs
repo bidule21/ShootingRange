@@ -9,6 +9,7 @@ using ShootingRange.Common;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Engine;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.SiusDbWriterViewModel.Properties;
 using ShootingRange.ViewModel;
 

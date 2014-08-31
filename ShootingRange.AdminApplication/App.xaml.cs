@@ -6,6 +6,7 @@ using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository;
 using ShootingRange.Repository.FakeRepositories;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 using ShootingRange.View;

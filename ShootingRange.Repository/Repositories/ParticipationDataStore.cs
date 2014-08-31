@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Repository;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Entities;
 using ShootingRange.Repository.Mapper;
+using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Repository.Repositories
 {
@@ -22,19 +21,13 @@ namespace ShootingRange.Repository.Repositories
       selector = g => new Participation
       {
         ParticipationId = g.ParticipationId,
-        ParticipationName = g.ParticipationName,
-        ParticipationDescriptionId = g.ParticipationDescriptionId
+        ParticipationName = g.Description,
       };
     }
     
     public IEnumerable<Participation> FindByParticipationName(string participationName)
     {
-      return _sqlRepository.Find(g => g.ParticipationName == participationName).ToList().Select(selector);
-    }
-
-    public IEnumerable<Participation> FindByParticipationDescriptionId(int participationDescriptionId)
-    {
-      return _sqlRepository.Find(g => g.ParticipationDescriptionId == participationDescriptionId).ToList().Select(selector);
+      return _sqlRepository.Find(g => g.Description == participationName).ToList().Select(selector);
     }
 
     public void Revert()

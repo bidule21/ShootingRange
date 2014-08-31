@@ -4,6 +4,7 @@ using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository;
 using ShootingRange.Repository.FakeRepositories;
 using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 
@@ -107,11 +108,6 @@ namespace ShootingRange.Configuration
       throw new System.NotImplementedException();
     }
 
-    public IParticipationTypeDataStore GetParticipationTypeDataStore()
-    {
-      throw new System.NotImplementedException();
-    }
-
     public ISessionDataStore GetSessionDataStore()
     {
       throw new System.NotImplementedException();
@@ -123,6 +119,21 @@ namespace ShootingRange.Configuration
     }
 
     public IShotDataStore GetShotDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public IShooterCollectionDataStore GetShooterCollectionDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public IShooterCollectionParticipationDataStore GetShooterCollectionParticipationDataStore()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public ICollectionShooterDataStore GetCollectionShooterDataStore()
     {
       throw new System.NotImplementedException();
     }
