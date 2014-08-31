@@ -12,19 +12,12 @@ namespace ShootingRange.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class t_orderitem
+    public partial class t_rankignoresession
     {
-        public t_orderitem()
-        {
-            this.t_order = new HashSet<t_order>();
-        }
+        public int RankIgnoreSessionId { get; set; }
+        public int SessionId { get; set; }
+        public string Reason { get; set; }
     
-        public int OrderItemId { get; set; }
-        public Nullable<int> ProgramItemId { get; set; }
-        public string ItemName { get; set; }
-        public Nullable<decimal> Price { get; set; }
-    
-        public virtual ICollection<t_order> t_order { get; set; }
-        public virtual t_programitem t_programitem { get; set; }
+        public virtual t_session t_session { get; set; }
     }
 }

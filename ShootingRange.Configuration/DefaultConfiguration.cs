@@ -42,9 +42,9 @@ namespace ShootingRange.Configuration
     public DefaultConfiguration()
     {
       //_shootingRange = new SiusDataFileProvider(@"C:\Users\eberlid\Dropbox\SSC\2014\Herbstschiessen\ShootingRange\20140516_164043.log");
-      _shootingRange = new SiusDataFileProvider(@"C:\Users\eberlid\Dropbox\SSC\2014\Herbstschiessen\ShootingRange\20130914_132912.log");
+      //_shootingRange = new SiusDataFileProvider(@"C:\Users\eberlid\Dropbox\SSC\2014\Herbstschiessen\ShootingRange\20130914_132912.log");
       //_shootingRange = new SiusApiProvider("http://192.168.1.4");
-      //_shootingRange = new SiusDataSocketProvider("192.168.1.4", 4000);
+      _shootingRange = new SiusDataSocketProvider("127.0.0.1", 4000);
       _events = new ShootingRangeEvents();
       _uiEvents = new UIEvents();
       ShootingRangeEntities entities = new ShootingRangeEntities();

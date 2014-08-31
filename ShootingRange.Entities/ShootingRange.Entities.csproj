@@ -40,10 +40,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_bestshot.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_club.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_collectionshooter.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_event.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_order.cs">
@@ -55,6 +61,9 @@
     <Compile Include="t_participation.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="t_participationdescription.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="t_person.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
@@ -62,6 +71,9 @@
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_programsubtotal.cs">
+      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="t_rankignoresession.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_session.cs">

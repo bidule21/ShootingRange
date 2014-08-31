@@ -43,8 +43,8 @@ namespace ShootingRange.SiusData.Parser
       decimal primaryScore = ValueAccessHelper.GetDecimal(valueList, PrimaryScore, allOverSuccess);
       decimal secondaryScore = ValueAccessHelper.GetDecimal(valueList, SecondaryScore, allOverSuccess);
       int shotNbr = ValueAccessHelper.GetInt(valueList, ShotNbr, allOverSuccess);
-      float x = ValueAccessHelper.GetFloat(valueList, X, allOverSuccess);
-      float y = ValueAccessHelper.GetFloat(valueList, Y, allOverSuccess);
+      //float x = ValueAccessHelper.GetFloat(valueList, X, allOverSuccess);
+      //float y = ValueAccessHelper.GetFloat(valueList, Y, allOverSuccess);
       int programNumber = ValueAccessHelper.GetInt(valueList, ProgramNumber, allOverSuccess);
 
       if (!allOverSuccess.Success) return null;

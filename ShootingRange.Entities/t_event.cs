@@ -12,19 +12,14 @@ namespace ShootingRange.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class t_orderitem
+    public partial class t_event
     {
-        public t_orderitem()
-        {
-            this.t_order = new HashSet<t_order>();
-        }
+        public int EventId { get; set; }
+        public int ShooterNumberConfigId { get; set; }
+        public string EventName { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
     
-        public int OrderItemId { get; set; }
-        public Nullable<int> ProgramItemId { get; set; }
-        public string ItemName { get; set; }
-        public Nullable<decimal> Price { get; set; }
-    
-        public virtual ICollection<t_order> t_order { get; set; }
-        public virtual t_programitem t_programitem { get; set; }
+        public virtual t_shooternumberconfig t_shooternumberconfig { get; set; }
     }
 }

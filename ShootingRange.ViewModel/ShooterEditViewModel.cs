@@ -81,6 +81,7 @@ namespace ShootingRange.ViewModel
       };
 
       _collectionShooterDataStore.Create(collectionShooter);
+      _windowService.CloseEditShooterWindow();
     }
 
     public ICommand AssignShooterCollectionCommand { get; set; }

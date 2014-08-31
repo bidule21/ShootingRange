@@ -7,7 +7,7 @@ namespace ShootingRange.Repository.Mapper
   {
     public static t_collectionshooter UpdateEntity(this t_collectionshooter entity, CollectionShooter shooter)
     {
-      entity.CollectionShooterId = shooter.CollectionShooterId;
+      entity.ShooterId = shooter.ShooterId;
       entity.ShooterCollectionId = shooter.ShooterCollectionId;
       return entity;
     }
