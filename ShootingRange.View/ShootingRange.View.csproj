@@ -150,6 +150,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
+      <Project>{ede3c213-3926-4548-ba0d-d63d7916d1ed}</Project>
+      <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.UiBusinessObjects\ShootingRange.UiBusinessObjects.csproj">
       <Project>{F55192F5-0745-4ADA-ADD2-90EDC4E947B0}</Project>
       <Name>ShootingRange.UiBusinessObjects</Name>

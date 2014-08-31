@@ -11,6 +11,7 @@ namespace ShootingRange.Common
       RequireSelectedPerson = delegate { };
       PersonDataStoreChanged = delegate { };
       ShooterDataStoreChanged = delegate { };
+      FetchSelectedShooter = () => null;
     }
     public UIEventsDelegate<UiPerson> PersonSelected { get; set; }
 
@@ -22,6 +23,8 @@ namespace ShootingRange.Common
     public UIEventsDelegate<UiShooter> ShooterSelected { get; set; }
 
     public UIEventsDelegate RequireSelectedShooter { get; set; }
+
+    public UiEventsDelegate<UiShooter> FetchSelectedShooter { get; set; }
   }
 
 

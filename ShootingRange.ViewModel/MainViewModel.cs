@@ -69,6 +69,7 @@ namespace ShootingRange.ViewModel
         _uiEvents = config.GetUIEvents();
         _uiEvents.RequireSelectedPerson += () => _uiEvents.PersonSelected(SelectedUiPerson);
         _uiEvents.RequireSelectedShooter += () => _uiEvents.ShooterSelected(SelectedUiShooter);
+        _uiEvents.FetchSelectedShooter += () => SelectedUiShooter;
         _uiEvents.PersonDataStoreChanged += LoadPersonList;
         _uiEvents.ShooterDataStoreChanged += LoadShooterList;
       }

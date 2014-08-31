@@ -47,6 +47,12 @@ namespace ShootingRange.ViewModel
       DeleteCommand = new RelayCommand<UiSession>(ExecuteDeleteCommand, CanExecuteDeleteCommand);
       CancelCommand = new RelayCommand<object>(ExecuteCancelCommand);
       SaveCommand = new RelayCommand<UiShooter>(ExecuteSaveCommand, CanExecuteSaveCommand);
+      UiShooter selectedUiShooter = _events.FetchSelectedShooter() ;
+      if (selectedUiShooter != null)
+      {
+        ShooterNumber = string.Format("{0}", selectedUiShooter.ShooterNumber);
+        ExecuteSearchShooterCommand(ShooterNumber);
+      }
     }
 
     private void ExecuteSaveCommand(UiShooter obj)
