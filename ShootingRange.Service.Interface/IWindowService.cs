@@ -20,5 +20,7 @@
 
     void ShowEditPassWindow();
     void CloseEditPassWindow();
+    void ShowTextBoxInputDialog(string caption, string message);
+    void CloseTextBoxInputDialog();
   }
 }

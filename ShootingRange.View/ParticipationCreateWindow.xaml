@@ -2,34 +2,130 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
-        Title="ParticipationCreateWindow" Height="381.391" Width="278.255">
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:uiBusinessObjects="clr-namespace:ShootingRange.UiBusinessObjects;assembly=ShootingRange.UiBusinessObjects"
+        xmlns:converter="clr-namespace:ShootingRange.View.Converter"
+        xmlns:viewUtils="clr-namespace:ShootingRange.ViewUtils;assembly=ShootingRange.ViewUtils"
+        Title="Gruppen verwalten" Background="#FFEEEEEE" Icon="Images/edit_ticket_32.png" ShowInTaskbar="False" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" MinHeight="500">
+    <Window.Resources>
+        <converter:PersonNameShooterNumberConverter x:Key="PersonNameShooterNumberConverter"></converter:PersonNameShooterNumberConverter>
+    </Window.Resources>
     <Window.DataContext>
         <viewModel:ParticipationCreateViewModel/>
     </Window.DataContext>
-    <StackPanel>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <StackPanel Grid.Row="1" Margin="5">
-                <Label Content="Available Participation Types"/>
-                <ListBox SelectedItem="{Binding SelectedAvailableParticipationType}" ItemsSource="{Binding AvailableParticipationTypes}"  Height="200" Margin="5">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+    </Window.InputBindings>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Command="{Binding CreateCommand}" CommandParameter="{Binding SelectedUiParticipation}">
+                <StackPanel>
+                    <viewUtils:AutoGreyableImage Height="32" Source="Images/add_group_32.png"/>
+                    <TextBlock Text="Gruppe erstellen"></TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedUiShooterCollection}">
+                <StackPanel>
+                    <viewUtils:AutoGreyableImage Height="32" Source="Images/remove_group_32.png"/>
+                    <TextBlock Text="Gruppe löschen"></TextBlock>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        <StackPanel Orientation="Horizontal">
+            <GroupBox Header="1. Wettkämpfe" Margin="5">
+            <ListBox Margin="5" MinWidth="200" ItemsSource="{Binding UiParticipations}" SelectedItem="{Binding SelectedUiParticipation}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type uiBusinessObjects:UiParticipation}">
+                        <TextBlock Text="{Binding ParticipationName}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            </GroupBox>
+            <GroupBox Header="2. Vorhanden Gruppen" Margin="5">
+                <ListBox  MinWidth="200" ItemsSource="{Binding SelectedUiParticipation.ShooterCollections}" Margin="5" SelectedItem="{Binding SelectedUiShooterCollection}">
                     <ListBox.ItemTemplate>
-                        <DataTemplate DataType="viewModel:ParticipationTypeListItem">
-                            <TextBlock Text="{Binding ParticipationTypeName}"/>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding CollectionName}"></TextBlock>
+                                <ItemsControl ItemsSource="{Binding Shooters}" Margin="30,0,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock>
+                                                <TextBlock.Text>
+                                                    <MultiBinding Converter="{StaticResource PersonNameShooterNumberConverter}">
+                                                        <MultiBinding.Bindings>
+                                                            <Binding Path="FirstName" />
+                                                            <Binding Path="LastName" />
+                                                            <Binding Path="ShooterNumber"/>
+                                                        </MultiBinding.Bindings>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
-            <StackPanel Grid.Row="0" VerticalAlignment="Top" Margin="5">
-                <Label Content="Participation Name"></Label>
-                <TextBox Margin="5" Text="{Binding ParticipationName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-            </StackPanel>
-        </Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,20,5,5">
-            <Button Content="OK" Width="80" Margin="3" Command="{Binding OkCommand}" CommandParameter="{Binding ParticipationDraft}"/>
-            <Button Content="Cancel" Width="80" Margin="3" Command="{Binding CancelCommand}"/>
+            </GroupBox>
+            <GroupBox Header="3. Schützen zuweisen" Margin="5">
+            <DockPanel Margin="5">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <Label Content="Gruppenname:"></Label>
+                        <Label Content="{Binding SelectedUiShooterCollection.CollectionName}">
+                        </Label>
+                    </StackPanel>
+                    <DockPanel VerticalAlignment="Stretch">
+                        <GroupBox Header="Zugeordnete Schützen" Margin="5">
+                            <ListBox VerticalAlignment="Stretch" Margin="5" MinWidth="200" SelectedItem="{Binding SelectedAssignedeUiShooter}" ItemsSource="{Binding SelectedUiShooterCollection.Shooters}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource PersonNameShooterNumberConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="FirstName" />
+                                                        <Binding Path="LastName" />
+                                                        <Binding Path="ShooterNumber"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+                        <StackPanel VerticalAlignment="Center">
+                            <Button Margin="5" Height="48" Width="48" Command="{Binding AssignCommand}" CommandParameter="{Binding SelectedAvailableUiShooter}">
+                                <viewUtils:AutoGreyableImage Source="Images/arrow_left_32.png"></viewUtils:AutoGreyableImage>
+                            </Button>
+                            <Button Margin="5" Height="48" Width="48" Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedAssignedeUiShooter}">
+                                <viewUtils:AutoGreyableImage Source="Images/arrow_right_32.png"></viewUtils:AutoGreyableImage>
+                            </Button>
+                        </StackPanel>
+                        <GroupBox Header="Verfügbare Schützen" Margin="5">
+                            <ListBox SelectedItem="{Binding SelectedAvailableUiShooter}" Margin="5" MinWidth="200" ItemsSource="{Binding AvailableUiShooters}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource PersonNameShooterNumberConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="FirstName" />
+                                                        <Binding Path="LastName" />
+                                                        <Binding Path="ShooterNumber"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox>
+                    </DockPanel>
+                </DockPanel>
+            </GroupBox>
         </StackPanel>
-    </StackPanel>
+    </DockPanel>
 </Window>

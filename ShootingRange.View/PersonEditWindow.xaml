@@ -3,18 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:view="clr-namespace:ShootingRange.View"
     xmlns:converter="clr-namespace:ShootingRange.View.Converter"
     mc:Ignorable="d" x:Class="ShootingRange.View.PersonEditWindow"
-        Title="PersonCreateWindow" Height="409" Width="350">
+        Title="Person editieren" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Topmost="True" Icon="Images/edit_person_32.png" ResizeMode="NoResize" Background="#FFEEEEEE" ShowInTaskbar="False">
     <Window.DataContext>
         <viewModel:PersonEditViewModel/>
     </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding EditPersonCommand}" CommandParameter="{Binding UiPerson}"/>
     </Window.InputBindings>
     <StackPanel Margin="5">
-        <StackPanel Orientation="Horizontal" Height="322">
+        <StackPanel Orientation="Horizontal">
             <Grid Margin="5,5,5,0" Height="293" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="113"/>
@@ -56,46 +56,10 @@
                     </DatePicker.Text>
                 </DatePicker>
             </Grid>
-            <!--<StackPanel Width="400">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="17*"/>
-                        <ColumnDefinition Width="8*"/>
-                    </Grid.ColumnDefinitions>
-                    <ComboBox Grid.Column="0" Margin="5,5,2,5" ItemsSource="{Binding Shooters}"/>
-                    <Button Grid.Column="1" Content="Create Shooter" Margin="5" Command="{Binding CreateShooterCommand}"/>
-                </Grid>
-                <TabControl HorizontalAlignment="Left" Width="390" Margin="5,5,0,5" Height="272">
-                    <TabItem Header="Gruppen">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="42"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <view:GroupTreeView Margin="5" GroupTreeItems="{Binding ShootersGroups}"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <Button Margin="5" Width="32">
-                                    <Image Source="Images/arrow_left_32.png">
-                                    </Image>
-                                </Button>
-                                <Button Margin="5" Width="32">
-                                    <Image Source="Images/arrow_right_32.png">
-                                    </Image>
-                                </Button>
-                            </StackPanel>
-                            <view:GroupTreeView Grid.Column="2" Margin="5" GroupTreeItems="{Binding AvailableGroups}"/>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Stiche">
-
-                    </TabItem>
-                </TabControl>
-            </StackPanel>-->
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,20,5,5">
-            <Button Content="OK" Width="80" Margin="3" Command="{Binding EditPersonCommand}" CommandParameter="{Binding UiPerson}"/>
-            <Button Content="Cancel" Width="80" Margin="3" Command="{Binding CancelCommand}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,5,5,5">
+            <Button Content="Speichern" Width="80" Margin="0,3,3,3" Command="{Binding EditPersonCommand}" CommandParameter="{Binding UiPerson}"/>
+            <Button Content="Abbrechen" Width="80" Margin="3,3,0,3" Command="{Binding CancelCommand}"/>
         </StackPanel>
     </StackPanel>
 </Window>

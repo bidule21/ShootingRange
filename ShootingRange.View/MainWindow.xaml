@@ -6,14 +6,18 @@
         xmlns:viewUtils="clr-namespace:ShootingRange.ViewUtils;assembly=ShootingRange.ViewUtils"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uiBusinessObjects="clr-namespace:ShootingRange.UiBusinessObjects;assembly=ShootingRange.UiBusinessObjects"
+    xmlns:converter="clr-namespace:ShootingRange.View.Converter"
     mc:Ignorable="d"
         x:Class="ShootingRange.View.MainWindow"
-        Title="MainWindow" Height="577.699" Width="984.627">
+        Title="MainWindow" Height="577.699" Width="984.627" Background="#FFEEEEEE" WindowStartupLocation="CenterScreen" Icon="Images/master_48.png">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
     <Window.Resources>
-        <viewModel:MainViewModel x:Key="MainViewModel"/>
         <DataTemplate x:Key="ShooterListItemTemplate" DataType="{x:Type uiBusinessObjects:UiShooter}">
             <TextBlock Text="{Binding Path=ShooterNumber}"/>
         </DataTemplate>
+        <converter:PersonNameShooterNumberConverter x:Key="PersonNameShooterNumberConverter"/>
         <!--<DataTemplate x:Key="GroupListItemTemplate" DataType="{x:Type viewModel:GroupListItem}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -26,11 +30,11 @@
             </Grid>
         </DataTemplate>-->
     </Window.Resources>
-    <DockPanel DataContext="{Binding Source={StaticResource MainViewModel}}">
+    <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Button Command="{Binding CreatePersonCommand}">
                 <StackPanel>
-                <Image Height="32" Source="Images/add_person_32.png" ToolTip="Create Person"/>
+                    <Image Height="32" Source="Images/add_person_32.png" ToolTip="Create Person"/>
                     <TextBlock Text="Person erstellen"></TextBlock>
                 </StackPanel>
             </Button>
@@ -58,19 +62,22 @@
                 <viewUtils:AutoGreyableImage Source="Images/add_weapon_32.png" ToolTip="Create Shooter"></viewUtils:AutoGreyableImage>
             </Button>-->
             <Button  Command="{Binding EditShooterCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <StackPanel><viewUtils:AutoGreyableImage Height="32" Source="Images/edit_weapon_32.png" ToolTip="Edit Shooter"></viewUtils:AutoGreyableImage>
+                <StackPanel>
+                    <viewUtils:AutoGreyableImage Height="32" Source="Images/edit_weapon_32.png" ToolTip="Edit Shooter"></viewUtils:AutoGreyableImage>
                     <TextBlock Text="Schütze editieren"></TextBlock>
                 </StackPanel>
             </Button>
             <Button  Command="{Binding DeleteShooterCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <StackPanel><viewUtils:AutoGreyableImage Height="32" Source="Images/remove_weapon_32.png" ToolTip="Delete Shooter"></viewUtils:AutoGreyableImage>
+                <StackPanel>
+                    <viewUtils:AutoGreyableImage Height="32" Source="Images/remove_weapon_32.png" ToolTip="Delete Shooter"></viewUtils:AutoGreyableImage>
                     <TextBlock Text="Schütze löschen"></TextBlock>
                 </StackPanel>
             </Button>
             <Separator Margin="0,2"/>
             <Button Command="{Binding CreateParticipationCommand}">
-                <StackPanel><viewUtils:AutoGreyableImage Source="Images/add_ticket_32.png" Height="32" ToolTip="Create Participation"/>
-                    <TextBlock Text="Gruppe erstellen"></TextBlock>
+                <StackPanel>
+                    <viewUtils:AutoGreyableImage Source="Images/add_ticket_32.png" Height="32" ToolTip="Create Participation"/>
+                    <TextBlock Text="Gruppen verwalten"></TextBlock>
                 </StackPanel>
             </Button>
             <!--<Button Command="{Binding EditParticipationCommand}" CommandParameter="{Binding SelectedUiShooter}">
@@ -87,8 +94,9 @@
                 </StackPanel>
             </Button>
             <Separator Margin="0,2"/>
-			<Button Command="{Binding PrintBarcodeCommand}" CommandParameter="{Binding SelectedUiShooter}">
-                <StackPanel><viewUtils:AutoGreyableImage Source="Images/barcode_32.png" Height="32" ToolTip="Print Barcode"/>
+            <Button Command="{Binding PrintBarcodeCommand}" CommandParameter="{Binding SelectedUiShooter}">
+                <StackPanel>
+                    <viewUtils:AutoGreyableImage Source="Images/barcode_32.png" Height="32" ToolTip="Print Barcode"/>
                     <TextBlock Text="Barcode drucken"></TextBlock>
                 </StackPanel>
             </Button>
@@ -98,66 +106,74 @@
                 <TextBlock Text="{Binding LogMessage}"/>
             </StatusBarItem>
         </StatusBar>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <DockPanel>
-                <GroupBox DockPanel.Dock="Bottom" Header="Shooters" Margin="5">
-                    <ListBox Height="150" ItemsSource="{Binding ShooterListItems}" SelectedItem="{Binding SelectedUiShooter}" ItemTemplate="{StaticResource ShooterListItemTemplate}" Margin="5"/>
-                </GroupBox>
-                <GroupBox Header="People" Margin="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <DockPanel>
+                    <GroupBox DockPanel.Dock="Bottom" Header="Schützen" Margin="5">
+                        <ListBox Height="150" ItemsSource="{Binding ShooterListItems}" SelectedItem="{Binding SelectedUiShooter}" Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type uiBusinessObjects:UiShooter}">
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource PersonNameShooterNumberConverter}">
+                                                <MultiBinding.Bindings>
+                                                    <Binding Path="FirstName" />
+                                                    <Binding Path="LastName" />
+                                                    <Binding Path="ShooterNumber"/>
+                                                </MultiBinding.Bindings>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </GroupBox>
+                    <GroupBox Header="Personen" Margin="5">
                     <DockPanel>
-                        <!--<Grid DockPanel.Dock="Top">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="67*"/>
-                                <ColumnDefinition Width="203*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Content="Search:" Margin="5"/>
-                            <TextBox Grid.Column="1" Margin="5"/>
-                        </Grid>-->
                         <view:PersonListView Margin="5" UiPeople="{Binding UiPeople}" SelectedUiPerson="{Binding SelectedUiPerson}"/>
                     </DockPanel>
-                </GroupBox>
-            </DockPanel>
-            <DockPanel Grid.Column="1">
-                <GroupBox Header="Participations" DockPanel.Dock="Bottom" Margin="5">
-                    <!--<view:ParticipationTreeView Height="150" Margin="5" ParticipationTreeItems="{Binding ParticipationTreeItems}"/>-->
-                    <ListBox Height="150" ItemsSource="{Binding Participations}" SelectedItem="{Binding SelectedUiShooterParticipation}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type viewModel:ShooterParticipationListItem}">
-                                <TextBlock Text="{Binding ParticipationName}"></TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </GroupBox>
-                <GroupBox Header="Passes" Margin="5">
-                    <TreeView ItemsSource="{Binding SessionTreeViewItems}" Margin="5">
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Subsessions}">
-                                <TextBlock Text="{Binding SessionHeader}"/>
-                                <HierarchicalDataTemplate.ItemTemplate>
-                                    <HierarchicalDataTemplate DataType="{x:Type viewModel:Subsession}" ItemsSource="{Binding Shots}">
-                                        <TextBlock Text="{Binding SubsessionHeader}"/>
-                                        <HierarchicalDataTemplate.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}"/>
-                                            </DataTemplate>
-                                        </HierarchicalDataTemplate.ItemTemplate>
-                                    </HierarchicalDataTemplate>
-                                </HierarchicalDataTemplate.ItemTemplate>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </GroupBox>
-            </DockPanel>
-            <DockPanel Grid.Column="2">
-                <GroupBox Header="Details" Margin="5">
-                    <TextBox TextWrapping="NoWrap" Text="{Binding DetailsView}"/>
-                </GroupBox>
-            </DockPanel>
-        </Grid>
+                    </GroupBox>
+                </DockPanel>
+                <DockPanel Grid.Column="1">
+                    <GroupBox Header="Wettkampfteilnahmen" DockPanel.Dock="Bottom" Margin="5">
+                        <!--<view:ParticipationTreeView Height="150" Margin="5" ParticipationTreeItems="{Binding ParticipationTreeItems}"/>-->
+                        <ListBox Margin="5" Height="150" ItemsSource="{Binding Participations}" SelectedItem="{Binding SelectedUiShooterParticipation}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type viewModel:ShooterParticipationListItem}">
+                                    <TextBlock Text="{Binding ParticipationName}"></TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </GroupBox>
+                    <GroupBox Header="Geschossene Stiche" Margin="5">
+                        <TreeView ItemsSource="{Binding SessionTreeViewItems}" Margin="5">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Subsessions}">
+                                    <TextBlock Text="{Binding SessionHeader}"/>
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type viewModel:Subsession}" ItemsSource="{Binding Shots}">
+                                            <TextBlock Text="{Binding SubsessionHeader}"/>
+                                            <HierarchicalDataTemplate.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </DataTemplate>
+                                            </HierarchicalDataTemplate.ItemTemplate>
+                                        </HierarchicalDataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </GroupBox>
+                </DockPanel>
+                <DockPanel Grid.Column="2">
+                    <GroupBox Header="Detailansicht" Margin="5">
+                        <TextBox Margin="5" TextWrapping="NoWrap" Text="{Binding DetailsView}"/>
+                    </GroupBox>
+                </DockPanel>
+            </Grid>
     </DockPanel>
 </Window>

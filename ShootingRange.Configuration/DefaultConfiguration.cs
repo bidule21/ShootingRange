@@ -8,6 +8,7 @@ using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service;
 using ShootingRange.Service.Interface;
 using ShootingRange.SiusData;
+using ShootingRange.View;
 using SiusUtils;
 
 namespace ShootingRange.Configuration

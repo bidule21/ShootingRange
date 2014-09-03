@@ -40,7 +40,8 @@ namespace ShootingRange.Repository.Repositories
 
     public ShooterCollection FindById(int id)
     {
-      return _sqlRepository.Find(_ => _.ShooterCollectionId == id).Select(_selector).Single();
+      ShooterCollection result = _sqlRepository.Find(_ => _.ShooterCollectionId == id).Select(_selector).Single();
+      return result;
     }
 
     public IEnumerable<ShooterCollection> GetAll()

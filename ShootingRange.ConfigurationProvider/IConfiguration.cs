@@ -1,7 +1,5 @@
 ﻿using ShootingRange.Common;
 using ShootingRange.Common.Modules;
-using ShootingRange.Repository;
-using ShootingRange.Repository.Repositories;
 using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 

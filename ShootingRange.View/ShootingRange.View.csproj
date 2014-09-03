@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -48,6 +49,9 @@
   <ItemGroup>
     <Compile Include="Converter\DateConverter.cs" />
     <Compile Include="Converter\PersonNameShooterNumberConverter.cs" />
+    <Compile Include="EditGroupWindow.xaml.cs">
+      <DependentUpon>EditGroupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EditPassWindow.xaml.cs">
       <DependentUpon>EditPassWindow.xaml</DependentUpon>
     </Compile>
@@ -60,6 +64,13 @@
     <Compile Include="ShooterEditWindow.xaml.cs">
       <DependentUpon>ShooterEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TextBoxInputWindow.xaml.cs">
+      <DependentUpon>TextBoxInputWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="EditGroupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EditPassWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,6 +124,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TextBoxInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PersonCreateWindow.xaml.cs">
@@ -153,6 +168,10 @@
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
       <Project>{ede3c213-3926-4548-ba0d-d63d7916d1ed}</Project>
       <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Service.Interface\ShootingRange.Service.Interface.csproj">
+      <Project>{7B2D7C87-4FA3-48DD-AB24-E90365D41F7F}</Project>
+      <Name>ShootingRange.Service.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.UiBusinessObjects\ShootingRange.UiBusinessObjects.csproj">
       <Project>{F55192F5-0745-4ADA-ADD2-90EDC4E947B0}</Project>
@@ -204,6 +223,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\receipt_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\master_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add_group_32.png" />
+    <Resource Include="Images\remove_group_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

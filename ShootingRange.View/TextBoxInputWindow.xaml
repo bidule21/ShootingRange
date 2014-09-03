@@ -1,0 +1,26 @@
+﻿<Window x:Class="ShootingRange.View.TextBoxInputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
+        Title="Gruppenname eingeben" ResizeMode="NoResize" Topmost="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <viewModel:TextBoxInputViewModel/>
+    </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding AddCommand}" CommandParameter="{Binding Input}"/>
+    </Window.InputBindings>
+    <DockPanel MinWidth="300">
+        <StackPanel DockPanel.Dock="Top">
+            <Label Margin="35,20,20,0" Content="Gruppenname:"></Label>
+            <TextBox Margin="40,5,20,0" Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <DockPanel Margin="0,30,0,0" Background="LightGray">
+            <StackPanel Background="LightGray" Margin="0,5,5,5" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Command="{Binding AddCommand}" CommandParameter="{Binding Input}" Margin="5" MinWidth="100" Content="Gruppe hinzufügen"></Button>
+                <Button Command="{Binding CancelCommand}" Margin="5" MinWidth="100" Content="Abbrechen"></Button>
+            </StackPanel>
+        </DockPanel>
+
+    </DockPanel>
+</Window>

@@ -10,5 +10,11 @@ namespace ShootingRange.ViewModel
   {
     public int ParticipationId { get; set; }
     public string ParticipationName { get; set; }
+
+    public IEnumerable<GroupListItem> GroupListItems { get; set; }
+
+    public bool HasGroupListItems { get { return GroupListItems.Any(); } }
+
+    public bool IsSelected { get; set; }
   }
 }

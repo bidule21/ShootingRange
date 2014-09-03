@@ -25,6 +25,10 @@ namespace ShootingRange.Common
     public UIEventsDelegate RequireSelectedShooter { get; set; }
 
     public UiEventsDelegate<UiShooter> FetchSelectedShooter { get; set; }
+
+    public UIEventsDelegate<int> SelectPersonById { get; set; }
+
+    public UiEventsDelegate<UiParticipation> FetchSelectedParticipation { get; set; }
   }
 
 

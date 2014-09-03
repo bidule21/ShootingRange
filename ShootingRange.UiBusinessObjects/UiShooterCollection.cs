@@ -10,5 +10,7 @@ namespace ShootingRange.UiBusinessObjects
   {
     public string CollectionName { get; set; }
     public int ShooterCollectionId { get; set; }
+
+    public IEnumerable<UiShooter> Shooters { get; set; }
   }
 }

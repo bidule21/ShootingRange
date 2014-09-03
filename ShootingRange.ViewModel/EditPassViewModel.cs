@@ -32,27 +32,31 @@ namespace ShootingRange.ViewModel
 
     public EditPassViewModel()
     {
-      IConfiguration config = ConfigurationSource.Configuration;
-      _shooterDatastore = config.GetShooterDataStore();
-      _sessionDatastore = config.GetSessionDataStore();
-      _programItemDatastore = config.GetProgramItemDataStore();
-      _personDatastore = config.GetPersonDataStore();
-      _windowService = config.GetWindowService();
-      _events = config.GetUIEvents();
-
-      List<UiShooter> shooters = _shooterDatastore.GetAll().Select(UiBusinessObjectMapper.ToUiShooter).ToList();
-      shooters.ForEach(_ => { if (_.PersonId != null) _.FetchPerson(_personDatastore.FindById((int) _.PersonId)); });
-      UiShooters = new ObservableCollection<UiShooter>(shooters.OrderBy(_ => _.LastName).ThenBy(_ => _.FirstName));
-
-      SearchShooterCommand = new RelayCommand<string>(ExecuteSearchShooterCommand, CanExecuteSearchShooterCommand);
-      DeleteCommand = new RelayCommand<UiSession>(ExecuteDeleteCommand, CanExecuteDeleteCommand);
-      CancelCommand = new RelayCommand<object>(ExecuteCancelCommand);
-      SaveCommand = new RelayCommand<UiShooter>(ExecuteSaveCommand, CanExecuteSaveCommand);
-      UiShooter selectedUiShooter = _events.FetchSelectedShooter() ;
-      if (selectedUiShooter != null)
+      if (!DesignTimeHelper.IsInDesignMode)
       {
-        ShooterNumber = string.Format("{0}", selectedUiShooter.ShooterNumber);
-        ExecuteSearchShooterCommand(ShooterNumber);
+        IConfiguration config = ConfigurationSource.Configuration;
+        _shooterDatastore = config.GetShooterDataStore();
+        _sessionDatastore = config.GetSessionDataStore();
+        _programItemDatastore = config.GetProgramItemDataStore();
+        _personDatastore = config.GetPersonDataStore();
+        _windowService = config.GetWindowService();
+        _events = config.GetUIEvents();
+
+        List<UiShooter> shooters = _shooterDatastore.GetAll().Select(UiBusinessObjectMapper.ToUiShooter).ToList();
+        shooters.ForEach(_ => { if (_.PersonId != null) _.FetchPerson(_personDatastore.FindById((int) _.PersonId)); });
+        UiShooters = new ObservableCollection<UiShooter>(shooters.OrderBy(_ => _.LastName).ThenBy(_ => _.FirstName));
+
+        SearchShooterCommand = new RelayCommand<string>(ExecuteSearchShooterCommand, CanExecuteSearchShooterCommand);
+        DeleteCommand = new RelayCommand<UiSession>(ExecuteDeleteCommand, CanExecuteDeleteCommand);
+        CancelCommand = new RelayCommand<object>(ExecuteCancelCommand);
+        SaveCommand = new RelayCommand<UiShooter>(ExecuteSaveCommand, CanExecuteSaveCommand);
+        UiShooter selectedUiShooter = _events.FetchSelectedShooter();
+
+        if (selectedUiShooter != null)
+        {
+          ShooterNumber = string.Format("{0}", selectedUiShooter.ShooterNumber);
+          ExecuteSearchShooterCommand(ShooterNumber);
+        }
       }
     }
 

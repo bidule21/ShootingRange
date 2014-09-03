@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DesignTimeHelper.cs" />
+    <Compile Include="EditGroupViewModel.cs" />
     <Compile Include="EditPassViewModel.cs" />
     <Compile Include="GroupListItem.cs" />
     <Compile Include="ParticipationCreateViewModel.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="ShooterCreateViewModel.cs" />
     <Compile Include="ShooterEditViewModel.cs" />
     <Compile Include="ShooterParticipationListItem.cs" />
+    <Compile Include="TextBoxInputViewModel.cs" />
     <Compile Include="UiBusinessObjectMapper.cs" />
   </ItemGroup>
   <ItemGroup>

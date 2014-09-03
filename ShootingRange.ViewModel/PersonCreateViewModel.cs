@@ -89,9 +89,11 @@ namespace ShootingRange.ViewModel
 
     private void ExecuteCreatePersonCommand(UiPerson uiPerson)
     {
-      _personDataStore.Create(uiPerson.ToPerson());
+      Person p = uiPerson.ToPerson();
+      _personDataStore.Create(p);
       _uiEvents.PersonDataStoreChanged();
       _windowService.CloseCreatePersonWindow();
+      _uiEvents.SelectPersonById(p.PersonId);
     }
 
     private bool CanExecuteCreatePersonCommand(UiPerson uiPerson)

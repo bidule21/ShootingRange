@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Input;
 using DotNetToolbox.RelayCommand;
 using ShootingRange.BusinessObjects;
@@ -33,6 +34,7 @@ namespace ShootingRange.ViewModel
     private IShooterCollectionDataStore _shooterCollectionDataStore;
     private IPersonDataStore _personDataStore;
     private ICollectionShooterDataStore _collectionShooterDataStore;
+    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
 
     public ShooterEditViewModel()
     {
@@ -60,8 +62,8 @@ namespace ShootingRange.ViewModel
         _shooterDataStore = config.GetShooterDataStore();
         _shooterParticipationView = config.GetShooterParticipationView();
         _shooterCollectionDataStore = config.GetShooterCollectionDataStore();
-        LoadAvailableParticipationList();
-        LoadAssignedParticipationList();
+        _shooterCollectionParticipationDataStore = config.GetShooterCollectionParticipationDataStore();
+        LoadData();
 
         UiShooterCollections = new ObservableCollection<UiShooterCollection>(_shooterCollectionDataStore.GetAll().Select(UiBusinessObjectMapper.ToUiShooterCollection).OrderBy(_ => _.CollectionName));
       }
@@ -106,9 +108,15 @@ namespace ShootingRange.ViewModel
       Func<Participation, ParticipationListItem> selector = participation => new ParticipationListItem()
       {
         ParticipationId = participation.ParticipationId,
-        ParticipationName = participation.ParticipationName
+        ParticipationName = participation.ParticipationName,
+        GroupListItems = new List<GroupListItem>() { }
       };
-      AvailableParticipations = new ObservableCollection<ParticipationListItem>(_participationDataStore.GetAll().Select(selector));
+
+      AvailableParticipations =
+        new ObservableCollection<ParticipationListItem>(
+          _participationDataStore.GetAll()
+            .Where(_ => AssignedParticipations.All(a => a.ParticipationName != _.ParticipationName))
+            .Select(selector));
     }
 
     
@@ -212,8 +220,7 @@ namespace ShootingRange.ViewModel
       }
       finally
       {
-        LoadAssignedParticipationList();
-        LoadAvailableParticipationList();
+        LoadData();
       }
     }
 
@@ -240,14 +247,19 @@ namespace ShootingRange.ViewModel
       }
       finally
       {
-        LoadAssignedParticipationList();
-        LoadAvailableParticipationList();
+        LoadData();
       }
+    }
+
+    private void LoadData()
+    {
+      LoadAssignedParticipationList();
+      LoadAvailableParticipationList();
     }
 
     private void ExecuteCloseCommand(object obj)
     {
-      _windowService.CloseCreateShooterWindow();
+      _windowService.CloseEditShooterWindow();
     }
 
 

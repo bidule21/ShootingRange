@@ -3,13 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewModel="clr-namespace:ShootingRange.ViewModel;assembly=ShootingRange.ViewModel"
         xmlns:converter="clr-namespace:ShootingRange.View.Converter"
-        Title="EditPassWindow" Height="360" Width="563">
+        Title="Passe mutieren" Background="#FFEEEEEE" MinHeight="500" Icon="Images/edit_ticket_32.png" ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <converter:PersonNameShooterNumberConverter x:Key="PersonNameShooterNumberConverter"></converter:PersonNameShooterNumberConverter>
     </Window.Resources>
     <Window.DataContext>
         <viewModel:EditPassViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
         <Grid DockPanel.Dock="Top">
             <Grid.RowDefinitions>

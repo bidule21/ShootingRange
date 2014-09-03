@@ -37,6 +37,7 @@
     <Compile Include="BarcodeInfo.cs" />
     <Compile Include="IBarcodeBuilderService.cs" />
     <Compile Include="IBarcodePrintService.cs" />
+    <Compile Include="IMainWindow.cs" />
     <Compile Include="IShooterNumberService.cs" />
     <Compile Include="ISsvShooterDataWriterService.cs" />
     <Compile Include="IWindowService.cs" />

@@ -69,27 +69,17 @@ namespace ShootingRange.ViewModel
         _events = config.GetEvents();
         _uiEvents = config.GetUIEvents();
         _uiEvents.RequireSelectedPerson += () => _uiEvents.PersonSelected(SelectedUiPerson);
+        _uiEvents.SelectPersonById += (id) => { SelectedUiPerson = UiPeople.FirstOrDefault(_ => _.PersonId == id); };
         _uiEvents.RequireSelectedShooter += () => _uiEvents.ShooterSelected(SelectedUiShooter);
         _uiEvents.FetchSelectedShooter += () => SelectedUiShooter;
         _uiEvents.PersonDataStoreChanged += LoadPersonList;
         _uiEvents.ShooterDataStoreChanged += LoadShooterList;
+        _shooterNumberService.Configure(_shooterDataStore);
+
+        LoadPersonList();
+        LoadShooterList();
+        LoadParticipationList();
       }
-
-      LoadPersonList();
-      LoadShooterList();
-      LoadParticipationList();
-      _shooterNumberService.Configure(_shooterDataStore);
-
-      //IEnumerable<Person> people = new ObservableCollection<Person>(_personDataStore.GetAll());
-
-      //UiPeople =
-      //  new ObservableCollection<UiPerson>(
-      //    people.Select(_ => new UiPerson
-      //    {
-      //      PersonId = _.PersonId,
-      //      FirstName = _.FirstName,
-      //      LastName = _.LastName
-      //    }));
 
       CreatePersonCommand = new RelayCommand<object>(ExecuteCreatePersonCommand);
       EditPersonCommand = new RelayCommand<UiPerson>(ExecuteEditPersonCommand, CanExecuteEditPersonCommand);
@@ -165,8 +155,8 @@ namespace ShootingRange.ViewModel
     {
       try
       {
-        bool yes = _windowService.ShowYesNoMessasge("Delete Person",
-          string.Format("Do you really want to delete '{0} {1}'?", uiPerson.LastName, uiPerson.FirstName));
+        bool yes = _windowService.ShowYesNoMessasge("Person löschen",
+          string.Format("Möchtest du die Person '{0} {1}' wirklich löschen?", uiPerson.LastName, uiPerson.FirstName));
 
         if (yes)
         {
@@ -207,6 +197,7 @@ namespace ShootingRange.ViewModel
           LastName = uiPerson.LastName,
           LicenseNumber = (uint)shooter.ShooterNumber
         });
+        _windowService.ShowMessage("Schütze erstellt", string.Format("Schütze mit Schützennummer '{0}' erfolgreich erstellt.", shooter.ShooterNumber));
       }
       catch (Exception e)
       {
@@ -255,7 +246,7 @@ namespace ShootingRange.ViewModel
     {
       try
       {
-        bool yes = _windowService.ShowYesNoMessasge("Delete Shooter", string.Format("Do you really want to shooter with ID '{0}'?", uiShooter.ShooterNumber));
+        bool yes = _windowService.ShowYesNoMessasge("Schütze löschen", string.Format("Möchtest du den Schützen mit der Nummer '{0}' wirklich löschen?", uiShooter.ShooterNumber));
         if (yes)
         {
           _shooterDataStore.Delete(uiShooter.ToShooter());
@@ -619,8 +610,8 @@ namespace ShootingRange.ViewModel
         List<ShooterParticipationDetails> participations = new List<ShooterParticipationDetails>();
         if (SelectedUiShooter != null)
         {
-          //participationTreeItems = _groupDetailsView.FindByShooterId(SelectedUiShooter.ShooterId).Select(selector);
-          //participations = _shooterParticipationView.FindByShooterId(SelectedUiShooter.ShooterId);
+          //participationTreeItems = _groupDetailsView.FindByShooterId(SelectedAvailableUiShooter.ShooterId).Select(selector);
+          //participations = _shooterParticipationView.FindByShooterId(SelectedAvailableUiShooter.ShooterId);
           IEnumerable<ShooterParticipation> shooterParticipations =
             _shooterParticipationDataStore.FindByShooterId(SelectedUiShooter.ShooterId).ToList();
           foreach (ShooterParticipation shooterParticipation in shooterParticipations)
@@ -685,17 +676,17 @@ namespace ShootingRange.ViewModel
           ShooterId = shooter.ShooterId
         };
 
-        IEnumerable<UiShooter> shooterListItems;
+        List<UiShooter> shooterListItems;
         if (SelectedUiPerson != null)
         {
-          shooterListItems = _shooterDataStore.FindByPersonId(SelectedUiPerson.PersonId).Select(selector);
+          shooterListItems = _shooterDataStore.FindByPersonId(SelectedUiPerson.PersonId).Select(selector).ToList();
         }
         else
         {
-          shooterListItems = _shooterDataStore.GetAll().Select(selector);
+          shooterListItems = _shooterDataStore.GetAll().Select(selector).ToList();
         }
 
-        ShooterListItems = new ObservableCollection<UiShooter>(shooterListItems);
+        ShooterListItems = new ObservableCollection<UiShooter>(shooterListItems.Select(_ => _.FetchPerson(_personDataStore)));
         SelectedUiShooter = ShooterListItems.SingleOrDefault(_ => _.ShooterId == selectedShooterId);
       }
       catch (Exception e)

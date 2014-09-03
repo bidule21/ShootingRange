@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Repository.Repositories;
 using ShootingRange.Repository.RepositoryInterfaces;
@@ -69,7 +71,7 @@ namespace ShootingRange.ViewModel
       SessionId = uiSession.SessionId,
       ShooterId = uiSession.ShooterId,
       ProgramItemId = uiSession.ProgramItemId
-    
+
     };
 
     public static UiShooter FetchPerson(this UiShooter shooter, Person person)
@@ -83,10 +85,38 @@ namespace ShootingRange.ViewModel
     {
       if (shooter.PersonId != null)
       {
-        shooter.FetchPerson(personDataStore.FindById((int)shooter.PersonId));
+        shooter.FetchPerson(personDataStore.FindById((int) shooter.PersonId));
       }
 
       return shooter;
+    }
+
+    public static UiParticipation FetchShooters(this UiParticipation participation,
+      IShooterCollectionParticipationDataStore shooterCollectionParticipationDataStore,
+      IShooterCollectionDataStore shooterCollectionDataStore,
+      ICollectionShooterDataStore collectionShooterDataStore,
+      IShooterDataStore shooterDataStore,
+      IPersonDataStore personDataStore)
+    {
+      participation.ShooterCollections = new List<UiShooterCollection>();
+      List<ShooterCollectionParticipation> shooterCollectionParticipations =
+        shooterCollectionParticipationDataStore.FindByIdParticipationId(participation.ParticipationId).ToList();
+      List<ShooterCollection> shooterCollections = shooterCollectionParticipations.Select(_ => shooterCollectionDataStore.FindById(_.ShooterCollectionId)).ToList();
+
+      foreach (ShooterCollection shooterCollection in shooterCollections)
+      {
+        List<CollectionShooter> collectionShooters =
+          collectionShooterDataStore.FindByShooterCollectionId(shooterCollection.ShooterCollectionId).ToList();
+
+        participation.ShooterCollections.Add(new UiShooterCollection
+        {
+          CollectionName = shooterCollection.CollectionName,
+          ShooterCollectionId = shooterCollection.ShooterCollectionId,
+          Shooters = collectionShooters.Select(_ => ToUiShooter(shooterDataStore.FindById(_.ShooterId)).FetchPerson(personDataStore))
+        });
+      }
+
+      return participation;
     }
 
     public static Func<ShooterCollection, UiShooterCollection> ToUiShooterCollection =
@@ -95,5 +125,22 @@ namespace ShootingRange.ViewModel
         ShooterCollectionId = shooterCollection.ShooterCollectionId,
         CollectionName = shooterCollection.CollectionName
       };
+
+    public static ShooterCollection ToShooterCollection(this UiShooterCollection uiShooterCollection)
+    {
+      return new ShooterCollection
+      {
+        ShooterCollectionId = uiShooterCollection.ShooterCollectionId,
+        CollectionName = uiShooterCollection.CollectionName
+      };
+    }
+
+    public static Func<Participation, UiParticipation> ToUiParticipation = participation => new UiParticipation
+    {
+      ParticipationId = participation.ParticipationId,
+      AllowCollectionParticipation = participation.AllowCollectionParticipation,
+      AllowSingleParticipation = participation.AllowSingleParticipation,
+      ParticipationName = participation.ParticipationName
+    };
   }
 }

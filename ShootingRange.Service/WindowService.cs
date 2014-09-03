@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ShootingRange.ConfigurationProvider;
 using ShootingRange.Service.Interface;
 using ShootingRange.View;
 
@@ -6,30 +7,31 @@ namespace ShootingRange.Service
 {
   public class WindowService : IWindowService
   {
-    PersonCreateWindow _personCreateWindow;
-    PersonEditWindow _personEditWindow;
+    private PersonCreateWindow _personCreateWindow;
+    private PersonEditWindow _personEditWindow;
     private ShooterCreateWindow _shooterCreateWindow;
     private ShooterEditWindow _shooterEditWindow;
     private ParticipationCreateWindow _participationCreateWindow;
     private EditPassWindow _editPassWindow;
+    private TextBoxInputWindow _textBoxInputWindow;
 
     #region Person
 
     public void ShowCreatePersonWindow()
     {
       _personCreateWindow = new PersonCreateWindow();
-      _personCreateWindow.ShowDialog();
-    }
-
-    public void CloseCreatePersonWindow()
-    {
-      CloseWindow(_personCreateWindow);
+      ShowWindow(_personCreateWindow);
     }
 
     public void ShowEditPersonWindow()
     {
       _personEditWindow = new PersonEditWindow();
-      _personEditWindow.ShowDialog();
+      ShowWindow(_personEditWindow);
+    }
+
+    public void CloseCreatePersonWindow()
+    {
+      CloseWindow(_personCreateWindow);
     }
 
     public void CloseEditPersonWindow()
@@ -44,7 +46,7 @@ namespace ShootingRange.Service
     public void ShowCreateShooterWindow()
     {
       _shooterCreateWindow = new ShooterCreateWindow();
-      _shooterCreateWindow.ShowDialog();
+      ShowWindow(_shooterCreateWindow);
     }
 
     public void CloseCreateShooterWindow()
@@ -55,7 +57,7 @@ namespace ShootingRange.Service
     public void ShowEditShooterWindow()
     {
       _shooterEditWindow = new ShooterEditWindow();
-      _shooterEditWindow.ShowDialog();
+      ShowWindow(_shooterEditWindow);
     }
 
     public void CloseEditShooterWindow()
@@ -66,7 +68,7 @@ namespace ShootingRange.Service
     public void ShowCreateParticipationWindow()
     {
       _participationCreateWindow = new ParticipationCreateWindow();
-      _participationCreateWindow.ShowDialog();
+      ShowWindow(_participationCreateWindow);
     }
 
     public void CloseCreateParticipationWindow()
@@ -77,12 +79,23 @@ namespace ShootingRange.Service
     public void ShowEditPassWindow()
     {
       _editPassWindow = new EditPassWindow();
-      _editPassWindow.ShowDialog();
+      ShowWindow(_editPassWindow);
     }
 
     public void CloseEditPassWindow()
     {
       CloseWindow(_editPassWindow);
+    }
+
+    public void ShowTextBoxInputDialog(string caption, string message)
+    {
+      _textBoxInputWindow = new TextBoxInputWindow();
+      ShowWindow(_textBoxInputWindow);
+    }
+
+    public void CloseTextBoxInputDialog()
+    {
+      CloseWindow(_textBoxInputWindow);
     }
 
     #endregion
@@ -101,7 +114,7 @@ namespace ShootingRange.Service
 
     public bool ShowYesNoMessasge(string caption, string message)
     {
-      MessageBoxResult result = MessageBox.Show(message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+      MessageBoxResult result = MessageBox.Show(Application.Current.MainWindow, message, caption, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       return result == MessageBoxResult.Yes;
     }
 
@@ -111,6 +124,12 @@ namespace ShootingRange.Service
     }
 
     #endregion
+
+    private void ShowWindow(Window window)
+    {
+      window.Owner = Application.Current.MainWindow;
+      window.ShowDialog();
+    }
 
     private void CloseWindow(Window window)
     {

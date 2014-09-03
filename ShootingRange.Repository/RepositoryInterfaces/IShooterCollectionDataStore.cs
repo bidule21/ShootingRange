@@ -5,6 +5,5 @@ namespace ShootingRange.Repository.RepositoryInterfaces
 {
   public interface IShooterCollectionDataStore : IDataStore<ShooterCollection, int>
   {
-
   }
 }

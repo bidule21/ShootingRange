@@ -22,6 +22,8 @@ namespace ShootingRange.Repository.Repositories
       {
         ParticipationId = g.ParticipationId,
         ParticipationName = g.Description,
+        AllowSingleParticipation = g.AllowSingleParticipation,
+        AllowCollectionParticipation = g.AllowCollectionParticipation
       };
     }
     

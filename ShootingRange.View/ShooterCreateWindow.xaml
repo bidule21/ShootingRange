@@ -17,7 +17,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <Label Content="Available Participations:"></Label>
+                        <Label Content="Available UiParticipations:"></Label>
                         <ListBox SelectedItem="{Binding SelectedAvailableParticipation}" ItemsSource="{Binding AvailableParticipations}"  Height="200" Margin="5">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="viewModel:ParticipationListItem">
@@ -27,7 +27,7 @@
                         </ListBox>
                     </StackPanel>
                     <StackPanel Grid.Column="2" >
-                        <Label Content="Assigned Participations:"></Label>
+                        <Label Content="Assigned UiParticipations:"></Label>
                         <ListBox SelectedItem="{Binding SelectedAssignedParticipation}" ItemsSource="{Binding AssignedParticipations}" Height="200" Margin="5">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="viewModel:ShooterParticipationListItem">
