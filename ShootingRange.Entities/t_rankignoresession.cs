@@ -12,17 +12,12 @@ namespace ShootingRange.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class t_shooternumberconfig
+    public partial class t_rankignoresession
     {
-        public t_shooternumberconfig()
-        {
-            this.t_event = new HashSet<t_event>();
-        }
+        public int RankIgnoreSessionId { get; set; }
+        public int SessionId { get; set; }
+        public string Reason { get; set; }
     
-        public int ShooterNumberConfigId { get; set; }
-        public int LastGivenShooterNumber { get; set; }
-        public int ShooterNumberIncrement { get; set; }
-    
-        public virtual ICollection<t_event> t_event { get; set; }
+        public virtual t_session t_session { get; set; }
     }
 }

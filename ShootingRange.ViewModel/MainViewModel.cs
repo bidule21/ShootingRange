@@ -31,6 +31,9 @@ namespace ShootingRange.ViewModel
     private IShooterParticipationView _shooterParticipationView;
     private ISessionDetailsView _sessionDetailsView;
     private ISsvShooterDataWriterService _shooterDataWriterService;
+    private ICollectionShooterDataStore _collectionShooterDataStore;
+    private IShooterCollectionDataStore _shooterCollectionDataStore;
+    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
     private ShootingRangeEvents _events;
 
     private IWindowService _windowService;
@@ -61,7 +64,9 @@ namespace ShootingRange.ViewModel
         _groupDetailsView = config.GetGroupDetailsView();
         _sessionDetailsView = config.GetSessionDetailsView();
         _shooterDataWriterService = config.GetSsvShooterDataWriterService();
-
+        _collectionShooterDataStore = config.GetCollectionShooterDataStore();
+        _shooterCollectionDataStore = config.GetShooterCollectionDataStore();
+        _shooterCollectionParticipationDataStore = config.GetShooterCollectionParticipationDataStore();
         _shooterNumberService = config.GetShooterNumberService();
         _windowService = config.GetWindowService();
         _barcodePrintService = config.GetBarcodePrintService();
@@ -290,20 +295,61 @@ namespace ShootingRange.ViewModel
     {
       try
       {
+        bool isNachwuchs = (from sp in _shooterParticipationDataStore.GetAll()
+          join p in _participationDataStore.GetAll() on sp.ParticipationId equals p.ParticipationId
+          where p.ParticipationName == "Nachwuchsstich" && sp.ShooterId == uiShooter.ShooterId
+          select p.ParticipationId).
+          Any();
+
+        bool isGruppe = (from sp in _shooterParticipationDataStore.GetAll()
+                            join p in _participationDataStore.GetAll() on sp.ParticipationId equals p.ParticipationId
+                         where p.ParticipationName == "Gruppenstich" && sp.ShooterId == uiShooter.ShooterId
+                            select p.ParticipationId).
+  Any();
+
+        bool isSieUndEr = (from sp in _shooterParticipationDataStore.GetAll()
+                            join p in _participationDataStore.GetAll() on sp.ParticipationId equals p.ParticipationId
+                           where p.ParticipationName == "Sie & Er" && sp.ShooterId == uiShooter.ShooterId
+                            select p.ParticipationId).
+  Any();
+
+        bool isWorschtUndBrot = (from sp in _shooterParticipationDataStore.GetAll()
+                            join p in _participationDataStore.GetAll() on sp.ParticipationId equals p.ParticipationId
+                                 where p.ParticipationName == "Worscht & Brot" && sp.ShooterId == uiShooter.ShooterId
+                            select p.ParticipationId).
+  Any();
+
+        string groupName = (from cs in _collectionShooterDataStore.GetAll()
+          join sc in _shooterCollectionDataStore.GetAll() on cs.ShooterCollectionId equals sc.ShooterCollectionId
+          join scp in _shooterCollectionParticipationDataStore.GetAll() on cs.ShooterCollectionId equals
+            scp.ShooterCollectionId
+          join p in _participationDataStore.GetAll() on scp.ParticipationId equals p.ParticipationId
+          where p.ParticipationName == "Gruppenstich" && cs.ShooterId == uiShooter.ShooterId
+          select sc.CollectionName).SingleOrDefault();
+
+        string sieUndErName = (from cs in _collectionShooterDataStore.GetAll()
+                            join sc in _shooterCollectionDataStore.GetAll() on cs.ShooterCollectionId equals sc.ShooterCollectionId
+                            join scp in _shooterCollectionParticipationDataStore.GetAll() on cs.ShooterCollectionId equals
+                              scp.ShooterCollectionId
+                            join p in _participationDataStore.GetAll() on scp.ParticipationId equals p.ParticipationId
+                            where p.ParticipationName == "Sie & Er" && cs.ShooterId == uiShooter.ShooterId
+                            select sc.CollectionName).SingleOrDefault();
+
         Person person = uiShooter.PersonId == null
           ? new Person() {FirstName = "unknown", LastName = "unknown"}
           : _personDataStore.FindById((int) uiShooter.PersonId);
-        ShooterParticipationDetails particiapDetails = _shooterParticipationView.FindByShooterId(uiShooter.ShooterId).FirstOrDefault();
         BarcodeInfo barcodeInfo = new BarcodeInfo
         {
           FirstName = person.FirstName,
           LastName = person.LastName,
           DateOfBirth = person.DateOfBirth,
-          GroupInfo =
-            particiapDetails == null
-              ? string.Empty
-              : string.Format("Gruppenwettkampf:\r\n{0}", particiapDetails.ParticipationName),
-          Barcode = _barcodeBuilderService.BuildBarcode(uiShooter.ShooterNumber, uiShooter.Legalization)
+          Gruppenstich = groupName ?? string.Empty,
+          SieUndEr = sieUndErName ?? string.Empty,
+          Barcode = _barcodeBuilderService.BuildBarcode(uiShooter.ShooterNumber, uiShooter.Legalization),
+          IsGruppenstich = isGruppe,
+          IsNachwuchsstich = isNachwuchs,
+          IsWorschtUndBrot = isWorschtUndBrot,
+          IsSieUndEr = isSieUndEr
         };
 
         _barcodePrintService.Print(barcodeInfo);

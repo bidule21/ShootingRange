@@ -16,6 +16,7 @@ namespace ShootingRange.Entities
     {
         public t_session()
         {
+            this.t_rankignoresession = new HashSet<t_rankignoresession>();
             this.t_sessionsubtotal = new HashSet<t_sessionsubtotal>();
         }
     
@@ -25,6 +26,7 @@ namespace ShootingRange.Entities
         public int LaneNumber { get; set; }
     
         public virtual t_programitem t_programitem { get; set; }
+        public virtual ICollection<t_rankignoresession> t_rankignoresession { get; set; }
         public virtual t_shooter t_shooter { get; set; }
         public virtual ICollection<t_sessionsubtotal> t_sessionsubtotal { get; set; }
     }

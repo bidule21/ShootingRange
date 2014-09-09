@@ -26,14 +26,18 @@ namespace ShootingRange.Persistence
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<t_bestshot> t_bestshot { get; set; }
         public DbSet<t_club> t_club { get; set; }
         public DbSet<t_collectionshooter> t_collectionshooter { get; set; }
+        public DbSet<t_event> t_event { get; set; }
         public DbSet<t_order> t_order { get; set; }
         public DbSet<t_orderitem> t_orderitem { get; set; }
         public DbSet<t_participation> t_participation { get; set; }
+        public DbSet<t_participationdescription> t_participationdescription { get; set; }
         public DbSet<t_person> t_person { get; set; }
         public DbSet<t_programitem> t_programitem { get; set; }
         public DbSet<t_programsubtotal> t_programsubtotal { get; set; }
+        public DbSet<t_rankignoresession> t_rankignoresession { get; set; }
         public DbSet<t_session> t_session { get; set; }
         public DbSet<t_sessionsubtotal> t_sessionsubtotal { get; set; }
         public DbSet<t_shooter> t_shooter { get; set; }

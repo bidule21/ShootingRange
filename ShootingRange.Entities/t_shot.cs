@@ -16,6 +16,7 @@ namespace ShootingRange.Entities
     {
         public t_shot()
         {
+            this.t_bestshot = new HashSet<t_bestshot>();
             this.t_sessionsubtotal1 = new HashSet<t_sessionsubtotal>();
         }
     
@@ -27,6 +28,7 @@ namespace ShootingRange.Entities
         public Nullable<decimal> ValueX { get; set; }
         public Nullable<decimal> ValueY { get; set; }
     
+        public virtual ICollection<t_bestshot> t_bestshot { get; set; }
         public virtual t_sessionsubtotal t_sessionsubtotal { get; set; }
         public virtual ICollection<t_sessionsubtotal> t_sessionsubtotal1 { get; set; }
     }

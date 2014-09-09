@@ -24,6 +24,7 @@ namespace ShootingRange.ViewModel
     private IParticipationDataStore _participationDataStore;
     private IShooterCollectionDataStore _shooterCollectionDataStore;
     private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
+    private IShooterParticipationDataStore _shooterParticipationDataStore;
     private IWindowService _windowService;
 
     public ParticipationCreateViewModel()
@@ -35,6 +36,7 @@ namespace ShootingRange.ViewModel
         _shooterCollectionDataStore = config.GetShooterCollectionDataStore();
         _shooterCollectionParticipationDataStore = config.GetShooterCollectionParticipationDataStore();
         _collectionShooterDataStore = config.GetCollectionShooterDataStore();
+        _shooterParticipationDataStore = config.GetShooterParticipationDataStore();
         _shooterDataStore = config.GetShooterDataStore();
         _personDataStore = config.GetPersonDataStore();
         _windowService = config.GetWindowService();
@@ -146,7 +148,10 @@ namespace ShootingRange.ViewModel
 
       AvailableUiShooters =
         new ObservableCollection<UiShooter>(
-          _shooterDataStore.GetAll().Where(_ => usedShooterIds.All(s => s != _.ShooterId))
+          (from s in _shooterDataStore.GetAll()
+            join sp in _shooterParticipationDataStore.GetAll() on s.ShooterId equals sp.ShooterId
+            where sp.ParticipationId == (SelectedUiParticipation == null ? 0 : SelectedUiParticipation.ParticipationId)
+            select s).Where(_ => usedShooterIds.All(s => s != _.ShooterId))
             .Select(UiBusinessObjectMapper.ToUiShooter).Select(_ => _.FetchPerson(_personDataStore)));
 
       //if (SelectedUiShooterCollection != null)

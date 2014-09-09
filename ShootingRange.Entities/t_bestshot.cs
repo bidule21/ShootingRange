@@ -12,17 +12,11 @@ namespace ShootingRange.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class t_shooternumberconfig
+    public partial class t_bestshot
     {
-        public t_shooternumberconfig()
-        {
-            this.t_event = new HashSet<t_event>();
-        }
+        public int BestShotId { get; set; }
+        public int ShotId { get; set; }
     
-        public int ShooterNumberConfigId { get; set; }
-        public int LastGivenShooterNumber { get; set; }
-        public int ShooterNumberIncrement { get; set; }
-    
-        public virtual ICollection<t_event> t_event { get; set; }
+        public virtual t_shot t_shot { get; set; }
     }
 }

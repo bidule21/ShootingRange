@@ -10,7 +10,7 @@ namespace ShootingRange.BarcodePrinter
     public void Print(BarcodeInfo barcodeInfo)
     {
       DocumentClass doc = new DocumentClass();
-      const string path = @".\Templates\Volksschiessen.lbx";
+      const string path = @".\Templates\Herbstschiessen.lbx";
       string fullPath = Path.GetFullPath(path);
       if (doc.Open(fullPath))
       {
@@ -23,8 +23,23 @@ namespace ShootingRange.BarcodePrinter
         IObject dateOfBirth = doc.GetObject("dateOfBirth");
         dateOfBirth.Text = Convert.ToString(barcodeInfo.DateOfBirth != null ? ((DateTime)barcodeInfo.DateOfBirth).ToString("dd.MM.yyyy") : string.Empty);
 
-        IObject groupName = doc.GetObject("groupName");
-        groupName.Text = Convert.ToString(barcodeInfo.GroupInfo);
+        IObject groupName = doc.GetObject("GroupName");
+        groupName.Text = Convert.ToString(barcodeInfo.Gruppenstich);
+
+        IObject sieUndErName = doc.GetObject("SieUndErName");
+        sieUndErName.Text = Convert.ToString(barcodeInfo.SieUndEr);
+
+        IObject isGruppenstich = doc.GetObject("pass_103");
+        isGruppenstich.Text = Convert.ToString(barcodeInfo.IsGruppenstich ? "x" : string.Empty);
+
+        IObject isNachwuchsstich = doc.GetObject("pass_104");
+        isNachwuchsstich.Text = Convert.ToString(barcodeInfo.IsNachwuchsstich ? "x" : string.Empty);
+
+        IObject isWorschtUndBrot = doc.GetObject("pass_101");
+        isWorschtUndBrot.Text = Convert.ToString(barcodeInfo.IsWorschtUndBrot ? "x" : string.Empty);
+
+        IObject isSieUndEr = doc.GetObject("pass_102");
+        isSieUndEr.Text = Convert.ToString(barcodeInfo.IsSieUndEr ? "x" : string.Empty);
 
         doc.StartPrint("", PrintOptionConstants.bpoDefault);
         doc.PrintOut(1, PrintOptionConstants.bpoDefault);
