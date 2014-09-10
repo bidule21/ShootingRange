@@ -540,53 +540,93 @@ namespace ShootingRange.ViewModel
 
     private void OnSelectedShooterItemChanged(UiShooter selectedUiShooter)
     {
-      LoadParticipationList();
-      if (selectedUiShooter != null)
+      try
       {
-        StringBuilder detailsStringBuilder = new StringBuilder();
-
-        Person person = selectedUiShooter.PersonId == null
-          ? new Person() {FirstName = "unknown", LastName = "unknown"}
-          : _personDataStore.FindById((int) selectedUiShooter.PersonId);
-        detailsStringBuilder.AppendFormat("{0}, {1} [{2}] : {3} [{4}]\r\n{5}\r\n", person.LastName, person.FirstName,
-          person.PersonId, selectedUiShooter.ShooterNumber, selectedUiShooter.ShooterId,
-          person.DateOfBirth != null ? ((DateTime) person.DateOfBirth).ToString("dd.MM.yyyy") : string.Empty);
-        detailsStringBuilder.AppendLine();
-        IEnumerable<SessionDetails> sessionDetails =
-          _sessionDetailsView.FindByShooterId(selectedUiShooter.ShooterId).OrderBy(_ => _.ProgramNumber).ToList();
-
-        foreach (SessionDetails sessionDetail in sessionDetails)
+        LoadParticipationList();
+        if (selectedUiShooter != null)
         {
-          detailsStringBuilder.AppendFormat("{0} [{1}] = {2}\r\n",
-            sessionDetail.SessionDescription,
-            sessionDetail.SessionId,
-            sessionDetail.SubSessions.Sum(sd => sd.Shots.Sum(_ => _.PrimaryScore)));
-        }
+          StringBuilder detailsStringBuilder = new StringBuilder();
 
-        DetailsView = detailsStringBuilder.ToString();
+          Person person = selectedUiShooter.PersonId == null
+            ? new Person() {FirstName = "unknown", LastName = "unknown"}
+            : _personDataStore.FindById((int) selectedUiShooter.PersonId);
+          detailsStringBuilder.AppendFormat("{0}, {1} [{2}] : {3} [{4}]\r\n{5}\r\n", person.LastName, person.FirstName,
+            person.PersonId, selectedUiShooter.ShooterNumber, selectedUiShooter.ShooterId,
+            person.DateOfBirth != null ? ((DateTime) person.DateOfBirth).ToString("dd.MM.yyyy") : string.Empty);
+          detailsStringBuilder.AppendLine();
+          IEnumerable<SessionDetails> sessionDetails =
+            _sessionDetailsView.FindByShooterId(selectedUiShooter.ShooterId).OrderBy(_ => _.ProgramNumber).ToList();
 
-        SessionTreeViewItems =
-          new ObservableCollection<SessionTreeViewItem>(sessionDetails.Select(sd => new SessionTreeViewItem
+          detailsStringBuilder.AppendLine("\r\n----------------------------------");
+          detailsStringBuilder.Append("Geschossene Stiche:");
+          detailsStringBuilder.AppendLine("\r\n----------------------------------");
+          foreach (SessionDetails sessionDetail in sessionDetails)
           {
-            SessionHeader =
-              sd.SessionDescription + " (" + sd.SubSessions.Sum(_ => _.Shots.Count()) + "): " +
-              sd.SubSessions.Sum(_ => _.Shots.Sum(shot => shot.PrimaryScore)),
-            Subsessions =
-              sd.SubSessions.Select(
-                ss =>
-                  new Subsession
-                  {
-                    Shots =
-                      ss.Shots.OrderBy(shot => shot.Ordinal)
-                        .Select(shot => string.Format("{0}\t{1}", shot.Ordinal, shot.PrimaryScore)),
-                    SubsessionHeader =
-                      string.Format("Gruppe {0} | T={1}", ss.Ordinal, ss.Shots.Sum(_ => _.PrimaryScore))
-                  })
-          }));
+            detailsStringBuilder.AppendFormat("{0} [{1}] = {2}\r\n",
+              sessionDetail.SessionDescription,
+              sessionDetail.SessionId,
+              sessionDetail.SubSessions.Sum(sd => sd.Shots.Sum(_ => _.PrimaryScore)));
+          }
+
+          detailsStringBuilder.AppendLine("\r\n----------------------------------");
+          detailsStringBuilder.Append("Wettkampfteilnahmen:");
+          detailsStringBuilder.AppendLine("\r\n----------------------------------");
+          foreach (ShooterParticipationListItem listItem in Participations)
+          {
+            detailsStringBuilder.AppendLine(listItem.ParticipationName);
+          }
+
+          detailsStringBuilder.AppendLine("\r\n----------------------------------");
+          detailsStringBuilder.Append("Gruppenzuteilung:");
+          detailsStringBuilder.AppendLine("\r\n----------------------------------");
+          List<ShooterParticipationDetails> shooterParticipationDetails =
+            (from cs in _collectionShooterDataStore.GetAll()
+              join sc in _shooterCollectionDataStore.GetAll() on cs.ShooterCollectionId equals sc.ShooterCollectionId
+              join scp in _shooterCollectionParticipationDataStore.GetAll() on sc.ShooterCollectionId equals
+                scp.ShooterCollectionId
+              join p in _participationDataStore.GetAll() on scp.ParticipationId equals p.ParticipationId
+              where cs.ShooterId == selectedUiShooter.ShooterId
+              select new ShooterParticipationDetails
+              {
+                ParticipationName = p.ParticipationName,
+                CollectionName = sc.CollectionName
+              }).ToList();
+
+          foreach (ShooterParticipationDetails spd in shooterParticipationDetails)
+          {
+            detailsStringBuilder.AppendLine(string.Format("{1}: {0}", spd.CollectionName, spd.ParticipationName));
+          }
+
+          DetailsView = detailsStringBuilder.ToString();
+
+          SessionTreeViewItems =
+            new ObservableCollection<SessionTreeViewItem>(sessionDetails.Select(sd => new SessionTreeViewItem
+            {
+              SessionHeader =
+                sd.SessionDescription + " (" + sd.SubSessions.Sum(_ => _.Shots.Count()) + "): " +
+                sd.SubSessions.Sum(_ => _.Shots.Sum(shot => shot.PrimaryScore)),
+              Subsessions =
+                sd.SubSessions.Select(
+                  ss =>
+                    new Subsession
+                    {
+                      Shots =
+                        ss.Shots.OrderBy(shot => shot.Ordinal)
+                          .Select(shot => string.Format("{0}\t{1}", shot.Ordinal, shot.PrimaryScore)),
+                      SubsessionHeader =
+                        string.Format("Gruppe {0} | T={1}", ss.Ordinal, ss.Shots.Sum(_ => _.PrimaryScore))
+                    })
+            }));
+        }
+        else
+        {
+          DetailsView = string.Empty;
+          SessionTreeViewItems.Clear();
+        }
       }
-      else
+      catch (Exception e)
       {
-        SessionTreeViewItems.Clear();
+        ReportException(e);
       }
     }
 
@@ -599,25 +639,25 @@ namespace ShootingRange.ViewModel
 
     private void OnSelectedShooterParticipationItemChanged(ShooterParticipationListItem selectedUiShooterParticipation)
     {
-      if (selectedUiShooterParticipation != null)
-      {
-        ShooterParticipation shooterParticipation = _shooterParticipationDataStore.FindById(selectedUiShooterParticipation.ShooterParticipationId);
-        IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.FindByParticipationId(shooterParticipation.ParticipationId).ToList();
+      //if (selectedUiShooterParticipation != null)
+      //{
+      //  ShooterParticipation shooterParticipation = _shooterParticipationDataStore.FindById(selectedUiShooterParticipation.ShooterParticipationId);
+      //  IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.FindByParticipationId(shooterParticipation.ParticipationId).ToList();
 
-        StringBuilder detailsStringBuilder = new StringBuilder();
-        detailsStringBuilder.AppendFormat("{0}\r\n", selectedUiShooterParticipation.ParticipationName);
-        foreach (ShooterParticipation participation in shooterParticipations)
-        {
-          Shooter shooter = _shooterDataStore.FindById(participation.ShooterId);
-          ShooterParticipation innerShooterParticipation = _shooterParticipationDataStore.FindByShooterId(shooter.ShooterId).First();
-          Person person = shooter.PersonId == null
-            ? new Person() {FirstName = "unknown", LastName = "unknown"}
-            : _personDataStore.FindById((int) shooter.PersonId);
-          detailsStringBuilder.AppendFormat("\t{0}, {1} [{2}]\r\n", person.LastName, person.FirstName, innerShooterParticipation.ShooterParticipationId);
-        }
+      //  StringBuilder detailsStringBuilder = new StringBuilder();
+      //  detailsStringBuilder.AppendFormat("{0}\r\n", selectedUiShooterParticipation.ParticipationName);
+      //  foreach (ShooterParticipation participation in shooterParticipations)
+      //  {
+      //    Shooter shooter = _shooterDataStore.FindById(participation.ShooterId);
+      //    ShooterParticipation innerShooterParticipation = _shooterParticipationDataStore.FindByShooterId(shooter.ShooterId).First();
+      //    Person person = shooter.PersonId == null
+      //      ? new Person() {FirstName = "unknown", LastName = "unknown"}
+      //      : _personDataStore.FindById((int) shooter.PersonId);
+      //    detailsStringBuilder.AppendFormat("\t{0}, {1} [{2}]\r\n", person.LastName, person.FirstName, innerShooterParticipation.ShooterParticipationId);
+      //  }
 
-        DetailsView = detailsStringBuilder.ToString();
-      }
+      //  DetailsView = detailsStringBuilder.ToString();
+      //}
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
