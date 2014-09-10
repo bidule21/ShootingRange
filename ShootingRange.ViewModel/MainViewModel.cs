@@ -549,9 +549,11 @@ namespace ShootingRange.ViewModel
           ? new Person() {FirstName = "unknown", LastName = "unknown"}
           : _personDataStore.FindById((int) selectedUiShooter.PersonId);
         detailsStringBuilder.AppendFormat("{0}, {1} [{2}] : {3} [{4}]\r\n{5}\r\n", person.LastName, person.FirstName,
-          person.PersonId, selectedUiShooter.ShooterNumber, selectedUiShooter.ShooterId, person.DateOfBirth != null ? ((DateTime)person.DateOfBirth).ToString("dd.MM.yyyy") : string.Empty);
+          person.PersonId, selectedUiShooter.ShooterNumber, selectedUiShooter.ShooterId,
+          person.DateOfBirth != null ? ((DateTime) person.DateOfBirth).ToString("dd.MM.yyyy") : string.Empty);
         detailsStringBuilder.AppendLine();
-        IEnumerable<SessionDetails> sessionDetails = _sessionDetailsView.FindByShooterId(selectedUiShooter.ShooterId).OrderBy(_ => _.ProgramNumber).ToList();
+        IEnumerable<SessionDetails> sessionDetails =
+          _sessionDetailsView.FindByShooterId(selectedUiShooter.ShooterId).OrderBy(_ => _.ProgramNumber).ToList();
 
         foreach (SessionDetails sessionDetail in sessionDetails)
         {
@@ -577,9 +579,14 @@ namespace ShootingRange.ViewModel
                     Shots =
                       ss.Shots.OrderBy(shot => shot.Ordinal)
                         .Select(shot => string.Format("{0}\t{1}", shot.Ordinal, shot.PrimaryScore)),
-                    SubsessionHeader = string.Format("Gruppe {0} | T={1}", ss.Ordinal, ss.Shots.Sum(_ => _.PrimaryScore))
+                    SubsessionHeader =
+                      string.Format("Gruppe {0} | T={1}", ss.Ordinal, ss.Shots.Sum(_ => _.PrimaryScore))
                   })
           }));
+      }
+      else
+      {
+        SessionTreeViewItems.Clear();
       }
     }
 
