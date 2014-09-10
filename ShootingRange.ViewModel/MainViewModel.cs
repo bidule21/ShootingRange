@@ -682,20 +682,20 @@ namespace ShootingRange.ViewModel
           //{
           //  //participationTreeItems = _groupDetailsView.FindByPersonId(SelectedUiPerson.PersonId).Select(selector);
           //}
-        else
-        {
-          //participationTreeItems = _groupDetailsView.GetAll().Select(selector);
-          IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.GetAll().ToList();
-          foreach (ShooterParticipation shooterParticipation in shooterParticipations)
-          {
-            Participation participation = _participationDataStore.FindById(shooterParticipation.ParticipationId);
-            participations.Add(new ShooterParticipationDetails
-            {
-              ParticipationName = participation.ParticipationName,
-              ShooterParticipationId = shooterParticipation.ShooterParticipationId
-            });
-          }
-        }
+        //else
+        //{
+        //  //participationTreeItems = _groupDetailsView.GetAll().Select(selector);
+        //  IEnumerable<ShooterParticipation> shooterParticipations = _shooterParticipationDataStore.GetAll().ToList();
+        //  foreach (ShooterParticipation shooterParticipation in shooterParticipations)
+        //  {
+        //    Participation participation = _participationDataStore.FindById(shooterParticipation.ParticipationId);
+        //    participations.Add(new ShooterParticipationDetails
+        //    {
+        //      ParticipationName = participation.ParticipationName,
+        //      ShooterParticipationId = shooterParticipation.ShooterParticipationId
+        //    });
+        //  }
+        //}
 
         Participations =
           new ObservableCollection<ShooterParticipationListItem>(
