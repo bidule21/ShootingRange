@@ -1,0 +1,81 @@
+﻿<wpf:CustomWindow x:Class="ShootingRange.ServiceDesk.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
+        xmlns:wpf="clr-namespace:Gui.Wpf;assembly=Gui.Wpf"
+        xmlns:controls="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
+        Title="{Binding Title}" Height="513" Width="786" mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=viewModel:MainWindowViewModel}" Icon="/ShootingRange.ServiceDesk.View;component/Resources/flower_48.png">
+    <wpf:CustomWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Gui.wpf;component/Styles.xaml"/>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </wpf:CustomWindow.Resources>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Margin="5" Command="{Binding ShowPersonsCommand}">
+                <StackPanel Orientation="Vertical">
+                    <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/person_48.png" Width="48" Height="48"/>
+                    <TextBlock Text="Personen" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="5" Command="{Binding ShowShootersCommand}">
+                <StackPanel Orientation="Vertical">
+                    <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/archer_48.png" Width="48" Height="48"/>
+                    <TextBlock Text="Schützen" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="5" Command="{Binding ShowGroupsCommand}">
+                <StackPanel Orientation="Vertical">
+                    <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/group_48.png" Width="48" Height="48"/>
+                    <TextBlock Text="Gruppen" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Separator/>
+            <Button Margin="5" Command="{Binding ShowRankingsCommand}">
+                <StackPanel Orientation="Vertical">
+                    <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/trophy_48.png" Width="48" Height="48"/>
+                    <TextBlock Text="Ranglisten" Margin="5"/>
+                </StackPanel>
+            </Button>
+        </ToolBar>
+        <Border DockPanel.Dock="Bottom" BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="0,1,0,1">
+            <StatusBar Height="18"></StatusBar>
+        </Border>
+        <Border BorderThickness="0,4,0,0" BorderBrush="{StaticResource SscBrush}">
+            <Grid d:DataContext="{d:DesignData Source=DesignTimeData/MainWindowData.xaml}">
+                <Grid.Background>
+                    <SolidColorBrush Color="{StaticResource SscLightColor}"></SolidColorBrush>
+                    <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="{StaticResource SscLightColor}" Offset="0.5" />
+                        <GradientStop Color="White" Offset="1.4" />
+                    </LinearGradientBrush>-->
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <GridSplitter Grid.Column="1"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Stretch"
+                              Background="{StaticResource SscDarkBrush}"
+                              ShowsPreview="true"
+                              Width="4" />
+                <StackPanel Grid.Column="0" Margin="10" Orientation="Vertical">
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Person erfassen..." Command="{Binding ShowCreatePersonCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Schütze erstellen..." Command="{Binding ShowCreateShooterCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Gruppe erstellen..." Command="{Binding ShowCreateGroupCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Separator />
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Konfiguration anpassen..." Command="{Binding ShowConfigurationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+               </StackPanel>
+                <Rectangle  Grid.Column="2"  Fill="White"/>
+                <ContentPresenter Grid.Column="2" Content="{Binding CurrentPage}"/>
+            </Grid>
+        </Border>
+    </DockPanel>
+</wpf:CustomWindow>

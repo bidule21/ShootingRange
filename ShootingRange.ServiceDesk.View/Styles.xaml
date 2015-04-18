@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="SscBrush" Color="#175299"/>
+    <SolidColorBrush x:Key="SscLightBrush" Color="#9fc4f1"/>
+    <SolidColorBrush x:Key="SscDarkBrush" Color="#113d73"/>
+    <Color x:Key="SscLightColor" R="159" G="196" B="241" A="255"></Color>
+    
+    <Style x:Key="PageHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource SscDarkBrush}"></Setter>
+        <Setter Property="Margin" Value="10,10,10,20"></Setter>
+    </Style>
+</ResourceDictionary>
