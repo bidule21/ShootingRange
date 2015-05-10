@@ -1,10 +1,29 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ShootingRange.BusinessObjects;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class CreatePersonViewModel :INotifyPropertyChanged
+  public class CreatePersonViewModel : INotifyPropertyChanged
   {
+    public CreatePersonViewModel()
+    {
+      Person = new Person();
+    }
+
+    private Person _person;
+    public Person Person
+    {
+      get { return _person; }
+      set
+      {
+        if (value != _person)
+        {
+          _person = value;
+          OnPropertyChanged("Person");
+        }
+      }
+    }
 
     private string _title;
     public string Title

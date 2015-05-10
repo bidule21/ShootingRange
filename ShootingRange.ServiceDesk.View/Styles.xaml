@@ -9,6 +9,6 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource SscDarkBrush}"></Setter>
-        <Setter Property="Margin" Value="10,10,10,20"></Setter>
+        <Setter Property="Margin" Value="10,10,10,10"></Setter>
     </Style>
 </ResourceDictionary>

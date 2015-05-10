@@ -2,13 +2,207 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
+      xmlns:view="clr-namespace:ShootingRange.ServiceDesk.View"
+      xmlns:businessObjects="clr-namespace:ShootingRange.BusinessObjects;assembly=ShootingRange.BusinessObjects"
+      xmlns:converter="clr-namespace:ShootingRange.View.Converter;assembly=ShootingRange.View"
+      xmlns:controls1="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300">
-<UserControl.Resources>
-    <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"></ResourceDictionary>
-</UserControl.Resources>
-    <Grid>
-        <TextBlock Text="Personen" Style="{StaticResource PageHeaderStyle}"></TextBlock>
+      d:DesignHeight="323" d:DesignWidth="614" d:DataContext="{d:DesignInstance Type=viewModel:PersonsPageViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
+                <ResourceDictionary>
+                    <converter:PersonNameConverter x:Key="PersonNameConverter"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid d:DataContext="{d:DesignData Source=../DesignTimeData/PersonPageData.xaml}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <ToolBarTray Grid.Row="0" Grid.Column="0" VerticalAlignment="Top" IsLocked="True">
+            <ToolBar>
+                <Button Command="{Binding ShowCreatePersonCommand}" ToolTip="Neuer Schütze erstellen..."
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Neuer Schütze" />
+
+                        <controls1:AutoGreyableImage
+                            Source="/ShootingRange.ServiceDesk.View;component/Resources/blank_16.png" Width="16"
+                            Height="16" /></StackPanel>
+                </Button>
+                <Button Command="{Binding ShowEditPersonCommand}" ToolTip="Schütze editieren..."
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                    <controls1:AutoGreyableImage
+                        Source="/ShootingRange.ServiceDesk.View;component/Resources/edit_16.png" Width="16" Height="16" />
+                </Button>
+                <Button Command="{Binding DeletePersonCommand}" ToolTip="Schütze löschen..."
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                    <controls1:AutoGreyableImage
+                        Source="/ShootingRange.ServiceDesk.View;component/Resources/delete_16.png" Width="16"
+                        Height="16" />
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <ToolBarTray Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" IsLocked="True">
+            <ToolBar>
+                <Button Command="{Binding CreateShooterCommand}" ToolTip="Schützennummer lösen"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Neue Schützennummer" />
+                        <controls1:AutoGreyableImage
+                            Source="/ShootingRange.ServiceDesk.View;component/Resources/add_16.png" Width="16"
+                            Height="16" /></StackPanel>
+                </Button>
+                <Button Command="{Binding DeleteShooterCommand}" ToolTip="Schützennummer löschen..."
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                    <controls1:AutoGreyableImage
+                        Source="/ShootingRange.ServiceDesk.View;component/Resources/delete_16.png" Width="16"
+                        Height="16" />
+                </Button>
+            </ToolBar>
+            </ToolBarTray>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Schützen" Style="{StaticResource PageHeaderStyle}"/>
+        <TextBox Height="23" Grid.Row="2" Grid.Column="0" Name="SearchBox" view:TextBoxBehavior.EscapeClearsText="True" Margin="5,10,5,5" Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
+        <ListView Grid.Row="3" Grid.Column="0" Margin="5" ItemsSource="{Binding FilteredPersons}" SelectedItem="{Binding SelectedPerson}">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type businessObjects:Person}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" FontWeight="Bold">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource PersonNameConverter}" ConverterParameter="FormatLastFirst">
+                                    <Binding Path="LastName"/>
+                                    <Binding Path="FirstName"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <Grid Grid.Row="1" Margin="20,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1" Text="{Binding DateOfBirth, StringFormat=dd.MM.yyyy}"/>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <TextBlock  Style="{StaticResource  PageHeaderStyle}">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource PersonNameConverter}" ConverterParameter="FormatLastFirst">
+                        <Binding Path="SelectedPerson.LastName" />
+                        <Binding Path="SelectedPerson.FirstName" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+        <TabControl Grid.Column="1" Grid.Row="3" Margin="5" ItemsSource="{Binding Shooters}" SelectedItem="{Binding SelectedShooter}">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:ShooterViewModel}">
+                    <TextBlock Text="{Binding Shooter.ShooterNumber}"></TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type viewModel:ShooterViewModel}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="Wettkämpfe" Margin="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ToolBarTray IsLocked="True" Grid.ColumnSpan="2">
+                                    <ToolBar>
+                                        <Button ToolTip="Schütze zu Wettkampf hinzufügen..." Command="{Binding ShowSelectParticipationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                                            <controls1:AutoGreyableImage
+                                                Source="/ShootingRange.ServiceDesk.View;component/Resources/add_16.png"
+                                                Width="16" Height="16" />
+                                        </Button>
+                                        <Button ToolTip="Schütze aus Wettkampf entfernen..." Command="{Binding DeleteParticipationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"> 
+                                            <controls1:AutoGreyableImage
+                                                Source="/ShootingRange.ServiceDesk.View;component/Resources/delete_16.png"
+                                                Width="16" Height="16" />
+                                        </Button>
+                                    </ToolBar></ToolBarTray>
+                                <ListView Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Participations}" SelectedItem="{Binding SelectedParticipation}" SelectionMode="Single">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type viewModel:ParticipationViewModel}">
+                                            <TextBlock Text="{Binding ProgramName}"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Gruppierungen" Grid.Row="1" Margin="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ToolBarTray IsLocked="True" Grid.ColumnSpan="2">
+                                    <ToolBar>
+                                        <!--<Button ToolTip="Neue Gruppe erstellen..." Command="{Binding ShowCreateGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                                            <Image
+                                                Source="/ShootingRange.ServiceDesk.View;component/Resources/blank_16.png"
+                                                Width="16" Height="16" />
+                                        </Button>-->
+                                        <Button ToolTip="Schütze zu bestehender Gruppe hinzufügen..." Command="{Binding ShowSelectGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                                            <controls1:AutoGreyableImage
+                                                Source="/ShootingRange.ServiceDesk.View;component/Resources/add_16.png"
+                                                Width="16" Height="16" />
+                                        </Button>
+                                        <Button ToolTip="Schütze aus Gruppe entfernen..." Command="{Binding DeleteGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                                            <controls1:AutoGreyableImage
+                                                Source="/ShootingRange.ServiceDesk.View;component/Resources/delete_16.png"
+                                                Width="16" Height="16" />
+                                        </Button>
+                                    </ToolBar>
+                                </ToolBarTray>
+                                <ListView Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Groupings}" SelectedItem="{Binding SelectedGrouping}"  SelectionMode="Single">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type viewModel:GroupingViewModel}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding GroupingName}"/>
+                                                <TextBlock Text=" ("></TextBlock>
+                                                <TextBlock Text="{Binding ParticipationName}"></TextBlock>
+                                                <TextBlock Text=")"></TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
     </Grid>
 </UserControl>

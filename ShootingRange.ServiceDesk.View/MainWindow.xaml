@@ -20,19 +20,13 @@
             <Button Margin="5" Command="{Binding ShowPersonsCommand}">
                 <StackPanel Orientation="Vertical">
                     <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/person_48.png" Width="48" Height="48"/>
-                    <TextBlock Text="Personen" Margin="5"/>
-                </StackPanel>
-            </Button>
-            <Button Margin="5" Command="{Binding ShowShootersCommand}">
-                <StackPanel Orientation="Vertical">
-                    <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/archer_48.png" Width="48" Height="48"/>
                     <TextBlock Text="Schützen" Margin="5"/>
                 </StackPanel>
             </Button>
-            <Button Margin="5" Command="{Binding ShowGroupsCommand}">
+            <Button Margin="5" Command="{Binding ShowGroupingsCommand}">
                 <StackPanel Orientation="Vertical">
                     <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/group_48.png" Width="48" Height="48"/>
-                    <TextBlock Text="Gruppen" Margin="5"/>
+                    <TextBlock Text="Gruppierungen" Margin="5"/>
                 </StackPanel>
             </Button>
             <Separator/>
@@ -47,7 +41,7 @@
             <StatusBar Height="18"></StatusBar>
         </Border>
         <Border BorderThickness="0,4,0,0" BorderBrush="{StaticResource SscBrush}">
-            <Grid d:DataContext="{d:DesignData Source=DesignTimeData/MainWindowData.xaml}">
+            <Grid>
                 <Grid.Background>
                     <SolidColorBrush Color="{StaticResource SscLightColor}"></SolidColorBrush>
                     <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -67,14 +61,15 @@
                               ShowsPreview="true"
                               Width="4" />
                 <StackPanel Grid.Column="0" Margin="10" Orientation="Vertical">
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Person erfassen..." Command="{Binding ShowCreatePersonCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Schütze erstellen..." Command="{Binding ShowCreateShooterCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Gruppe erstellen..." Command="{Binding ShowCreateGroupCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-                    <Separator />
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Konfiguration anpassen..." Command="{Binding ShowConfigurationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Neuer Schütze..." Command="{Binding ShowCreatePersonCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Neue Gruppierung..." Command="{Binding ShowCreateGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <!--<Separator />
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Konfiguration anpassen..." Command="{Binding ShowConfigurationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>-->
                </StackPanel>
-                <Rectangle  Grid.Column="2"  Fill="White"/>
-                <ContentPresenter Grid.Column="2" Content="{Binding CurrentPage}"/>
+                <Rectangle Grid.Column="2" Fill="AliceBlue"/>
+                <AdornerDecorator Grid.Column="2">
+                    <ContentControl Name="MainContent" Content="{Binding CurrentPage}"/>
+                </AdornerDecorator>
             </Grid>
         </Border>
     </DockPanel>

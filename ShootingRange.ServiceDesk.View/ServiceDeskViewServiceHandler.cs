@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq.Expressions;
+using System.Windows;
 using Gui.ViewModel;
 using Gui.Wpf;
 using ShootingRange.ServiceDesk.View.Controls;
@@ -42,6 +43,48 @@ namespace ShootingRange.ServiceDesk.View
     public IPage CreatePersonPage(IWindow owner, CreatePersonViewModel dataContext)
     {
       return GetUserControl<UcCreatePerson>((Window)owner, dataContext);
+    }
+
+    public IPage CreateGroupingPage(IWindow owner, CreateGroupingViewModel dataContext)
+    {
+      return GetUserControl<UcCreateGrouping>((Window) owner, dataContext);
+    }
+
+    public IPage CreateSelectParticipationPage(IWindow owner, SelectParticipationViewModel dataContext)
+    {
+      return GetUserControl<UcSelectParticipation>((Window) owner, dataContext);
+    }
+
+    public IPage CreateSelectGroupingPage(IWindow owner, SelectGroupingViewModel dataContext)
+    {
+      return GetUserControl<UcSelectGrouping>((Window)owner, dataContext);
+    }
+
+    public bool? ShowNativeDialog(IWindow owner, YesNoMessageBoxViewModel dataContext)
+    {
+      MessageBoxResult result = MessageBox.Show((Window) owner,
+        dataContext.MessageBoxText,
+        dataContext.Caption,
+        MessageBoxButton.YesNo,
+        MessageBoxImage.Question,
+        dataContext.DefaultYes ? MessageBoxResult.Yes : MessageBoxResult.No);
+
+      if (result == MessageBoxResult.Yes)
+        return true;
+      if (result == MessageBoxResult.No)
+        return false;
+
+      return null;
+    }
+
+    public void ShowErrorDialog(IWindow owner, ErrorDialogViewModel vm)
+    {
+      MessageBox.Show((Window)owner, vm.MessageText, vm.Caption, MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    public void ShowMessageDialog(IWindow owner, MessageDialogViewModel vm)
+    {
+      MessageBox.Show((Window)owner, vm.MessageText, vm.Caption, MessageBoxButton.OK, MessageBoxImage.Information);
     }
   }
 }

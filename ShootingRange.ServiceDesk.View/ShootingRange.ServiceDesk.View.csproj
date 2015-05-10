@@ -59,8 +59,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\UcCreateGrouping.xaml.cs">
+      <DependentUpon>UcCreateGrouping.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UcCreatePerson.xaml.cs">
       <DependentUpon>UcCreatePerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UcEditPerson.xaml.cs">
+      <DependentUpon>UcEditPerson.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\UcGroups.xaml.cs">
       <DependentUpon>UcGroups.xaml</DependentUpon>
@@ -71,17 +77,53 @@
     <Compile Include="Controls\UcRankings.xaml.cs">
       <DependentUpon>UcRankings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UcSelectGrouping.xaml.cs">
+      <DependentUpon>UcSelectGrouping.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UcSelectParticipation.xaml.cs">
+      <DependentUpon>UcSelectParticipation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UcShooter.xaml.cs">
+      <DependentUpon>UcShooter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UcShooters.xaml.cs">
       <DependentUpon>UcShooters.xaml</DependentUpon>
     </Compile>
+    <DesignData Include="DesignTimeData\SelectParticipationData.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
     <Compile Include="Dialogs\UcDialog.xaml.cs">
       <DependentUpon>UcDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ServiceDeskViewServiceHandler.cs" />
+    <Compile Include="TextBoxBehavior.cs" />
+    <Page Include="Controls\UcCreateGrouping.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UcEditPerson.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UcSelectGrouping.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UcSelectParticipation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UcShooter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DesignTimeData\MainWindowData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <DesignData Include="DesignTimeData\PersonPageData.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
     <Page Include="Dialogs\UcDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -144,9 +186,17 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
+      <Project>{EDE3C213-3926-4548-BA0D-D63D7916D1ED}</Project>
+      <Name>ShootingRange.BusinessObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.ServiceDesk.ViewModel\ShootingRange.ServiceDesk.ViewModel.csproj">
       <Project>{172a838b-0e90-408c-a1d2-41e5812c176d}</Project>
       <Name>ShootingRange.ServiceDesk.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.View\ShootingRange.View.csproj">
+      <Project>{0C979F35-D417-47A1-84C8-13A72EE43480}</Project>
+      <Name>ShootingRange.View</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -164,7 +214,24 @@
   <ItemGroup>
     <Resource Include="Resources\trophy_48.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\save_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delete_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delete_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blank_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\edit_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add_16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

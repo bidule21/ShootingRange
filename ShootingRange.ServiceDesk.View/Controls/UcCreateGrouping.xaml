@@ -1,18 +1,18 @@
-﻿<wpf:CustomUserControl x:Class="ShootingRange.ServiceDesk.View.Controls.UcCreatePerson"
+﻿<wpf:CustomUserControl x:Class="ShootingRange.ServiceDesk.View.Controls.UcCreateGrouping"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
              xmlns:wpf="clr-namespace:Gui.Wpf;assembly=Gui.Wpf"
+             xmlns:businessObjects="clr-namespace:ShootingRange.BusinessObjects;assembly=ShootingRange.BusinessObjects"
              mc:Ignorable="d" 
-             Width="380" d:DesignHeight="278" d:DesignWidth="373" d:DataContext="{d:DesignInstance Type=viewModel:CreatePersonViewModel}">
+             Width="380" d:DataContext="{d:DesignInstance Type=viewModel:CreateGroupingViewModel}">
     <UserControl.Resources>
         <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"></ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -23,10 +23,14 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" Style="{StaticResource PageHeaderStyle}"/>
         <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Name"/>
-        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Vorname"/>
-        <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Geburtsdatum"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Person.LastName}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Person.FirstName}"/>
-        <DatePicker Grid.Row="3" Grid.Column="1" Margin="5" SelectedDate="{Binding Person.DateOfBirth}"/>
+        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Gruppenname"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding Participations}" SelectedItem="{Binding SelectedParticipation}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type businessObjects:Participation}">
+                    <TextBlock Text="{Binding ParticipationName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding ShooterCollection.CollectionName}"/>
     </Grid>
 </wpf:CustomUserControl>

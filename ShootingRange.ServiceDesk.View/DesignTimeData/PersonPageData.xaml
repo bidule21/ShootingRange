@@ -1,0 +1,40 @@
+﻿<viewModel:PersonsPageViewModel
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
+    xmlns:businessObjects="clr-namespace:ShootingRange.BusinessObjects;assembly=ShootingRange.BusinessObjects"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <viewModel:PersonsPageViewModel.Participations>
+        <viewModel:ParticipationViewModel ProgramName="Sie und Er"/>
+        <viewModel:ParticipationViewModel ProgramName="Gruppenwettkampf"/>
+        <viewModel:ParticipationViewModel ProgramName="Probe"/>
+    </viewModel:PersonsPageViewModel.Participations>
+    <viewModel:PersonsPageViewModel.FilteredPersons>
+        <businessObjects:Person FirstName="Alfred" LastName="Escher" DateOfBirth="2015-03-04"/>
+        <businessObjects:Person FirstName="Galileo" LastName="Galilei" DateOfBirth="1985-08-13"/>
+        <businessObjects:Person FirstName="Rudolf" LastName="Merz" DateOfBirth="1973-01-12"/>
+        <businessObjects:Person FirstName="Wilhelm" LastName="Tell"/>
+        <businessObjects:Person FirstName="Wolfgang Amadeus" LastName="Mozart"/>
+    </viewModel:PersonsPageViewModel.FilteredPersons>
+    <viewModel:PersonsPageViewModel.Shooters>
+        <viewModel:ShooterViewModel>
+            <viewModel:ShooterViewModel.Shooter>
+                <businessObjects:Shooter ShooterNumber="120003"></businessObjects:Shooter>
+            </viewModel:ShooterViewModel.Shooter>
+        </viewModel:ShooterViewModel>
+    </viewModel:PersonsPageViewModel.Shooters>
+    <viewModel:PersonsPageViewModel.SelectedPerson>
+        <businessObjects:Person FirstName="Roger" LastName="Waltenspül" DateOfBirth="1993-03-17"></businessObjects:Person>
+    </viewModel:PersonsPageViewModel.SelectedPerson>
+    <viewModel:PersonsPageViewModel.SelectedShooter>
+        <viewModel:ShooterViewModel>
+            <viewModel:ShooterViewModel.Shooter>
+                <businessObjects:Shooter ShooterNumber="120003"></businessObjects:Shooter>
+            </viewModel:ShooterViewModel.Shooter>
+            <viewModel:ShooterViewModel.Participations>
+                <viewModel:ParticipationViewModel/>
+                <viewModel:ParticipationViewModel/>
+                <viewModel:ParticipationViewModel/>
+            </viewModel:ShooterViewModel.Participations>
+        </viewModel:ShooterViewModel>
+    </viewModel:PersonsPageViewModel.SelectedShooter>
+</viewModel:PersonsPageViewModel>
