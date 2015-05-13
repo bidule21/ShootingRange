@@ -58,6 +58,7 @@ namespace ShootingRange.ServiceDesk
       vs.RegisterFunction<CreateGroupingViewModel, IPage>(vsh.CreateGroupingPage);
       vs.RegisterFunction<SelectParticipationViewModel, IPage>(vsh.CreateSelectParticipationPage);
       vs.RegisterFunction<SelectGroupingViewModel, IPage>(vsh.CreateSelectGroupingPage);
+      vs.RegisterFunction<SelectShooterViewModel, IPage>(vsh.CreateSelectShooterPage);
 
       #endregion
 

@@ -83,6 +83,9 @@
     <Compile Include="Controls\UcSelectParticipation.xaml.cs">
       <DependentUpon>UcSelectParticipation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UcSelectShooter.xaml.cs">
+      <DependentUpon>UcSelectShooter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UcShooter.xaml.cs">
       <DependentUpon>UcShooter.xaml</DependentUpon>
     </Compile>
@@ -113,6 +116,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\UcSelectShooter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\UcShooter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +129,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <DesignData Include="DesignTimeData\PersonPageData.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
+    <DesignData Include="DesignTimeData\GroupsPageData.xaml">
+      <SubType>Designer</SubType>
+    </DesignData>
+    <DesignData Include="DesignTimeData\SelectShooterData.xaml">
       <SubType>Designer</SubType>
     </DesignData>
     <Page Include="Dialogs\UcDialog.xaml">
@@ -231,6 +244,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\add_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\printer_16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

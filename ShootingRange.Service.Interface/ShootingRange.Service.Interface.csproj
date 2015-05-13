@@ -34,7 +34,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BarcodeInfo.cs" />
+    <Compile Include="BarcodeFruehlingsschiessen.cs" />
+    <Compile Include="BarcodeHerbstschiessen.cs" />
     <Compile Include="IBarcodeBuilderService.cs" />
     <Compile Include="IBarcodePrintService.cs" />
     <Compile Include="IMainWindow.cs" />

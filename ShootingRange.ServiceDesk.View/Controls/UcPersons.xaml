@@ -71,6 +71,9 @@
                         Source="/ShootingRange.ServiceDesk.View;component/Resources/delete_16.png" Width="16"
                         Height="16" />
                 </Button>
+                <Button Command="{Binding PrintBarcodeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
+                    <controls1:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/printer_16.png" Width="16" Height="16"/>
+                </Button>
             </ToolBar>
             </ToolBarTray>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Schützen" Style="{StaticResource PageHeaderStyle}"/>

@@ -45,6 +45,7 @@
     <Compile Include="CreateGroupingViewModel.cs" />
     <Compile Include="CreatePersonViewModel.cs" />
     <Compile Include="GroupingHelper.cs" />
+    <Compile Include="GroupingPageGroupingViewModel.cs" />
     <Compile Include="MessageDialogViewModel.cs" />
     <Compile Include="ErrorDialogViewModel.cs" />
     <Compile Include="GroupsPageViewModel.cs" />
@@ -52,12 +53,15 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="NotifyPropertyChanged.cs" />
     <Compile Include="ParticipationViewModel.cs" />
+    <Compile Include="PersonShooterViewModel.cs" />
     <Compile Include="PersonsPageViewModel.cs" />
     <Compile Include="PersonViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RankingsPageViewModel.cs" />
     <Compile Include="SelectGroupingViewModel.cs" />
     <Compile Include="SelectParticipationViewModel.cs" />
+    <Compile Include="SelectShooterViewModel.cs" />
+    <Compile Include="ShooterCollectionViewModel.cs" />
     <Compile Include="ShootersPageViewModel.cs" />
     <Compile Include="ShooterViewModel.cs" />
     <Compile Include="DialogHelper.cs" />

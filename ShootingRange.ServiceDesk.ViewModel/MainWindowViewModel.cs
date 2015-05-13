@@ -64,8 +64,9 @@ namespace ShootingRange.ServiceDesk.ViewModel
       throw new NotImplementedException();
     }
 
-    private void ShowPage<T>(IWindow parent, T vm)
+    private void ShowPage<T>(IWindow parent, T vm) where T : ILoadable
     {
+      vm.Load();
       IPage p = ViewServiceLocator.ViewService.ExecuteFunction<T, IPage>(parent, vm);
       CurrentPage = p;
     }

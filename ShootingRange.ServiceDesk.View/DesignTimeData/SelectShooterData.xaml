@@ -1,0 +1,8 @@
+﻿<viewModel:SelectShooterViewModel
+    xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel">
+<viewModel:SelectShooterViewModel.Shooters>
+        <viewModel:PersonShooterViewModel FirstName="Hans" LastName="Hülsenboden"/>
+        <viewModel:PersonShooterViewModel FirstName="Felix" LastName="Muster"/>
+        <viewModel:PersonShooterViewModel FirstName="Maria" LastName="Diener"/>
+    </viewModel:SelectShooterViewModel.Shooters>
+</viewModel:SelectShooterViewModel>

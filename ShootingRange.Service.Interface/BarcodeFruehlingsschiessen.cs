@@ -2,7 +2,7 @@
 
 namespace ShootingRange.Service.Interface
 {
-  public class BarcodeInfo
+  public class BarcodeHerbstschiessen
   {
     public string FirstName { get; set; }
     public string LastName { get; set; }

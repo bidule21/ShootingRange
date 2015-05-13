@@ -7,7 +7,7 @@ namespace ShootingRange.BarcodePrinter
 {
   public class PtouchBarcodePrinter : IBarcodePrintService
   {
-    public void Print(BarcodeInfo barcodeInfo)
+    public void Print(BarcodeHerbstschiessen barcodeInfo)
     {
       DocumentClass doc = new DocumentClass();
       const string path = @".\Templates\Herbstschiessen.lbx";
@@ -50,6 +50,11 @@ namespace ShootingRange.BarcodePrinter
       {
         throw new InvalidOperationException(string.Format("Can not open template file '{0}'", fullPath));
       }
+    }
+
+    public void Print(BarcodeFruehlingsschiessen barcodeInfo)
+    {
+      throw new NotImplementedException();
     }
   }
 }

@@ -12,7 +12,7 @@ using ShootingRange.Service.Interface;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class PersonsPageViewModel : INotifyPropertyChanged
+  public class PersonsPageViewModel : INotifyPropertyChanged, ILoadable
   {
     private IPersonDataStore _personDataStore;
     private IShooterDataStore _shooterDataStore;
@@ -65,6 +65,26 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
       ShowSelectParticipationCommand = new ViewModelCommand(x => { });
       ShowSelectParticipationCommand.RaiseCanExecuteChanged();
+
+      PrintBarcodeCommand = new ViewModelCommand(x => PrintBarcode((IWindow) x));
+      PrintBarcodeCommand.AddGuard(x => SelectedShooter != null);
+      PrintBarcodeCommand.RaiseCanExecuteChanged();
+    }
+
+    private void PrintBarcode(IWindow window)
+    {
+      IBarcodePrintService barcodeService = ConfigurationSource.Configuration.GetBarcodePrintService();
+
+      BarcodeFruehlingsschiessen barcode = new BarcodeFruehlingsschiessen();
+
+      try
+      {
+        barcodeService.Print(barcode);
+      }
+      catch (Exception e)
+      {
+        DialogHelper.ShowErrorDialog(window, "Barcode Print Error", "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.Message);
+      }
     }
 
     #region Commands
@@ -170,6 +190,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
       SelectedShooter = Shooters.FirstOrDefault(s => s.Shooter.ShooterNumber == shooterNumber);
     }
 
+    public ViewModelCommand PrintBarcodeCommand { get; private set; }
+
     public ViewModelCommand DeleteShooterCommand { get; private set; }
 
     public ViewModelCommand ShowSelectParticipationCommand { get; private set; }
@@ -215,10 +237,16 @@ namespace ShootingRange.ServiceDesk.ViewModel
       SelectedShooter = null;
     }
 
+    public void Load()
+    {
+      LoadPersons();
+    }
+
     public void LoadPersons()
     {
       _persons = _personDataStore.GetAll().OrderBy(person => person.LastName).ThenBy(person => person.FirstName).ToList();
       UpdateFilteredPersons();
+      SelectedPersonChanged();
     }
 
 
@@ -393,7 +421,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         if (value != _groups)
         {
           _groups = value;
-          OnPropertyChanged("Groupings");
+          OnPropertyChanged("Groups");
         }
       }
     }
@@ -401,6 +429,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
     private void SelectedShooterChanged()
     {
+      PrintBarcodeCommand.RaiseCanExecuteChanged();
       DeleteShooterCommand.RaiseCanExecuteChanged();
     }
 
@@ -420,21 +449,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
       }
     }
 
-    //private void SelectedPersonChangedFetchShooters()
-    //{
-    //  Shooters =
-    //    new ObservableCollection<ShooterViewModel>(
-    //      _shooterDataStore.FindByPersonId(SelectedPerson.PersonId).ToList().Select(s => new ShooterViewModel
-    //      {
-    //        Shooter = s,
-    //        Participations = new ObservableCollection<ParticipationViewModel>(
-    //          FetchParticipationsForShooter(s)),
-    //        Groupings =
-    //          new ObservableCollection<GroupingViewModel>(
-    //            FetchGroupsForShooter(s))
-    //      }));
-    //}
-
     #region Fetch
 
     #endregion
@@ -450,5 +464,10 @@ namespace ShootingRange.ServiceDesk.ViewModel
     }
 
     #endregion
+  }
+
+  public interface ILoadable
+  {
+    void Load();
   }
 }

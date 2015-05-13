@@ -60,6 +60,11 @@ namespace ShootingRange.ServiceDesk.View
       return GetUserControl<UcSelectGrouping>((Window)owner, dataContext);
     }
 
+    public IPage CreateSelectShooterPage(IWindow owner, SelectShooterViewModel dataContext)
+    {
+      return GetUserControl<UcSelectShooter>((Window) owner, dataContext);
+    }
+
     public bool? ShowNativeDialog(IWindow owner, YesNoMessageBoxViewModel dataContext)
     {
       MessageBoxResult result = MessageBox.Show((Window) owner,

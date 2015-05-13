@@ -338,7 +338,7 @@ namespace ShootingRange.ViewModel
         Person person = uiShooter.PersonId == null
           ? new Person() {FirstName = "unknown", LastName = "unknown"}
           : _personDataStore.FindById((int) uiShooter.PersonId);
-        BarcodeInfo barcodeInfo = new BarcodeInfo
+        BarcodeHerbstschiessen barcodeInfo = new BarcodeHerbstschiessen
         {
           FirstName = person.FirstName,
           LastName = person.LastName,

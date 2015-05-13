@@ -1,7 +1,10 @@
 ﻿namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class RankingsPageViewModel
+  public class RankingsPageViewModel : ILoadable
   {
-     
+    public void Load()
+    {
+      
+    }
   }
 }
