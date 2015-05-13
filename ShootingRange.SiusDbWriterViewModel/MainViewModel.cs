@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -8,8 +7,6 @@ using DotNetToolbox.RelayCommand;
 using ShootingRange.Common;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Engine;
-using ShootingRange.Repository.Repositories;
-using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.SiusDbWriterViewModel.Properties;
 using ShootingRange.ViewModel;
 
@@ -17,7 +14,6 @@ namespace ShootingRange.SiusDbWriterViewModel
 {
   public class MainViewModel : INotifyPropertyChanged
   {
-    private IShotDataStore _shotDataStore;
     private ShootingRangeEngine _engine;
 
     public MainViewModel()

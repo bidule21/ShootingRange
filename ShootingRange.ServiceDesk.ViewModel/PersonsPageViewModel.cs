@@ -16,12 +16,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
   {
     private IPersonDataStore _personDataStore;
     private IShooterDataStore _shooterDataStore;
-    private IShooterParticipationDataStore _shooterParticipationDataStore;
-    private IParticipationDataStore _participationDataStore;
-    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
-    private IShooterCollectionDataStore _shooterCollectionDataStore;
-    private ICollectionShooterDataStore _collectionShooterDataStore;
-
     private IShooterNumberService _shooterNumberService;
 
     private List<Person> _persons;
@@ -31,12 +25,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
       _personDataStore = ConfigurationSource.Configuration.GetPersonDataStore();
       _shooterDataStore = ConfigurationSource.Configuration.GetShooterDataStore();
       _shooterNumberService = ConfigurationSource.Configuration.GetShooterNumberService();
-      _shooterParticipationDataStore = ConfigurationSource.Configuration.GetShooterParticipationDataStore();
-      _participationDataStore = ConfigurationSource.Configuration.GetParticipationDataStore();
-      _shooterCollectionParticipationDataStore =
-        ConfigurationSource.Configuration.GetShooterCollectionParticipationDataStore();
-      _shooterCollectionDataStore = ConfigurationSource.Configuration.GetShooterCollectionDataStore();
-      _collectionShooterDataStore = ConfigurationSource.Configuration.GetCollectionShooterDataStore();
 
       Initialize();
       LoadPersons();
