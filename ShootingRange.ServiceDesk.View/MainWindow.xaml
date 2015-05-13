@@ -29,13 +29,13 @@
                     <TextBlock Text="Gruppierungen" Margin="5"/>
                 </StackPanel>
             </Button>
-            <Separator/>
+            <!--<Separator/>
             <Button Margin="5" Command="{Binding ShowRankingsCommand}">
                 <StackPanel Orientation="Vertical">
                     <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/trophy_48.png" Width="48" Height="48"/>
                     <TextBlock Text="Ranglisten" Margin="5"/>
                 </StackPanel>
-            </Button>
+            </Button>-->
         </ToolBar>
         <Border DockPanel.Dock="Bottom" BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="0,1,0,1">
             <StatusBar Height="18"></StatusBar>

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Management.Instrumentation;
-using System.Timers;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Common;
 using ShootingRange.Common.Modules;
 using ShootingRange.ConfigurationProvider;
-using ShootingRange.Repository.Repositories;
 using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.Engine
@@ -23,7 +19,6 @@ namespace ShootingRange.Engine
     private IProgramItemDataStore _programItemDataStore;
     private IShooterDataStore _shooterDataStore;
     private IPersonDataStore _personDataStore;
-    private ShootingRangeEvents _events;
     private IShootingRange _shootingRange;
 
     private Dictionary<int, Session> _sessionsAwaitingProgramNumber;
@@ -43,8 +38,6 @@ namespace ShootingRange.Engine
       _shotDataStore = configuration.GetShotDataStore();
       _shooterDataStore = configuration.GetShooterDataStore();
       _personDataStore = configuration.GetPersonDataStore();
-
-      _events = configuration.GetEvents();
     }
 
     private void ShootingRangeOnLog(object sender, LogEventArgs e)
