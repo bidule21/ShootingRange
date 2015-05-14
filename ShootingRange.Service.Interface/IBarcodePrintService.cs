@@ -3,6 +3,6 @@
   public interface IBarcodePrintService
   {
     void Print(BarcodeHerbstschiessen barcodeInfo);
-    void Print(BarcodeFruehlingsschiessen barcodeInfo);
+    void Print(BarcodeVolksschiessen barcodeInfo);
   }
 }

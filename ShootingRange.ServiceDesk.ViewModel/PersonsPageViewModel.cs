@@ -16,6 +16,10 @@ namespace ShootingRange.ServiceDesk.ViewModel
   {
     private IPersonDataStore _personDataStore;
     private IShooterDataStore _shooterDataStore;
+    private ICollectionShooterDataStore _collectionShooterDataStore;
+    private IShooterCollectionDataStore _shooterCollectionDataStore;
+    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
+    private IParticipationDataStore _pariticipationDataStore;
     private IShooterNumberService _shooterNumberService;
 
     private List<Person> _persons;
@@ -25,6 +29,11 @@ namespace ShootingRange.ServiceDesk.ViewModel
       _personDataStore = ConfigurationSource.Configuration.GetPersonDataStore();
       _shooterDataStore = ConfigurationSource.Configuration.GetShooterDataStore();
       _shooterNumberService = ConfigurationSource.Configuration.GetShooterNumberService();
+      _collectionShooterDataStore = ConfigurationSource.Configuration.GetCollectionShooterDataStore();
+      _shooterCollectionDataStore = ConfigurationSource.Configuration.GetShooterCollectionDataStore();
+      _shooterCollectionParticipationDataStore =
+        ConfigurationSource.Configuration.GetShooterCollectionParticipationDataStore();
+      _pariticipationDataStore = ConfigurationSource.Configuration.GetParticipationDataStore();
 
       Initialize();
       LoadPersons();
@@ -61,17 +70,50 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
     private void PrintBarcode(IWindow window)
     {
-      IBarcodePrintService barcodeService = ConfigurationSource.Configuration.GetBarcodePrintService();
-
-      BarcodeFruehlingsschiessen barcode = new BarcodeFruehlingsschiessen();
-
-      try
+      if (SelectedShooter != null)
       {
-        barcodeService.Print(barcode);
-      }
-      catch (Exception e)
-      {
-        DialogHelper.ShowErrorDialog(window, "Barcode Print Error", "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.Message);
+        var personShooter = (from shooter in _shooterDataStore.GetAll()
+          join person in _personDataStore.GetAll() on shooter.PersonId equals person.PersonId
+          where shooter.ShooterId == SelectedShooter.Shooter.ShooterId
+          select new
+          {
+            person.FirstName,
+            person.LastName,
+            person.DateOfBirth,
+            shooter.ShooterNumber
+          }).Single();
+
+        IEnumerable<string> gruppenstichGruppennamen = from sc in _shooterCollectionDataStore.GetAll()
+          join cs in _collectionShooterDataStore.FindByShooterId(SelectedShooter.Shooter.ShooterId) on
+            sc.ShooterCollectionId equals cs.ShooterCollectionId
+          join scp in _shooterCollectionParticipationDataStore.GetAll() on cs.ShooterCollectionId equals
+            scp.ShooterCollectionId
+          join p in _pariticipationDataStore.GetAll() on scp.ParticipationId equals p.ParticipationId
+          where p.ParticipationName == "Gruppenstich"
+          select sc.CollectionName;
+
+        string gruppenstichGruppenname = gruppenstichGruppennamen.SingleOrDefault(_ => true);
+
+        IBarcodePrintService barcodeService = ConfigurationSource.Configuration.GetBarcodePrintService();
+        IBarcodeBuilderService barcodeBuilderService = ConfigurationSource.Configuration.GetBarcodeBuilderService();
+
+        BarcodeVolksschiessen barcode = new BarcodeVolksschiessen
+        {
+          FirstName = personShooter.FirstName,
+          LastName = personShooter.LastName,
+          DateOfBirth = personShooter.DateOfBirth,
+          Barcode = barcodeBuilderService.BuildBarcode(personShooter.ShooterNumber, 0),
+          Gruppenstich = gruppenstichGruppenname
+        };
+
+        try
+        {
+          barcodeService.Print(barcode);
+        }
+        catch (Exception e)
+        {
+          DialogHelper.ShowErrorDialog(window, "Barcode Print Error", "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.Message);
+        }
       }
     }
 
@@ -170,6 +212,15 @@ namespace ShootingRange.ServiceDesk.ViewModel
         PersonId = person.PersonId,
         ShooterNumber = shooterNumber
       };
+
+      ISsvShooterDataWriterService ssvShooterDataWriterService =
+        ConfigurationSource.Configuration.GetSsvShooterDataWriterService();
+      ssvShooterDataWriterService.WriteShooterData(new SsvShooterData
+      {
+        FirstName = person.FirstName,
+        LastName = person.LastName,
+        LicenseNumber = (uint)shooter.ShooterNumber
+      });
 
       _shooterDataStore.Create(shooter);
 
