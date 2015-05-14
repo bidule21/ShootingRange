@@ -10,6 +10,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
   {
     private GroupsPageViewModel _groupingsPageViewModel;
     private PersonsPageViewModel _personsPageViewModel;
+    private ResultsPageViewModel _resultsPageViewModel;
     private IPersonDataStore _personDataStore;
 
     public MainWindowViewModel()
@@ -19,6 +20,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
       _personDataStore = ConfigurationSource.Configuration.GetPersonDataStore();
       _personsPageViewModel = new PersonsPageViewModel();
       _groupingsPageViewModel = new GroupsPageViewModel();
+      _resultsPageViewModel = new ResultsPageViewModel();
 
       ShowPersonsCommand = new ViewModelCommand(x => ShowPage((IWindow)x, _personsPageViewModel));
       ShowPersonsCommand.RaiseCanExecuteChanged();
@@ -34,6 +36,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
       ShowCreateGroupingCommand = new ViewModelCommand(x => ShowCreateGrouping((IWindow)x));
       ShowCreateGroupingCommand.RaiseCanExecuteChanged();
+
+      ShowResultsCommand = new ViewModelCommand(x => ShowPage((IWindow)x, _resultsPageViewModel));
 
       ShowConfigurationCommand = new ViewModelCommand(x => ShowConfiguration((IWindow)x));
 
@@ -79,6 +83,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
     public ViewModelCommand ShowCreatePersonCommand { get; private set; }
     public ViewModelCommand ShowCreateGroupingCommand { get; private set; }
     public ViewModelCommand ShowConfigurationCommand { get; private set; }
+
+    public ViewModelCommand ShowResultsCommand { get; private set; }
 
     #endregion
 

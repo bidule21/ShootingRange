@@ -58,9 +58,11 @@
     <Compile Include="PersonViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RankingsPageViewModel.cs" />
+    <Compile Include="ResultsPageViewModel.cs" />
     <Compile Include="SelectGroupingViewModel.cs" />
     <Compile Include="SelectParticipationViewModel.cs" />
     <Compile Include="SelectShooterViewModel.cs" />
+    <Compile Include="SessionViewModel.cs" />
     <Compile Include="ShooterCollectionViewModel.cs" />
     <Compile Include="ShootersPageViewModel.cs" />
     <Compile Include="ShooterViewModel.cs" />

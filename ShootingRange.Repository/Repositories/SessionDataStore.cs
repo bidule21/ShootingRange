@@ -42,7 +42,7 @@ namespace ShootingRange.Repository.Repositories
 
     public Session FindById(int id)
     {
-      return _sqlRepository.Find(_ => _.ShooterId == id).Select(_selector).Single();
+      return _sqlRepository.Find(_ => _.SessionId == id).Select(_selector).Single();
     }
 
     public IEnumerable<Session> GetAll()

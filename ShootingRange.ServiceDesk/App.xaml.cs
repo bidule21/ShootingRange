@@ -49,6 +49,7 @@ namespace ShootingRange.ServiceDesk
       vs.RegisterFunction<ShootersPageViewModel, IPage>(vsh.CreateShootersPage);
       vs.RegisterFunction<GroupsPageViewModel, IPage>(vsh.CreateGroupsPage);
       vs.RegisterFunction<RankingsPageViewModel, IPage>(vsh.CreateRankingsPage);
+      vs.RegisterFunction<ResultsPageViewModel, IPage>(vsh.CreateResultsPage);
 
       #endregion
 

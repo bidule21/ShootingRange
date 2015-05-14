@@ -36,6 +36,13 @@
                     <TextBlock Text="Ranglisten" Margin="5"/>
                 </StackPanel>
             </Button>-->
+            <Separator/>
+            <Button Margin="5" Command="{Binding ShowResultsCommand}">
+                <StackPanel Orientation="Vertical">
+                    <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/target_48.png" Width="48" Height="48"/>
+                    <TextBlock Text="Resultate" Margin="5"/>
+                </StackPanel>
+            </Button>
         </ToolBar>
         <Border DockPanel.Dock="Bottom" BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="0,1,0,1">
             <StatusBar Height="18"></StatusBar>

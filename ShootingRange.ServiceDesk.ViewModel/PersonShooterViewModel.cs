@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ShootingRange.BusinessObjects.Properties;
@@ -77,6 +78,23 @@ namespace ShootingRange.ServiceDesk.ViewModel
         }
       }
     }
+
+
+
+    private DateTime? _dateOfBirth;
+    public DateTime? DateOfBirth
+    {
+      get { return _dateOfBirth; }
+      set
+      {
+        if (value != _dateOfBirth)
+        {
+          _dateOfBirth = value;
+          OnPropertyChanged("DateOfBirth");
+        }
+      }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     [NotifyPropertyChangedInvocator]

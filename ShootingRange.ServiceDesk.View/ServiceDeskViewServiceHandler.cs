@@ -40,6 +40,11 @@ namespace ShootingRange.ServiceDesk.View
       return GetUserControl<UcRankings>((Window)owner, dataContext);
     }
 
+    public IPage CreateResultsPage(IWindow owner, ResultsPageViewModel dataContext)
+    {
+      return GetUserControl<UcResults>((Window)owner, dataContext);
+    }
+
     public IPage CreatePersonPage(IWindow owner, CreatePersonViewModel dataContext)
     {
       return GetUserControl<UcCreatePerson>((Window)owner, dataContext);

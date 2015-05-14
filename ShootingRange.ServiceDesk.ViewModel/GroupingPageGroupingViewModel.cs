@@ -39,7 +39,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         {
           Title = "Schütze auswählen"
         };
-        vm.Initialize();
+        vm.Initialize(GroupTypeId);
 
         bool? dialogResult = DialogHelper.ShowDialog(parent, vm, vm.Title);
 
