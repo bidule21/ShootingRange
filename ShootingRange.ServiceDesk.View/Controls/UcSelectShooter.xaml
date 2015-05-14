@@ -1,0 +1,60 @@
+﻿<wpf:CustomUserControl x:Class="ShootingRange.ServiceDesk.View.Controls.UcSelectShooter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wpf="clr-namespace:Gui.Wpf;assembly=Gui.Wpf"
+             xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
+             xmlns:converter="clr-namespace:ShootingRange.View.Converter;assembly=ShootingRange.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="225" MinWidth="230" Height="400" d:DataContext="{d:DesignInstance Type=viewModel:SelectShooterViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
+                <ResourceDictionary>
+                    <converter:PersonNameConverter x:Key="PersonNameConverter"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="5" d:DataContext="{d:DesignData Source=../DesignTimeData/SelectShooterData.xaml}">
+            <ListView ItemsSource="{Binding Shooters}" SelectedItem="{Binding SelectedShooter}">
+                <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:PersonShooterViewModel}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontWeight="Bold">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource PersonNameConverter}"
+                                              ConverterParameter="FormatLastFirst">
+                                    <Binding Path="LastName" />
+                                    <Binding Path="FirstName" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                            <TextBlock Text=" ("/>
+                            <TextBlock Text="{Binding ShooterNumber}"/>
+                            <TextBlock Text=")"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="20,0,0,5" Text="{Binding DateOfBirth, StringFormat=dd.MM.yyyy}"/>
+                    </Grid>
+                    
+                    <!--<StackPanel Orientation="Horizontal">
+                        <TextBlock Text=" ("/>
+                        <TextBlock Text="{Binding ShooterNumber}"/>
+                        <TextBlock Text=")"/>
+                    </StackPanel>-->
+                </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+    </Grid>
+</wpf:CustomUserControl>
