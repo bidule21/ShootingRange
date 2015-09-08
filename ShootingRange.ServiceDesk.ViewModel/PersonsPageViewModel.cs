@@ -16,7 +16,9 @@ namespace ShootingRange.ServiceDesk.ViewModel
         private readonly IPersonDataStore _personDataStore;
         private readonly IShooterDataStore _shooterDataStore;
         private readonly IShooterNumberService _shooterNumberService;
-        private ISsvShooterDataWriterService _shooterDataWriter;
+        private readonly ISsvShooterDataWriterService _shooterDataWriter;
+        private ICollectionShooterDataStore _collectionShooterDataStore;
+        private IShooterCollectionDataStore _shooterCollectionDataStore;
 
         private List<Person> _allPersons;
 
@@ -26,6 +28,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
             _shooterDataStore = ServiceLocator.Current.GetInstance<IShooterDataStore>();
             _shooterNumberService = ServiceLocator.Current.GetInstance<IShooterNumberService>();
             _shooterDataWriter = ServiceLocator.Current.GetInstance<ISsvShooterDataWriterService>();
+            _collectionShooterDataStore = ServiceLocator.Current.GetInstance<ICollectionShooterDataStore>();
+            _shooterCollectionDataStore = ServiceLocator.Current.GetInstance<IShooterCollectionDataStore>();
 
             MessengerInstance.Register<ShowPersonsPageMessage>(this, x => LoadPersons());
             MessengerInstance.Register<PersonSelectedMessage>(this,
@@ -54,7 +58,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                     ShooterViewModel selectedShooter = SelectedShooter;
                     LoadPersons();
 
-                    if(selectedPerson != null)
+                    if (selectedPerson != null)
                         MessengerInstance.Send(new SetSelectedPersonMessage(selectedPerson.PersonId));
 
                     if (selectedShooter != null)
@@ -69,11 +73,13 @@ namespace ShootingRange.ServiceDesk.ViewModel
             ShowCreatePersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreatePersonDialogMessage()));
             ShowCreatePersonCommand.RaiseCanExecuteChanged();
 
-            ShowEditPersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new EditPersonDialogMessage(SelectedPerson)));
+            ShowEditPersonCommand =
+                new ViewModelCommand(x => MessengerInstance.Send(new EditPersonDialogMessage(SelectedPerson)));
             ShowEditPersonCommand.AddGuard(x => SelectedPerson != null);
             ShowEditPersonCommand.RaiseCanExecuteChanged();
 
-            DeletePersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new DeletePersonDialogMessage(SelectedPerson)));
+            DeletePersonCommand =
+                new ViewModelCommand(x => MessengerInstance.Send(new DeletePersonDialogMessage(SelectedPerson)));
             DeletePersonCommand.AddGuard(x => SelectedPerson != null);
             DeletePersonCommand.RaiseCanExecuteChanged();
 
@@ -81,7 +87,9 @@ namespace ShootingRange.ServiceDesk.ViewModel
             CreateShooterCommand.AddGuard(x => SelectedPerson != null);
             CreateShooterCommand.RaiseCanExecuteChanged();
 
-            DeleteShooterCommand = new ViewModelCommand(x => MessengerInstance.Send(new DeleteShooterDialogMessage(SelectedShooter.Shooter.ShooterNumber)));
+            DeleteShooterCommand =
+                new ViewModelCommand(
+                    x => MessengerInstance.Send(new DeleteShooterDialogMessage(SelectedShooter.Shooter.ShooterNumber)));
             DeleteShooterCommand.AddGuard(x => SelectedShooter != null);
             DeleteShooterCommand.RaiseCanExecuteChanged();
 
@@ -95,17 +103,53 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         private void PrintBarcode()
         {
-            IBarcodePrintService barcodeService = ServiceLocator.Current.GetInstance<IBarcodePrintService>();
-
-            BarcodeFruehlingsschiessen barcode = new BarcodeFruehlingsschiessen();
-
-            try
+            throw new NotImplementedException();
+            if (SelectedShooter != null)
             {
-                barcodeService.Print(barcode);
-            }
-            catch (Exception e)
-            {
-                MessengerInstance.Send(new DialogMessage("Barcode Print Error", "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.ToString(), MessageIcon.Error));
+                //var personShooter = (from shooter in _shooterDataStore.GetAll()
+                //    join person in _personDataStore.GetAll() on shooter.PersonId equals person.PersonId
+                //    where shooter.ShooterId == SelectedShooter.Shooter.ShooterId
+                //    select new
+                //    {
+                //        person.FirstName,
+                //        person.LastName,
+                //        person.DateOfBirth,
+                //        shooter.ShooterNumber
+                //    }).Single();
+
+                //IEnumerable<string> gruppenstichGruppennamen = from sc in _shooterCollectionDataStore.GetAll()
+                //    join cs in _collectionShooterDataStore.FindByShooterId(SelectedShooter.Shooter.ShooterId) on
+                //        sc.ShooterCollectionId equals cs.ShooterCollectionId
+                //    join scp in _shooterCollectionParticipationDataStore.GetAll() on cs.ShooterCollectionId equals
+                //        scp.ShooterCollectionId
+                //    join p in _pariticipationDataStore.GetAll() on scp.ParticipationId equals p.ParticipationId
+                //    where p.ParticipationName == "Gruppenstich"
+                //    select sc.CollectionName;
+
+                //string gruppenstichGruppenname = gruppenstichGruppennamen.SingleOrDefault(_ => true);
+
+                //IBarcodePrintService barcodeService = ConfigurationSource.Configuration.GetBarcodePrintService();
+                //IBarcodeBuilderService barcodeBuilderService = ConfigurationSource.Configuration.GetBarcodeBuilderService();
+
+                //BarcodeVolksschiessen barcode = new BarcodeVolksschiessen
+                //{
+                //    FirstName = personShooter.FirstName,
+                //    LastName = personShooter.LastName,
+                //    DateOfBirth = personShooter.DateOfBirth,
+                //    Barcode = barcodeBuilderService.BuildBarcode(personShooter.ShooterNumber, 0),
+                //    Gruppenstich = gruppenstichGruppenname
+                //};
+
+                //try
+                //{
+                //    barcodeService.Print(barcode);
+                //}
+                //catch (Exception e)
+                //{
+                //    MessengerInstance.Send(new DialogMessage("Barcode Print Error",
+                //        "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.ToString(),
+                //        MessageIcon.Error));
+                //}
             }
         }
 
