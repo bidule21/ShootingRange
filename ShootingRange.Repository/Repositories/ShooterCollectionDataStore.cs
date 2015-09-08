@@ -21,7 +21,8 @@ namespace ShootingRange.Repository.Repositories
       _selector = shooterCollection => new ShooterCollection
       {
         CollectionName = shooterCollection.CollectionName,
-        ShooterCollectionId = shooterCollection.ShooterCollectionId
+        ShooterCollectionId = shooterCollection.ShooterCollectionId,
+        ProgramNumber = shooterCollection.ProgramNumber
       };
     }
 
@@ -61,5 +62,10 @@ namespace ShootingRange.Repository.Repositories
       t_shootercollection entity = _sqlRepository.Find(_ => _.ShooterCollectionId == shooterCollection.ShooterCollectionId).Single();
       _sqlRepository.Delete(entity);
     }
+
+      public IEnumerable<ShooterCollection> FindByProgramNumber(int programNumber)
+      {
+          return _sqlRepository.Find(_ => _.ProgramNumber == programNumber).Select(_selector);
+      }
   }
 }

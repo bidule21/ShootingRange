@@ -21,7 +21,7 @@ namespace ShootingRange.Repository.Repositories
       _selector = session => new Session
       {
         SessionId = session.SessionId,
-        ProgramItemId = session.ProgramItemId,
+        ProgramNumber = session.ProgramNumber,
         LaneNumber = session.LaneNumber,
         ShooterId = session.ShooterId,
       };

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ShootingRange.BusinessObjects
@@ -9,7 +8,7 @@ namespace ShootingRange.BusinessObjects
     public int SessionId { get; set; }
     public int ShooterId { get; set; }
     public int LaneNumber { get; set; }
-    public int? ProgramItemId { get; set; }
+    public int ProgramNumber { get; set; }
 
     private List<SubSession> _subSessions;
 

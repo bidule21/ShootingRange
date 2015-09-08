@@ -30,10 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.CommonServiceLocator">
+      <HintPath>..\packages\Autofac.Extras.CommonServiceLocator.3.2.0\lib\net40\Autofac.Extras.CommonServiceLocator.dll</HintPath>
+    </Reference>
     <Reference Include="Gui.ViewModel">
       <HintPath>..\..\DotNetToolbox\Gui.Wpf\bin\Debug\Gui.ViewModel.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,32 +54,41 @@
   <ItemGroup>
     <Compile Include="CreateGroupingViewModel.cs" />
     <Compile Include="CreatePersonViewModel.cs" />
-    <Compile Include="GroupingHelper.cs" />
     <Compile Include="GroupingPageGroupingViewModel.cs" />
-    <Compile Include="MessageDialogViewModel.cs" />
-    <Compile Include="ErrorDialogViewModel.cs" />
     <Compile Include="GroupsPageViewModel.cs" />
     <Compile Include="GroupingViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="NotifyPropertyChanged.cs" />
+    <Compile Include="MessageTypes\AddGroupingToShooterDialogMessage.cs" />
+    <Compile Include="MessageTypes\AddParticipationToShooterDialogMessage.cs" />
+    <Compile Include="MessageTypes\AddShooterToGroupingDialogMessage.cs" />
+    <Compile Include="MessageTypes\CreateGroupingDialogMessage.cs" />
+    <Compile Include="MessageTypes\DeleteGroupingDialogMessage.cs" />
+    <Compile Include="MessageTypes\DeletePersonDialogMessage.cs" />
+    <Compile Include="MessageTypes\DeleteShooterDialogMessage.cs" />
+    <Compile Include="MessageTypes\DialogMessage.cs" />
+    <Compile Include="MessageTypes\EditPersonDialogMessage.cs" />
+    <Compile Include="MessageTypes\CreatePersonDialogMessage.cs" />
+    <Compile Include="MessageTypes\RefreshDataFromDatabase.cs" />
+    <Compile Include="MessageTypes\RemoveGroupingFromShooterDialogMessage.cs" />
+    <Compile Include="MessageTypes\RemoveParticipationFromShooterDialogMessage.cs" />
+    <Compile Include="MessageTypes\SetSelectedPersonMessage.cs" />
+    <Compile Include="MessageTypes\SetSelectedShooterCollectionMessage.cs" />
+    <Compile Include="MessageTypes\SetSelectedShooterMessage.cs" />
+    <Compile Include="MessageTypes\ShowGroupsPageMessage.cs" />
+    <Compile Include="MessageTypes\ShowPersonsPageMessage.cs" />
+    <Compile Include="MessageTypes\PersonSelectedMessage.cs" />
     <Compile Include="ParticipationViewModel.cs" />
     <Compile Include="PersonShooterViewModel.cs" />
     <Compile Include="PersonsPageViewModel.cs" />
-    <Compile Include="PersonViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RankingsPageViewModel.cs" />
     <Compile Include="ResultsPageViewModel.cs" />
     <Compile Include="SelectGroupingViewModel.cs" />
     <Compile Include="SelectParticipationViewModel.cs" />
     <Compile Include="SelectShooterViewModel.cs" />
     <Compile Include="SessionViewModel.cs" />
     <Compile Include="ShooterCollectionViewModel.cs" />
-    <Compile Include="ShootersPageViewModel.cs" />
     <Compile Include="ShooterViewModel.cs" />
-    <Compile Include="DialogHelper.cs" />
-    <Compile Include="UcDialogViewModel.cs" />
-    <Compile Include="ViewServiceLocator.cs" />
-    <Compile Include="YesNoMessageBoxViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
@@ -89,6 +108,10 @@
       <Name>ShootingRange.Service.Interface</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

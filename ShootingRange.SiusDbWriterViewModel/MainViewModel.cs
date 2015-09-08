@@ -5,227 +5,228 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using DotNetToolbox.RelayCommand;
 using ShootingRange.Common;
-using ShootingRange.ConfigurationProvider;
 using ShootingRange.Engine;
 using ShootingRange.SiusDbWriterViewModel.Properties;
-using ShootingRange.ViewModel;
+using IContainer = Autofac.IContainer;
 
 namespace ShootingRange.SiusDbWriterViewModel
 {
-  public class MainViewModel : INotifyPropertyChanged
-  {
-    private ShootingRangeEngine _engine;
-
-    public MainViewModel()
+    public class MainViewModel : INotifyPropertyChanged
     {
-      LastSiusMessage = "Welcome!";
-      LogCollection = new ObservableCollection<string>();
+        private readonly IContainer _container;
+        private ShootingRangeEngine _engine;
 
-      Host = "localhost";
-      Port = 4000;
-      Server = "localhost";
-      User = "root";
-      Password = "";
-      Database = "shootingrange";
-
-      if (!DesignTimeHelper.IsInDesignMode)
-      {
-
-      }
-
-      StartProcessingOnConnect = false;
-      ConnectSiusCommand = new RelayCommand<object>(ExecuteConnectSiusCommand, CanExecuteConnectSiusCommand);
-      StartProcessingCommand = new RelayCommand<object>(ExecuteStartProcessingCommand, CanExecuteStartProcessingCommand);
-    }
-
-    private bool CanExecuteConnectSiusCommand(object obj)
-    {
-      return _engine == null;
-    }
-
-    private void ExecuteStartProcessingCommand(object obj)
-    {
-      _engine.StartProcessing();
-    }
-
-    private bool CanExecuteStartProcessingCommand(object obj)
-    {
-      return _engine != null && !_engine.IsProcessing;
-    }
-
-    private void EngineOnLog(object sender, LogEventArgs e)
-    {
-      LastSiusMessage = e.Message;
-      LogCollection.Add(e.Message);
-
-      while (LogCollection.Count > 20)
-        LogCollection.RemoveAt(0);
-    }
-
-    private void ExecuteConnectSiusCommand(object obj)
-    {
-      try
-      {
-        IConfiguration config = ConfigurationSource.Configuration;
-        _engine = new ShootingRangeEngine(config);
-        _engine.Log += EngineOnLog;
-
-        if (StartProcessingOnConnect)
-          ExecuteStartProcessingCommand(null);
-
-        _engine.ConnectToSius();
-      }
-      catch (Exception e)
-      {
-        LastSiusMessage = e.Message;
-      }
-    }
-
-    public ICommand ConnectSiusCommand { get; private set; }
-
-    public ICommand StartProcessingCommand { get; private set; }
-
-    private string _lastSiusMessage;
-
-    
-    private bool _startProcessingOnConnect;
-    public bool StartProcessingOnConnect
-    {
-      get { return _startProcessingOnConnect; }
-      set
-      {
-        if (value != _startProcessingOnConnect)
+        public MainViewModel([NotNull] IContainer container)
         {
-          _startProcessingOnConnect = value;
-          OnPropertyChanged("StartProcessingOnConnect");
+            if (container == null) throw new ArgumentNullException("container");
+
+            _container = container;
+
+            LastSiusMessage = "Welcome!";
+            LogCollection = new ObservableCollection<string>();
+
+            Host = "localhost";
+            Port = 4000;
+            Server = "localhost";
+            User = "root";
+            Password = "";
+            Database = "shootingrange";
+
+            StartProcessingOnConnect = false;
+            ConnectSiusCommand = new RelayCommand<object>(ExecuteConnectSiusCommand, CanExecuteConnectSiusCommand);
+            StartProcessingCommand = new RelayCommand<object>(ExecuteStartProcessingCommand,
+                CanExecuteStartProcessingCommand);
         }
-      }
-    }
-    
-    private ObservableCollection<string> _logCollection;
-    public ObservableCollection<string> LogCollection
-    {
-      get { return _logCollection; }
-      set
-      {
-        if (value != _logCollection)
+
+        private bool CanExecuteConnectSiusCommand(object obj)
         {
-          _logCollection = value;
-          OnPropertyChanged("LogCollection");
+            return _engine == null;
         }
-      }
-    }
 
-    public string LastSiusMessage
-    {
-      get { return _lastSiusMessage; }
-      set
-      {
-        if (value != _lastSiusMessage)
+        private void ExecuteStartProcessingCommand(object obj)
         {
-          _lastSiusMessage = value;
-          OnPropertyChanged("LastSiusMessage");
+            _engine.StartProcessing();
         }
-      }
-    }
 
-    private string _database;
-
-    public string Database
-    {
-      get { return _database; }
-      set
-      {
-        if (value != _database)
+        private bool CanExecuteStartProcessingCommand(object obj)
         {
-          _database = value;
-          OnPropertyChanged("Database");
+            return _engine != null && !_engine.IsProcessing;
         }
-      }
-    }
 
-    private string _password;
-
-    public string Password
-    {
-      get { return _password; }
-      set
-      {
-        if (value != _password)
+        private void EngineOnLog(object sender, LogEventArgs e)
         {
-          _password = value;
-          OnPropertyChanged("Password");
+            LastSiusMessage = e.Message;
+            LogCollection.Add(e.Message);
+
+            while (LogCollection.Count > 20)
+                LogCollection.RemoveAt(0);
         }
-      }
-    }
 
-    private string _user;
-
-    public string User
-    {
-      get { return _user; }
-      set
-      {
-        if (value != _user)
+        private void ExecuteConnectSiusCommand(object obj)
         {
-          _user = value;
-          OnPropertyChanged("User");
+            try
+            {
+                _engine = new ShootingRangeEngine(_container);
+                _engine.Log += EngineOnLog;
+
+                if (StartProcessingOnConnect)
+                    ExecuteStartProcessingCommand(null);
+
+                _engine.ConnectToSius();
+            }
+            catch (Exception e)
+            {
+                LastSiusMessage = e.Message;
+            }
         }
-      }
-    }
 
-    private string _server;
+        public ICommand ConnectSiusCommand { get; private set; }
 
-    public string Server
-    {
-      get { return _server; }
-      set
-      {
-        if (value != _server)
+        public ICommand StartProcessingCommand { get; private set; }
+
+        private string _lastSiusMessage;
+
+
+        private bool _startProcessingOnConnect;
+
+        public bool StartProcessingOnConnect
         {
-          _server = value;
-          OnPropertyChanged("Server");
+            get { return _startProcessingOnConnect; }
+            set
+            {
+                if (value != _startProcessingOnConnect)
+                {
+                    _startProcessingOnConnect = value;
+                    OnPropertyChanged("StartProcessingOnConnect");
+                }
+            }
         }
-      }
-    }
 
-    private int _port;
+        private ObservableCollection<string> _logCollection;
 
-    public int Port
-    {
-      get { return _port; }
-      set
-      {
-        if (value != _port)
+        public ObservableCollection<string> LogCollection
         {
-          _port = value;
-          OnPropertyChanged("Port");
+            get { return _logCollection; }
+            set
+            {
+                if (value != _logCollection)
+                {
+                    _logCollection = value;
+                    OnPropertyChanged("LogCollection");
+                }
+            }
         }
-      }
-    }
 
-    private string _host;
-
-    public string Host
-    {
-      get { return _host; }
-      set
-      {
-        if (value != _host)
+        public string LastSiusMessage
         {
-          _host = value;
-          OnPropertyChanged("Host");
+            get { return _lastSiusMessage; }
+            set
+            {
+                if (value != _lastSiusMessage)
+                {
+                    _lastSiusMessage = value;
+                    OnPropertyChanged("LastSiusMessage");
+                }
+            }
         }
-      }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        private string _database;
 
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      PropertyChangedEventHandler handler = PropertyChanged;
-      if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        public string Database
+        {
+            get { return _database; }
+            set
+            {
+                if (value != _database)
+                {
+                    _database = value;
+                    OnPropertyChanged("Database");
+                }
+            }
+        }
+
+        private string _password;
+
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                if (value != _password)
+                {
+                    _password = value;
+                    OnPropertyChanged("Password");
+                }
+            }
+        }
+
+        private string _user;
+
+        public string User
+        {
+            get { return _user; }
+            set
+            {
+                if (value != _user)
+                {
+                    _user = value;
+                    OnPropertyChanged("User");
+                }
+            }
+        }
+
+        private string _server;
+
+        public string Server
+        {
+            get { return _server; }
+            set
+            {
+                if (value != _server)
+                {
+                    _server = value;
+                    OnPropertyChanged("Server");
+                }
+            }
+        }
+
+        private int _port;
+
+        public int Port
+        {
+            get { return _port; }
+            set
+            {
+                if (value != _port)
+                {
+                    _port = value;
+                    OnPropertyChanged("Port");
+                }
+            }
+        }
+
+        private string _host;
+
+        public string Host
+        {
+            get { return _host; }
+            set
+            {
+                if (value != _host)
+                {
+                    _host = value;
+                    OnPropertyChanged("Host");
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-  }
 }

@@ -1,90 +1,98 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Gui.ViewModel;
-using ShootingRange.BusinessObjects;
+using ShootingRange.ConfigurationProvider;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class CreateGroupingViewModel : INotifyPropertyChanged
-  {
-    public CreateGroupingViewModel()
+    public class CreateGroupingViewModel : INotifyPropertyChanged
     {
-      ShooterCollection = new ShooterCollection();
-
-      ShowCreateGroupingCommand = new ViewModelCommand(x => CreateShooter((IWindow)x));
-    }
-
-    private void CreateShooter(IWindow parent)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    public ViewModelCommand ShowCreateGroupingCommand { get; private set; }
-
-    private ShooterCollection _shooterCollection;
-    public ShooterCollection ShooterCollection
-    {
-      get { return _shooterCollection; }
-      set
-      {
-        if (value != _shooterCollection)
+        public CreateGroupingViewModel(ServiceDeskConfiguration serviceDeskConfiguration)
         {
-          _shooterCollection = value;
-          OnPropertyChanged("ShooterCollection");
+            Participations =
+                new ObservableCollection<ParticipationDescription>(
+                    serviceDeskConfiguration.ParticipationDescriptions.GetAll()
+                        .Where(x => x.AllowShooterCollectionParticipation));
+
+            OkCommand = new ViewModelCommand(x =>
+            {
+                ((IWindow)x).Close();
+            });
+            OkCommand.AddGuard(x => !string.IsNullOrWhiteSpace(GroupingName) && SelectedParticipation != null);
         }
-      }
-    }
 
+        public ViewModelCommand OkCommand { get; set; }
 
-    private Participation _selectedParticipation;
-    public Participation SelectedParticipation
-    {
-      get { return _selectedParticipation; }
-      set
-      {
-        if (value != _selectedParticipation)
+        private string _groupingName;
+
+        public string GroupingName
         {
-          _selectedParticipation = value;
-          OnPropertyChanged("SelectedParticipation");
+            get { return _groupingName; }
+            set
+            {
+                if (value != _groupingName)
+                {
+                    _groupingName = value;
+                    OnPropertyChanged();
+                    OkCommand.RaiseCanExecuteChanged();
+                }
+            }
         }
-      }
-    }
 
-    private ObservableCollection<Participation> _participations;
-    public ObservableCollection<Participation> Participations
-    {
-      get { return _participations; }
-      set
-      {
-        if (value != _participations)
+        private ParticipationDescription _selectedParticipation;
+
+        public ParticipationDescription SelectedParticipation
         {
-          _participations = value;
-          OnPropertyChanged("Participations");
+            get { return _selectedParticipation; }
+            set
+            {
+                if (value != _selectedParticipation)
+                {
+                    _selectedParticipation = value;
+                    OnPropertyChanged();
+                    OkCommand.RaiseCanExecuteChanged();
+                }
+            }
         }
-      }
-    }
 
-    private string _title;
-    public string Title
-    {
-      get { return _title; }
-      set
-      {
-        if (value != _title)
+        private ObservableCollection<ParticipationDescription> _participations;
+
+        public ObservableCollection<ParticipationDescription> Participations
         {
-          _title = value;
-          OnPropertyChanged("Title");
+            get { return _participations; }
+            set
+            {
+                if (value != _participations)
+                {
+                    _participations = value;
+                    OnPropertyChanged();
+                }
+            }
         }
-      }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        private string _title;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      var handler = PropertyChanged;
-      if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                if (value != _title)
+                {
+                    _title = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-  }
 }

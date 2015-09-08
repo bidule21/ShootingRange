@@ -1,125 +1,69 @@
-﻿using System;
-using Gui.ViewModel;
-using ShootingRange.ConfigurationProvider;
-using ShootingRange.Repository.RepositoryInterfaces;
-using ShootingRange.Service.Interface;
+﻿using Gui.ViewModel;
+using ShootingRange.ServiceDesk.ViewModel.MessageTypes;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class MainWindowViewModel : NotifyPropertyChanged
-  {
-    private GroupsPageViewModel _groupingsPageViewModel;
-    private PersonsPageViewModel _personsPageViewModel;
-    private ResultsPageViewModel _resultsPageViewModel;
-    private IPersonDataStore _personDataStore;
-
-    public MainWindowViewModel()
+    public class MainWindowViewModel : Gui.ViewModel.ViewModel
     {
-      Title = "Shooting Range";
-
-      _personDataStore = ConfigurationSource.Configuration.GetPersonDataStore();
-      _personsPageViewModel = new PersonsPageViewModel();
-      _groupingsPageViewModel = new GroupsPageViewModel();
-      _resultsPageViewModel = new ResultsPageViewModel();
-
-      ShowPersonsCommand = new ViewModelCommand(x => ShowPage((IWindow)x, _personsPageViewModel));
-      ShowPersonsCommand.RaiseCanExecuteChanged();
-
-      ShowGroupingsCommand = new ViewModelCommand(x => ShowPage((IWindow)x, _groupingsPageViewModel));
-      ShowGroupingsCommand.RaiseCanExecuteChanged();
-
-      ShowRankingsCommand = new ViewModelCommand(x => ShowPage((IWindow)x, new RankingsPageViewModel()));
-      ShowRankingsCommand.RaiseCanExecuteChanged();
-
-      ShowCreatePersonCommand = new ViewModelCommand(x => ShowCreatePerson((IWindow)x));
-      ShowCreatePersonCommand.RaiseCanExecuteChanged();
-
-      ShowCreateGroupingCommand = new ViewModelCommand(x => ShowCreateGrouping((IWindow)x));
-      ShowCreateGroupingCommand.RaiseCanExecuteChanged();
-
-      ShowResultsCommand = new ViewModelCommand(x => ShowPage((IWindow)x, _resultsPageViewModel));
-
-      ShowConfigurationCommand = new ViewModelCommand(x => ShowConfiguration((IWindow)x));
-
-      ShowPersonsCommand.Execute(null);
-    }
-
-    private void ShowCreatePerson(IWindow parent)
-    {
-      _personsPageViewModel.ShowCreatePerson(parent);
-      RadrawCurrentPage();
-    }
-
-    private void ShowCreateGrouping(IWindow parent)
-    {
-      GroupingHelper.ShowCreateGrouping(parent);
-      RadrawCurrentPage();
-    }
-
-    private void RadrawCurrentPage()
-    {
-      IPage currentPageBkp = CurrentPage;
-      CurrentPage = null;
-      CurrentPage = currentPageBkp;
-    }
-
-    private void ShowConfiguration(IWindow parent)
-    {
-      throw new NotImplementedException();
-    }
-
-    private void ShowPage<T>(IWindow parent, T vm) where T : ILoadable
-    {
-      vm.Load();
-      IPage p = ViewServiceLocator.ViewService.ExecuteFunction<T, IPage>(parent, vm);
-      CurrentPage = p;
-    }
-
-    #region Commands
-
-    public ViewModelCommand ShowPersonsCommand { get; private set; }
-    public ViewModelCommand ShowGroupingsCommand { get; private set; }
-    public ViewModelCommand ShowRankingsCommand { get; private set; }
-    public ViewModelCommand ShowCreatePersonCommand { get; private set; }
-    public ViewModelCommand ShowCreateGroupingCommand { get; private set; }
-    public ViewModelCommand ShowConfigurationCommand { get; private set; }
-
-    public ViewModelCommand ShowResultsCommand { get; private set; }
-
-    #endregion
-
-    #region INotifyPropertyChanged Members
-
-    private IPage _currentPage;
-
-    public IPage CurrentPage
-    {
-      get { return _currentPage; }
-      set
-      {
-        if (value != _currentPage)
+        public MainWindowViewModel()
         {
-          _currentPage = value;
-          OnPropertyChanged("CurrentPage");
+            Title = "Shooting Range";
+
+            ShowPersonsCommand = new ViewModelCommand(x => MessengerInstance.Send(new ShowPersonsPageMessage()));
+            ShowPersonsCommand.RaiseCanExecuteChanged();
+
+            ShowGroupingsCommand = new ViewModelCommand(x => MessengerInstance.Send(new ShowGroupsPageMessage()));
+            ShowGroupingsCommand.RaiseCanExecuteChanged();
+
+            ShowCreatePersonDialogCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreatePersonDialogMessage()));
+            ShowCreatePersonDialogCommand.RaiseCanExecuteChanged();
+
+            ShowCreateGroupingDialogCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreateGroupingDialogMessage((IWindow)x)));
+            ShowCreateGroupingDialogCommand.RaiseCanExecuteChanged();
         }
-      }
-    }
 
-    private string _title;
+        #region Commands
 
-    public string Title
-    {
-      get { return _title; }
-      set
-      {
-        if (value != _title)
+        public ViewModelCommand ShowPersonsCommand { get; private set; }
+        public ViewModelCommand ShowGroupingsCommand { get; private set; }
+        public ViewModelCommand ShowCreatePersonDialogCommand { get; private set; }
+        public ViewModelCommand ShowCreateGroupingDialogCommand { get; private set; }
+
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        private IPage _currentPage;
+
+        public IPage CurrentPage
         {
-          _title = value;
-          OnPropertyChanged("Title");
+            get { return _currentPage; }
+            set
+            {
+                if (value != _currentPage)
+                {
+                    _currentPage = value;
+                    OnPropertyChanged();
+                }
+            }
         }
-      }
-    }
 
-    #endregion
-  }
+        private string _title;
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                if (value != _title)
+                {
+                    _title = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+    }
 }

@@ -1,461 +1,381 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Gui.ViewModel;
+using Microsoft.Practices.ServiceLocation;
 using ShootingRange.BusinessObjects;
-using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
+using ShootingRange.ServiceDesk.ViewModel.MessageTypes;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class PersonsPageViewModel : INotifyPropertyChanged, ILoadable
-  {
-    private IPersonDataStore _personDataStore;
-    private IShooterDataStore _shooterDataStore;
-    private IShooterNumberService _shooterNumberService;
-
-    private List<Person> _persons;
-
-    public PersonsPageViewModel()
+    public class PersonsPageViewModel : Gui.ViewModel.ViewModel
     {
-      _personDataStore = ConfigurationSource.Configuration.GetPersonDataStore();
-      _shooterDataStore = ConfigurationSource.Configuration.GetShooterDataStore();
-      _shooterNumberService = ConfigurationSource.Configuration.GetShooterNumberService();
+        private readonly IPersonDataStore _personDataStore;
+        private readonly IShooterDataStore _shooterDataStore;
+        private readonly IShooterNumberService _shooterNumberService;
+        private ISsvShooterDataWriterService _shooterDataWriter;
 
-      Initialize();
-      LoadPersons();
-    }
+        private List<Person> _allPersons;
 
-    private void Initialize()
-    {
-      ShowCreatePersonCommand = new ViewModelCommand(x => ShowCreatePerson((IWindow)x));
-      ShowCreatePersonCommand.RaiseCanExecuteChanged();
-
-      ShowEditPersonCommand = new ViewModelCommand(x => ShowEditPerson((IWindow)x));
-      ShowEditPersonCommand.AddGuard(x => SelectedPerson != null);
-      ShowEditPersonCommand.RaiseCanExecuteChanged();
-
-      DeletePersonCommand = new ViewModelCommand(x => DeletePerson((IWindow)x));
-      DeletePersonCommand.AddGuard(x => SelectedPerson != null);
-      DeletePersonCommand.RaiseCanExecuteChanged();
-
-      CreateShooterCommand = new ViewModelCommand(x => CreateShooter(SelectedPerson));
-      CreateShooterCommand.AddGuard(x => SelectedPerson != null);
-      CreateShooterCommand.RaiseCanExecuteChanged();
-
-      DeleteShooterCommand = new ViewModelCommand(x => DeleteShooter((IWindow)x));
-      DeleteShooterCommand.AddGuard(x => SelectedShooter != null);
-      DeleteShooterCommand.RaiseCanExecuteChanged();
-
-      ShowSelectParticipationCommand = new ViewModelCommand(x => { });
-      ShowSelectParticipationCommand.RaiseCanExecuteChanged();
-
-      PrintBarcodeCommand = new ViewModelCommand(x => PrintBarcode((IWindow) x));
-      PrintBarcodeCommand.AddGuard(x => SelectedShooter != null);
-      PrintBarcodeCommand.RaiseCanExecuteChanged();
-    }
-
-    private void PrintBarcode(IWindow window)
-    {
-      IBarcodePrintService barcodeService = ConfigurationSource.Configuration.GetBarcodePrintService();
-
-      BarcodeFruehlingsschiessen barcode = new BarcodeFruehlingsschiessen();
-
-      try
-      {
-        barcodeService.Print(barcode);
-      }
-      catch (Exception e)
-      {
-        DialogHelper.ShowErrorDialog(window, "Barcode Print Error", "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.Message);
-      }
-    }
-
-    #region Commands
-
-    public ViewModelCommand ShowCreatePersonCommand { get; private set; }
-
-    public void ShowCreatePerson(IWindow parent)
-    {
-      CreatePersonViewModel vm = new CreatePersonViewModel
-      {
-        Title = "Neuer Schütze"
-      };
-      bool? dialogResult = DialogHelper.ShowDialog(parent, vm, vm.Title);
-
-      if (dialogResult.HasValue && dialogResult == true)
-      {
-        if (string.IsNullOrWhiteSpace(vm.Person.FirstName) || string.IsNullOrWhiteSpace(vm.Person.LastName))
+        public PersonsPageViewModel()
         {
-          ErrorInfoPersonEdit(parent);
-          return;
+            _personDataStore = ServiceLocator.Current.GetInstance<IPersonDataStore>();
+            _shooterDataStore = ServiceLocator.Current.GetInstance<IShooterDataStore>();
+            _shooterNumberService = ServiceLocator.Current.GetInstance<IShooterNumberService>();
+            _shooterDataWriter = ServiceLocator.Current.GetInstance<ISsvShooterDataWriterService>();
+
+            MessengerInstance.Register<ShowPersonsPageMessage>(this, x => LoadPersons());
+            MessengerInstance.Register<PersonSelectedMessage>(this,
+                x =>
+                {
+                    UpdateCommandCanExecuteOnSelectedPersonChanged();
+                    LoadShooters(x.Person);
+                });
+            MessengerInstance.Register<SetSelectedPersonMessage>(this,
+                x =>
+                {
+                    SelectedPerson = FilteredPersons.FirstOrDefault(person => person.PersonId == x.PersonId);
+                });
+            MessengerInstance.Register<SetSelectedShooterMessage>(this,
+                x =>
+                {
+                    SelectedShooter = Shooters.FirstOrDefault(s => s.Shooter.ShooterId == x.ShooterId);
+                    if (SelectedShooter == null)
+                        SelectedShooter = Shooters.FirstOrDefault();
+                });
+
+            MessengerInstance.Register<RefreshDataFromDatabase>(this,
+                x =>
+                {
+                    Person selectedPerson = SelectedPerson;
+                    ShooterViewModel selectedShooter = SelectedShooter;
+                    LoadPersons();
+
+                    if(selectedPerson != null)
+                        MessengerInstance.Send(new SetSelectedPersonMessage(selectedPerson.PersonId));
+
+                    if (selectedShooter != null)
+                        MessengerInstance.Send(new SetSelectedShooterMessage(selectedShooter.Shooter.ShooterId));
+                });
+
+            Initialize();
         }
 
-        _personDataStore.Create(vm.Person);
-        SelectedPerson = vm.Person;
-        LoadPersons();
-        CreateShooter(SelectedPerson);
-      }
-    }
-
-    public ViewModelCommand ShowEditPersonCommand { get; private set; }
-
-    private void ShowEditPerson(IWindow parent)
-    {
-      CreatePersonViewModel vm = new CreatePersonViewModel
-      {
-        Person = new Person(SelectedPerson),
-        Title = "Person editieren"
-      };
-      bool? dialogResult = DialogHelper.ShowDialog(parent, vm, vm.Title);
-
-      if (dialogResult.HasValue && dialogResult == true)
-      {
-        if (string.IsNullOrWhiteSpace(vm.Person.FirstName) || string.IsNullOrWhiteSpace(vm.Person.LastName))
+        private void Initialize()
         {
-          ErrorInfoPersonEdit(parent);
-          return;
+            ShowCreatePersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreatePersonDialogMessage()));
+            ShowCreatePersonCommand.RaiseCanExecuteChanged();
+
+            ShowEditPersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new EditPersonDialogMessage(SelectedPerson)));
+            ShowEditPersonCommand.AddGuard(x => SelectedPerson != null);
+            ShowEditPersonCommand.RaiseCanExecuteChanged();
+
+            DeletePersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new DeletePersonDialogMessage(SelectedPerson)));
+            DeletePersonCommand.AddGuard(x => SelectedPerson != null);
+            DeletePersonCommand.RaiseCanExecuteChanged();
+
+            CreateShooterCommand = new ViewModelCommand(x => CreateShooter(SelectedPerson));
+            CreateShooterCommand.AddGuard(x => SelectedPerson != null);
+            CreateShooterCommand.RaiseCanExecuteChanged();
+
+            DeleteShooterCommand = new ViewModelCommand(x => MessengerInstance.Send(new DeleteShooterDialogMessage(SelectedShooter.Shooter.ShooterNumber)));
+            DeleteShooterCommand.AddGuard(x => SelectedShooter != null);
+            DeleteShooterCommand.RaiseCanExecuteChanged();
+
+            ShowSelectParticipationCommand = new ViewModelCommand(x => { });
+            ShowSelectParticipationCommand.RaiseCanExecuteChanged();
+
+            PrintBarcodeCommand = new ViewModelCommand(x => PrintBarcode());
+            PrintBarcodeCommand.AddGuard(x => SelectedShooter != null);
+            PrintBarcodeCommand.RaiseCanExecuteChanged();
         }
 
-        _personDataStore.Update(vm.Person);
-        LoadPersons();
-        SetCurrentPerson(vm.Person);
-      }
-    }
-
-    private static void ErrorInfoPersonEdit(IWindow parent)
-    {
-      ErrorDialogViewModel errorVm = new ErrorDialogViewModel()
-      {
-        Caption = "Vorgang nicht möglich",
-        MessageText = "Vorname und Nachname dürfen nicht leer sein."
-      };
-
-      ViewServiceLocator.ViewService.ExecuteAction(parent, errorVm);
-    }
-
-    public ViewModelCommand DeletePersonCommand { get; private set; }
-
-    private void DeletePerson(IWindow window)
-    {
-      YesNoMessageBoxViewModel vm = new YesNoMessageBoxViewModel
-      {
-        DefaultYes = false,
-        Caption = "Person löschen?",
-        MessageBoxText =
-          string.Format("Möchtest du die Person '{0} {1}' wirklich löschen?",
-            SelectedPerson.FirstName,
-            SelectedPerson.LastName)
-      };
-
-      bool? result = ViewServiceLocator.ViewService.ExecuteFunction<YesNoMessageBoxViewModel, bool?>(window, vm);
-      if (result == true)
-      {
-        _personDataStore.Delete(SelectedPerson);
-        LoadPersons();
-      }
-    }
-
-    public ViewModelCommand CreateShooterCommand { get; private set; }
-
-    private void CreateShooter(Person person)
-    {
-      int shooterNumber = _shooterNumberService.GetShooterNumber();
-      Shooter shooter = new Shooter
-      {
-        PersonId = person.PersonId,
-        ShooterNumber = shooterNumber
-      };
-
-      _shooterDataStore.Create(shooter);
-
-      SetCurrentPerson(person);
-      LoadShooters(person);
-      SelectedShooter = Shooters.FirstOrDefault(s => s.Shooter.ShooterNumber == shooterNumber);
-    }
-
-    public ViewModelCommand PrintBarcodeCommand { get; private set; }
-
-    public ViewModelCommand DeleteShooterCommand { get; private set; }
-
-    public ViewModelCommand ShowSelectParticipationCommand { get; private set; }
-
-    public ViewModelCommand DeleteParticipationCommand { get; private set; }
-
-    private void DeleteShooter(IWindow window)
-    {
-      YesNoMessageBoxViewModel vm = new YesNoMessageBoxViewModel
-      {
-        DefaultYes = false,
-        Caption = "Person löschen?",
-        MessageBoxText =
-          string.Format("Möchtest du den Schützen '{0}' wirklich löschen?",
-            SelectedShooter.Shooter.ShooterNumber)
-      };
-
-      bool? result = ViewServiceLocator.ViewService.ExecuteFunction<YesNoMessageBoxViewModel, bool?>(window, vm);
-
-      if (result == true)
-      {
-        _shooterDataStore.Delete(SelectedShooter.Shooter);
-        LoadShooters(SelectedPerson);
-      }
-    }
-
-    #endregion
-
-
-    private void LoadShooters(Person person)
-    {
-      Shooter[] shooters = _shooterDataStore.FindByPersonId(person.PersonId).ToArray();
-
-      Shooters =
-        new ObservableCollection<ShooterViewModel>(
-          shooters.Select(shooter => new ShooterViewModel(shooter)));
-      SelectedShooter = Shooters.FirstOrDefault();
-    }
-
-    private void ClearShooters()
-    {
-      Shooters = new ObservableCollection<ShooterViewModel>();
-      SelectedShooter = null;
-    }
-
-    public void Load()
-    {
-      LoadPersons();
-    }
-
-    public void LoadPersons()
-    {
-      _persons = _personDataStore.GetAll().OrderBy(person => person.LastName).ThenBy(person => person.FirstName).ToList();
-      UpdateFilteredPersons();
-      SelectedPersonChanged();
-    }
-
-
-    private void SetCurrentPerson(Person person)
-    {
-      SelectedPerson = person;
-    }
-
-    private void UpdateFilteredPersons()
-    {
-      FilteredPersons = new ObservableCollection<Person>(FilterPersons(_persons, PersonFilterText));
-    }
-
-    private IEnumerable<Person> FilterPersons(IEnumerable<Person> persons, string filterText)
-    {
-      if (filterText == null) filterText = string.Empty;
-      string[] split = filterText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
- 
-      foreach (Person person in persons)
-      {
-        if (string.IsNullOrWhiteSpace(filterText))
+        private void PrintBarcode()
         {
-          yield return person;
+            IBarcodePrintService barcodeService = ServiceLocator.Current.GetInstance<IBarcodePrintService>();
+
+            BarcodeFruehlingsschiessen barcode = new BarcodeFruehlingsschiessen();
+
+            try
+            {
+                barcodeService.Print(barcode);
+            }
+            catch (Exception e)
+            {
+                MessengerInstance.Send(new DialogMessage("Barcode Print Error", "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.ToString(), MessageIcon.Error));
+            }
         }
-        else
+
+        #region Commands
+
+        public ViewModelCommand ShowCreatePersonCommand { get; private set; }
+
+        public ViewModelCommand ShowEditPersonCommand { get; private set; }
+
+        public ViewModelCommand DeletePersonCommand { get; private set; }
+
+        public ViewModelCommand CreateShooterCommand { get; private set; }
+
+        private void CreateShooter(Person person)
         {
-          if (
-            split.All(
-              x =>
-                person.FirstName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1 ||
-                person.LastName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
-          {
-            yield return person;
-          }
+            int shooterNumber = _shooterNumberService.GetShooterNumber();
+            Shooter shooter = new Shooter
+            {
+                PersonId = person.PersonId,
+                ShooterNumber = shooterNumber
+            };
+
+            _shooterDataWriter.WriteShooterData(new SsvShooterData
+            {
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                LicenseNumber = (uint) shooter.ShooterNumber
+            });
+
+            _shooterDataStore.Create(shooter);
+
+            SetCurrentPerson(person);
+            LoadShooters(person);
+            SelectedShooter = Shooters.FirstOrDefault(s => s.Shooter.ShooterNumber == shooterNumber);
         }
-      }
-    }
 
+        public ViewModelCommand PrintBarcodeCommand { get; private set; }
 
-    #region Properties
+        public ViewModelCommand DeleteShooterCommand { get; private set; }
 
-    private ObservableCollection<ProgramItem> _programItems;
+        public ViewModelCommand ShowSelectParticipationCommand { get; private set; }
 
-    public ObservableCollection<ProgramItem> ProgramItems
-    {
-      get { return _programItems; }
-      set
-      {
-        if (value != _programItems)
+        public ViewModelCommand DeleteParticipationCommand { get; private set; }
+
+        #endregion
+
+        private void LoadShooters(Person person)
         {
-          _programItems = value;
-          OnPropertyChanged("ProgramItems");
+            if (person == null)
+            {
+                Shooters = new ObservableCollection<ShooterViewModel>();
+                SelectedShooter = null;
+
+            }
+            else
+            {
+                Shooter[] shooters = _shooterDataStore.FindByPersonId(person.PersonId).ToArray();
+
+                Shooters =
+                    new ObservableCollection<ShooterViewModel>(
+                        shooters.Select(shooter => new ShooterViewModel(shooter)));
+                SelectedShooter = Shooters.FirstOrDefault();
+            }
         }
-      }
-    }
 
-    private string _personFilterText;
 
-    public string PersonFilterText
-    {
-      get { return _personFilterText; }
-      set
-      {
-        if (value != _personFilterText)
+        public void LoadPersons()
         {
-          _personFilterText = value;
-          OnPropertyChanged("PersonFilterText");
-          UpdateFilteredPersons();
+            _allPersons =
+                _personDataStore.GetAll().OrderBy(person => person.LastName).ThenBy(person => person.FirstName).ToList();
+            FilterPersons();
         }
-      }
-    }
 
-    private ObservableCollection<Person> _filteredPersons;
-
-    public ObservableCollection<Person> FilteredPersons
-    {
-      get { return _filteredPersons; }
-      set
-      {
-        if (value != _filteredPersons)
+        private void FilterPersons()
         {
-          _filteredPersons = value;
-          OnPropertyChanged("FilteredPersons");
+            FilteredPersons = new ObservableCollection<Person>(FilterPersons(_allPersons, PersonFilterText));
         }
-      }
-    }
 
-    private Person _selectedPerson;
 
-    public Person SelectedPerson
-    {
-      get { return _selectedPerson; }
-      set
-      {
-        if (value != _selectedPerson)
+        private void SetCurrentPerson(Person person)
         {
-          _selectedPerson = value;
-          OnPropertyChanged("SelectedPerson");
-
-          SelectedPersonChanged();
+            SelectedPerson = person;
         }
-      }
-    }
 
-    private ParticipationViewModel _selectedParticipation;
-    public ParticipationViewModel SelectedParticipation
-    {
-      get { return _selectedParticipation; }
-      set
-      {
-        if (value != _selectedParticipation)
+        private IEnumerable<Person> FilterPersons(IEnumerable<Person> persons, string filterText)
         {
-          _selectedParticipation = value;
-          OnPropertyChanged("SelectedParticipation");
-        }
-      }
-    }
+            if (filterText == null) filterText = string.Empty;
+            string[] split = filterText.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
-    private ObservableCollection<ParticipationViewModel> _participations;
-    public ObservableCollection<ParticipationViewModel> Participations
-    {
-      get { return _participations; }
-      set
-      {
-        if (value != _participations)
+            foreach (Person person in persons)
+            {
+                if (string.IsNullOrWhiteSpace(filterText))
+                {
+                    yield return person;
+                }
+                else
+                {
+                    if (
+                        split.All(
+                            x =>
+                                person.FirstName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1 ||
+                                person.LastName.IndexOf(x, StringComparison.InvariantCultureIgnoreCase) != -1))
+                    {
+                        yield return person;
+                    }
+                }
+            }
+        }
+
+        #region Properties
+
+        private ObservableCollection<ProgramItem> _programItems;
+
+        public ObservableCollection<ProgramItem> ProgramItems
         {
-          _participations = value;
-          OnPropertyChanged("Participations");
+            get { return _programItems; }
+            set
+            {
+                if (value != _programItems)
+                {
+                    _programItems = value;
+                    OnPropertyChanged("ProgramItems");
+                }
+            }
         }
-      }
-    }
 
+        private string _personFilterText;
 
-
-    private ObservableCollection<ShooterViewModel> _shooters;
-    public ObservableCollection<ShooterViewModel> Shooters
-    {
-      get { return _shooters; }
-      set
-      {
-        if (value != _shooters)
+        public string PersonFilterText
         {
-          _shooters = value;
-          OnPropertyChanged("Shooters");
+            get { return _personFilterText; }
+            set
+            {
+                if (value != _personFilterText)
+                {
+                    _personFilterText = value;
+                    OnPropertyChanged("PersonFilterText");
+                    FilterPersons();
+                }
+            }
         }
-      }
-    }
 
-    private ShooterViewModel _selectedShooter;
-    public ShooterViewModel SelectedShooter
-    {
-      get { return _selectedShooter; }
-      set
-      {
-        if (value != _selectedShooter)
+        private ObservableCollection<Person> _filteredPersons;
+
+        public ObservableCollection<Person> FilteredPersons
         {
-          _selectedShooter = value;
-          OnPropertyChanged("SelectedShooter");
-
-          SelectedShooterChanged();
+            get { return _filteredPersons; }
+            set
+            {
+                if (value != _filteredPersons)
+                {
+                    _filteredPersons = value;
+                    OnPropertyChanged();
+                }
+            }
         }
-      }
-    }
 
-    private ObservableCollection<GroupingViewModel> _groups;
+        private Person _selectedPerson;
 
-    public ObservableCollection<GroupingViewModel> Groups
-    {
-      get { return _groups; }
-      set
-      {
-        if (value != _groups)
+        public Person SelectedPerson
         {
-          _groups = value;
-          OnPropertyChanged("Groups");
+            get { return _selectedPerson; }
+            set
+            {
+                if (value != _selectedPerson)
+                {
+                    _selectedPerson = value;
+                    OnPropertyChanged("SelectedPerson");
+
+                    MessengerInstance.Send(new PersonSelectedMessage(_selectedPerson));
+                }
+            }
         }
-      }
-    }
-    #endregion
 
-    private void SelectedShooterChanged()
+        private ParticipationViewModel _selectedParticipation;
+
+        public ParticipationViewModel SelectedParticipation
+        {
+            get { return _selectedParticipation; }
+            set
+            {
+                if (value != _selectedParticipation)
+                {
+                    _selectedParticipation = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private ObservableCollection<ParticipationViewModel> _participations;
+
+        public ObservableCollection<ParticipationViewModel> Participations
+        {
+            get { return _participations; }
+            set
+            {
+                if (value != _participations)
+                {
+                    _participations = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        private ObservableCollection<ShooterViewModel> _shooters;
+
+        public ObservableCollection<ShooterViewModel> Shooters
+        {
+            get { return _shooters; }
+            set
+            {
+                if (value != _shooters)
+                {
+                    _shooters = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private ShooterViewModel _selectedShooter;
+
+        public ShooterViewModel SelectedShooter
+        {
+            get { return _selectedShooter; }
+            set
+            {
+                if (value != _selectedShooter)
+                {
+                    _selectedShooter = value;
+                    OnPropertyChanged();
+
+                    PrintBarcodeCommand.RaiseCanExecuteChanged();
+                    DeleteShooterCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        private ObservableCollection<GroupingViewModel> _groups;
+
+        public ObservableCollection<GroupingViewModel> Groups
+        {
+            get { return _groups; }
+            set
+            {
+                if (value != _groups)
+                {
+                    _groups = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
+        private void UpdateCommandCanExecuteOnSelectedPersonChanged()
+        {
+            DeletePersonCommand.RaiseCanExecuteChanged();
+            ShowEditPersonCommand.RaiseCanExecuteChanged();
+            CreateShooterCommand.RaiseCanExecuteChanged();
+        }
+
+        #region Fetch
+
+        #endregion
+
+    }
+
+    public interface ILoadable
     {
-      PrintBarcodeCommand.RaiseCanExecuteChanged();
-      DeleteShooterCommand.RaiseCanExecuteChanged();
+        void Load();
     }
-
-    private void SelectedPersonChanged()
-    {
-      DeletePersonCommand.RaiseCanExecuteChanged();
-      ShowEditPersonCommand.RaiseCanExecuteChanged();
-      CreateShooterCommand.RaiseCanExecuteChanged();
-
-      if (SelectedPerson != null)
-      {
-        LoadShooters(SelectedPerson);
-      }
-      else
-      {
-        ClearShooters();
-      }
-    }
-
-    #region Fetch
-
-    #endregion
-
-    #region INotifyPropertyChanged Members
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      var handler = PropertyChanged;
-      if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    #endregion
-  }
-
-  public interface ILoadable
-  {
-    void Load();
-  }
 }

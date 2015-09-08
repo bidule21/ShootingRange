@@ -6,9 +6,9 @@ namespace ShootingRange.ServiceDesk.ViewModel
 {
   public class ParticipationViewModel : INotifyPropertyChanged
   {
-    public ParticipationViewModel(int participationId)
+    public ParticipationViewModel(int programNumber)
     {
-      ParticipationId = participationId;
+      ProgramNumber = programNumber;
     }
 
     public ParticipationViewModel()
@@ -16,7 +16,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
       
     }
 
-    public int ParticipationId { get; private set; }
+    public int ProgramNumber { get; private set; }
 
     private string _programName;
     public string ProgramName
@@ -27,7 +27,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         if (value != _programName)
         {
           _programName = value;
-          OnPropertyChanged("ProgramName");
+          OnPropertyChanged();
         }
       }
     }

@@ -1,43 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Microsoft.Practices.Unity;
-using ShootingRange.Configuration;
-using ShootingRange.ConfigurationProvider;
+﻿using System.Windows;
+using Autofac;
+using ShootingRange.Common;
+using ShootingRange.Persistence;
+using ShootingRange.Repository.Repositories;
+using ShootingRange.Repository.RepositoryInterfaces;
+using ShootingRange.SiusData;
 using ShootingRange.SiusDbWriterView;
+using ShootingRange.SiusDbWriterViewModel;
 
 namespace ShootingRange.SiusDbWriter
 {
-  /// <summary>
-  /// Interaction logic for App.xaml
-  /// </summary>
-  public partial class App : Application
-  {
-    private IUnityContainer _container;
-
-    protected override void OnStartup(StartupEventArgs e)
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
     {
-      base.OnStartup(e);
-      ConfigureContainer();
-      ComposeObjects();
-      Application.Current.MainWindow.Show();
-    }
+        private IContainer _container;
 
-    private void ConfigureContainer()
-    {
-      _container = new UnityContainer();
-      _container.RegisterType<IConfiguration, DefaultConfiguration>(new ContainerControlledLifetimeManager());
-    }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            ConfigureContainer();
+            ComposeObjects();
+        }
 
-    private void ComposeObjects()
-    {
-      ConfigurationSource.Configuration = _container.Resolve<IConfiguration>();
-      Application.Current.MainWindow = _container.Resolve<MainWindow>();
-      Application.Current.MainWindow.Title = "SiusDbWriter";
+        private void ConfigureContainer()
+        {
+            ContainerBuilder builder = new ContainerBuilder();
+
+            ShootingRangeEntities entities = new ShootingRangeEntities();
+            ISessionDataStore sessionDataStore = new SessionDataStore(entities);
+            ISessionSubtotalDataStore sessionSubtotalDataStore = new SessionSubtotalDataStore(entities);
+            IShotDataStore shotDataStore = new ShotDataStore(entities);
+            IShooterDataStore shooterDataStore = new ShooterDataStore(entities);
+            IPersonDataStore personDataStore = new PersonDataStore(entities);
+
+            builder.RegisterInstance(sessionDataStore).As<ISessionDataStore>();
+            builder.RegisterInstance(sessionSubtotalDataStore).As<ISessionSubtotalDataStore>();
+            builder.RegisterInstance(shotDataStore).As<IShotDataStore>();
+            builder.RegisterInstance(shooterDataStore).As<IShooterDataStore>();
+            builder.RegisterInstance(personDataStore).As<IPersonDataStore>();
+            builder.RegisterInstance(new SiusDataFileProvider(@"C:\Users\eberlid\Dropbox\SSC\2014\Herbstschiessen\ShootingRange\20140516_164043.log")).As<IShootingRange>();
+
+            _container = builder.Build();
+        }
+
+        private void ComposeObjects()
+        {
+            MainViewModel mainViewModel = new MainViewModel(_container);
+            Window mainWindow = new MainWindow();
+            mainWindow.DataContext = mainViewModel;
+            Current.MainWindow = mainWindow;
+            Current.MainWindow.Show();
+        }
     }
-  }
 }

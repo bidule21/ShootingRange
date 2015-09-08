@@ -34,6 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
@@ -93,13 +100,33 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShootingRange.Common\ShootingRange.Common.csproj">
+      <Project>{A1C688F3-99DF-4EFD-93F3-5BACE9104FB2}</Project>
+      <Name>ShootingRange.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.ConfigurationProvider\ShootingRange.ConfigurationProvider.csproj">
       <Project>{4DA2B804-0082-45A9-9CE8-C727050A58A0}</Project>
       <Name>ShootingRange.ConfigurationProvider</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.Configuration\ShootingRange.Configuration.csproj">
-      <Project>{FD6AD0E8-2BD2-4C1C-9704-04D65D221C18}</Project>
-      <Name>ShootingRange.Configuration</Name>
+    <ProjectReference Include="..\ShootingRange.Persistence\ShootingRange.Persistence.csproj">
+      <Project>{161A7067-75A0-4FF5-A614-7AE8C938515D}</Project>
+      <Name>ShootingRange.Persistence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Providers\ShootingRange.SiusData\ShootingRange.SiusData.csproj">
+      <Project>{E05652AE-4264-4757-964E-611910C42771}</Project>
+      <Name>ShootingRange.SiusData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Repository\ShootingRange.Repository.csproj">
+      <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>
+      <Name>ShootingRange.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Service.Interface\ShootingRange.Service.Interface.csproj">
+      <Project>{7B2D7C87-4FA3-48DD-AB24-E90365D41F7F}</Project>
+      <Name>ShootingRange.Service.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.SiusDbWriterViewModel\ShootingRange.SiusDbWriterViewModel.csproj">
+      <Project>{c73d0738-e2e6-4c16-9ceb-ea5f07710a49}</Project>
+      <Name>ShootingRange.SiusDbWriterViewModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.SiusDbWriterView\ShootingRange.SiusDbWriterView.csproj">
       <Project>{3A0413FF-55E7-4A2E-B99C-14105CF56E06}</Project>

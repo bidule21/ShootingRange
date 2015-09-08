@@ -1,0 +1,32 @@
+﻿<Window x:Class="ShootingRange.ServiceDesk.View.Dialogs.CreatePerson"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
+        Title="{Binding Title}" SizeToContent="WidthAndHeight" d:DataContext="{d:DesignInstance Type=viewModel:CreatePersonViewModel}" ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Name"/>
+        <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Vorname"/>
+        <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Margin="5" Content="Geburtsdatum"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+        <DatePicker Grid.Row="3" Grid.Column="1" Margin="5" SelectedDate="{Binding DateOfBirth}"/>
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,0,5">
+            <Button Content="OK" Height="23" Width="80" Margin="5" IsDefault="True" Command="{Binding OkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" Click="Button_Click"/>
+            <Button Content="Cancel" Height="23" Width="80" Margin="5" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

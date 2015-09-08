@@ -6,8 +6,8 @@
       xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
       xmlns:view="clr-namespace:ShootingRange.ServiceDesk.View"
       xmlns:businessObjects="clr-namespace:ShootingRange.BusinessObjects;assembly=ShootingRange.BusinessObjects"
-      xmlns:converter="clr-namespace:ShootingRange.View.Converter;assembly=ShootingRange.View"
       xmlns:controls1="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
+      xmlns:converter1="clr-namespace:Gui.Wpf.Converter;assembly=Gui.Wpf"
       mc:Ignorable="d" 
       d:DesignHeight="323" d:DesignWidth="614" d:DataContext="{d:DesignInstance Type=viewModel:PersonsPageViewModel}">
     <UserControl.Resources>
@@ -15,12 +15,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
                 <ResourceDictionary>
-                    <converter:PersonNameConverter x:Key="PersonNameConverter"/>
+                    <converter1:PersonNameFormatConverter x:Key="PersonNameConverter"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid d:DataContext="{d:DesignData Source=../DesignTimeData/PersonPageData.xaml}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -172,11 +172,6 @@
                                 </Grid.ColumnDefinitions>
                                 <ToolBarTray IsLocked="True" Grid.ColumnSpan="2">
                                     <ToolBar>
-                                        <!--<Button ToolTip="Neue Gruppe erstellen..." Command="{Binding ShowCreateGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
-                                            <Image
-                                                Source="/ShootingRange.ServiceDesk.View;component/Resources/blank_16.png"
-                                                Width="16" Height="16" />
-                                        </Button>-->
                                         <Button ToolTip="Schütze zu bestehender Gruppe hinzufügen..." Command="{Binding ShowSelectGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
                                             <controls1:AutoGreyableImage
                                                 Source="/ShootingRange.ServiceDesk.View;component/Resources/add_16.png"

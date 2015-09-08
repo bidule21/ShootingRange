@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="RelayCommand, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DotNetToolbox\RelayCommand\bin\Debug\RelayCommand.dll</HintPath>
@@ -68,10 +71,9 @@
       <Project>{7B2D7C87-4FA3-48DD-AB24-E90365D41F7F}</Project>
       <Name>ShootingRange.Service.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.ViewModel\ShootingRange.ViewModel.csproj">
-      <Project>{A869786D-0BAD-4C1B-8B8F-88CF40481712}</Project>
-      <Name>ShootingRange.ViewModel</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

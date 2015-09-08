@@ -2,96 +2,117 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Gui.ViewModel;
+using Microsoft.Practices.ServiceLocation;
 using ShootingRange.BusinessObjects.Properties;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.RepositoryInterfaces;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class SelectGroupingViewModel : INotifyPropertyChanged
-  {
-    private IParticipationDataStore _participationDataStore;
-    private IShooterCollectionParticipationDataStore _shooterCollectionParticipationDataStore;
-    private IShooterCollectionDataStore _shooterCollectionDataStore;
-
-    public SelectGroupingViewModel()
+    public class SelectGroupingViewModel : INotifyPropertyChanged
     {
-      _participationDataStore = ConfigurationSource.Configuration.GetParticipationDataStore();
-      _shooterCollectionParticipationDataStore = ConfigurationSource.Configuration.GetShooterCollectionParticipationDataStore();
-      _shooterCollectionDataStore = ConfigurationSource.Configuration.GetShooterCollectionDataStore();
-    }
-
-    public void Initialize()
-    {
-      Groupings = new ObservableCollection<GroupingViewModel>(
-        from participation in _participationDataStore.GetAll().Where(p => p.AllowCollectionParticipation)
-        join shooterCollectionParticipation in _shooterCollectionParticipationDataStore.GetAll() on
-          participation.ParticipationId equals shooterCollectionParticipation.ParticipationId
-        join shooterCollection in _shooterCollectionDataStore.GetAll() on
-          shooterCollectionParticipation.ShooterCollectionId equals shooterCollection.ShooterCollectionId
-        orderby shooterCollection.CollectionName
-        orderby participation.ParticipationName
-        select new GroupingViewModel
+        public SelectGroupingViewModel()
         {
-          GroupingId = shooterCollection.ShooterCollectionId,
-          GroupingName = shooterCollection.CollectionName,
-          ParticipationName = participation.ParticipationName
+            OkCommand = new ViewModelCommand(x => { });
+            OkCommand.AddGuard(x => SelectedGrouping != null);
         }
-        );
-    }
 
-    private string _title;
+        public ViewModelCommand OkCommand { get; private set; }
 
-    public string Title
-    {
-      get { return _title; }
-      set
-      {
-        if (value != _title)
+        public void Initialize(int shooterId)
         {
-          _title = value;
-          OnPropertyChanged("Title");
+            ServiceDeskConfiguration serviceDeskConfiguration = ServiceLocator.Current.GetInstance<ServiceDeskConfiguration>();
+            IShooterDataStore shooterDataStore = ServiceLocator.Current.GetInstance<IShooterDataStore>();
+            IPersonDataStore personDataStore = ServiceLocator.Current.GetInstance<IPersonDataStore>();
+            ICollectionShooterDataStore collectionShooterDataStore = ServiceLocator.Current.GetInstance<ICollectionShooterDataStore>();
+            IShooterCollectionDataStore shooterCollectionDataStore = ServiceLocator.Current.GetInstance<IShooterCollectionDataStore>();
+
+            var shooterCollectionToProgramNumber = from shooterCollection in shooterCollectionDataStore.GetAll()
+                join collectionShooter in collectionShooterDataStore.GetAll() on shooterCollection.ShooterCollectionId
+                    equals collectionShooter.ShooterCollectionId
+                join shooter in shooterDataStore.GetAll() on collectionShooter.ShooterId equals shooter.ShooterId group shooter by shooterCollection.ProgramNumber into
+                    gj
+                select new
+                {
+                    ProgramNumber = gj.Key.ToString(),
+                    Shooters = gj.Select(x => x)
+                };
+
+            var selectableCollections = from grouping in shooterCollectionToProgramNumber
+                where grouping.Shooters.All(x => x.ShooterId != shooterId)
+                join participation in serviceDeskConfiguration.ParticipationDescriptions.GetAll() on
+                    grouping.ProgramNumber equals participation.ProgramNumber
+                join shooterCollection in shooterCollectionDataStore.GetAll() on grouping.ProgramNumber equals
+                    shooterCollection.ProgramNumber.ToString()
+                select new GroupingViewModel
+                {
+                    ParticipationName = participation.ProgramName,
+                    ShooterCollectionId = shooterCollection.ShooterCollectionId,
+                    GroupingName = shooterCollection.CollectionName,
+                    Shooters = new ObservableCollection<PersonShooterViewModel>(from cs in collectionShooterDataStore.GetAll()
+                        join s in shooterDataStore.GetAll() on cs.ShooterId equals s.ShooterId join p in personDataStore.GetAll() on s.PersonId equals p.PersonId
+                        where cs.ShooterCollectionId == shooterCollection.ShooterCollectionId
+                        select new PersonShooterViewModel(p, s))
+                };
+
+            Groupings = new ObservableCollection<GroupingViewModel>(selectableCollections);
         }
-      }
-    }
 
-    private ObservableCollection<GroupingViewModel> _groupings;
+        private string _title;
 
-    public ObservableCollection<GroupingViewModel> Groupings
-    {
-      get { return _groupings; }
-      set
-      {
-        if (value != _groupings)
+        public string Title
         {
-          _groupings = value;
-          OnPropertyChanged("Groupings");
+            get { return _title; }
+            set
+            {
+                if (value != _title)
+                {
+                    _title = value;
+                    OnPropertyChanged("Title");
+                }
+            }
         }
-      }
-    }
 
-    private GroupingViewModel _selectedGrouping;
+        private ObservableCollection<GroupingViewModel> _groupings;
 
-    public GroupingViewModel SelectedGrouping
-    {
-      get { return _selectedGrouping; }
-      set
-      {
-        if (value != _selectedGrouping)
+        public ObservableCollection<GroupingViewModel> Groupings
         {
-          _selectedGrouping = value;
-          OnPropertyChanged("SelectedGrouping");
+            get { return _groupings; }
+            set
+            {
+                if (value != _groupings)
+                {
+                    _groupings = value;
+                    OnPropertyChanged("Groupings");
+                }
+            }
         }
-      }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        private GroupingViewModel _selectedGrouping;
 
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      var handler = PropertyChanged;
-      if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        public GroupingViewModel SelectedGrouping
+        {
+            get { return _selectedGrouping; }
+            set
+            {
+                if (value != _selectedGrouping)
+                {
+                    _selectedGrouping = value;
+                    OnPropertyChanged("SelectedGrouping");
+
+                    OkCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-  }
 }

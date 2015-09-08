@@ -23,8 +23,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
     public void LoadPersons()
     {
-      IPersonDataStore personDataStore = ConfigurationSource.Configuration.GetPersonDataStore();
-      IShooterDataStore shooterDataStore = ConfigurationSource.Configuration.GetShooterDataStore();
+      IPersonDataStore personDataStore = null;
+      IShooterDataStore shooterDataStore = null;
 
       IEnumerable<PersonShooterViewModel> shooters = from shooter in shooterDataStore.GetAll()
         join person in personDataStore.GetAll() on shooter.PersonId equals person.PersonId
@@ -92,47 +92,47 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
     private void SelectedPersonChanged()
     {
-      if (SelectedPerson != null)
-      {
-        ISessionDataStore sessionDataStore = ConfigurationSource.Configuration.GetSessionDataStore();
-        ISessionSubtotalDataStore subsessionDataStore = ConfigurationSource.Configuration.GetSessionSubtotalDataStore();
-        IShotDataStore shotDataStore = ConfigurationSource.Configuration.GetShotDataStore();
-        IProgramItemDataStore programItemDataStore = ConfigurationSource.Configuration.GetProgramItemDataStore();
+      //if (SelectedPerson != null)
+      //{
+      //  ISessionDataStore sessionDataStore = ConfigurationSource.Configuration.GetSessionDataStore();
+      //  ISessionSubtotalDataStore subsessionDataStore = ConfigurationSource.Configuration.GetSessionSubtotalDataStore();
+      //  IShotDataStore shotDataStore = ConfigurationSource.Configuration.GetShotDataStore();
+      //  IProgramItemDataStore programItemDataStore = ConfigurationSource.Configuration.GetProgramItemDataStore();
 
-        Dictionary<int, List<int>> sessionToSubsession = (from session in
-          sessionDataStore.FindByShooterId(SelectedPerson.ShooterId)
-          join subsession in subsessionDataStore.GetAll() on session.SessionId equals subsession.SessionId
-          orderby session.ProgramItemId
-          group subsession by session.SessionId).ToDictionary(_ => _.Key,
-            _ => _.Select(fo => fo.SessionSubtotalId).ToList());
+      //  Dictionary<int, List<int>> sessionToSubsession = (from session in
+      //    sessionDataStore.FindByShooterId(SelectedPerson.ShooterId)
+      //    join subsession in subsessionDataStore.GetAll() on session.SessionId equals subsession.SessionId
+      //    orderby session.ProgramItemId
+      //    group subsession by session.SessionId).ToDictionary(_ => _.Key,
+      //      _ => _.Select(fo => fo.SessionSubtotalId).ToList());
 
-        Sessions = new ObservableCollection<SessionViewModel>();
-        foreach (KeyValuePair<int, List<int>> keyValuePair in sessionToSubsession)
-        {
-          Session session = sessionDataStore.FindById(keyValuePair.Key);
+      //  Sessions = new ObservableCollection<SessionViewModel>();
+      //  foreach (KeyValuePair<int, List<int>> keyValuePair in sessionToSubsession)
+      //  {
+      //    Session session = sessionDataStore.FindById(keyValuePair.Key);
 
-          if (session.ProgramItemId.HasValue)
-          {
-            ProgramItem programItem = programItemDataStore.FindById((int) session.ProgramItemId);
+      //    if (session.ProgramItemId.HasValue)
+      //    {
+      //      ProgramItem programItem = programItemDataStore.FindById((int) session.ProgramItemId);
 
-            SessionViewModel svm = new SessionViewModel
-            {
-              LaneNumber = session.LaneNumber,
-              ProgramName = programItem.ProgramName,
-            };
+      //      SessionViewModel svm = new SessionViewModel
+      //      {
+      //        LaneNumber = session.LaneNumber,
+      //        ProgramName = programItem.ProgramName,
+      //      };
 
-            List<Shot> shots = new List<Shot>();
-            foreach (int subsessionId in keyValuePair.Value)
-            {
-              shots.AddRange(shotDataStore.FindBySubSessionId(subsessionId).OrderBy(shot => shot.Ordinal));
-            }
+      //      List<Shot> shots = new List<Shot>();
+      //      foreach (int subsessionId in keyValuePair.Value)
+      //      {
+      //        shots.AddRange(shotDataStore.FindBySubSessionId(subsessionId).OrderBy(shot => shot.Ordinal));
+      //      }
 
-            svm.Shots = new ObservableCollection<Shot>(shots);
-            svm.Total = shots.Sum(s => s.PrimaryScore);
-            Sessions.Add(svm);
-          }
-        }
-      }
+      //      svm.Shots = new ObservableCollection<Shot>(shots);
+      //      svm.Total = shots.Sum(s => s.PrimaryScore);
+      //      Sessions.Add(svm);
+      //    }
+      //  }
+      //}
     }
 
     private ObservableCollection<PersonShooterViewModel> _filteredPersons;

@@ -18,15 +18,6 @@ namespace ShootingRange.Repository.Mapper
     }
   }
 
-  internal static class ProgramItemMapper
-  {
-    public static t_programitem UpdateEntity(this t_programitem entity, ProgramItem programItem)
-    {
-      entity.ItemName = programItem.ProgramName;
-      entity.ProgramNumber = programItem.ProgramNumber;
-      return entity;
-    }
-  }
 
   internal static class ShotMapper
   {

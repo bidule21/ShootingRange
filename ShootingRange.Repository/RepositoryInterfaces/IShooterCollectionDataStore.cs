@@ -5,5 +5,6 @@ namespace ShootingRange.Repository.RepositoryInterfaces
 {
   public interface IShooterCollectionDataStore : IDataStore<ShooterCollection, int>
   {
+      IEnumerable<ShooterCollection> FindByProgramNumber(int programNumber);
   }
 }

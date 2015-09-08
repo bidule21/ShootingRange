@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Repository;
 using ShootingRange.BusinessObjects;
 using ShootingRange.Entities;
@@ -24,7 +21,7 @@ namespace ShootingRange.Repository.Repositories
       _selector = shooterParticipation => new ShooterParticipation()
       {
         ShooterParticipationId = shooterParticipation.ShooterParticipationId,
-        ParticipationId =  shooterParticipation.ParticipationId,
+        ProgramNumber =  shooterParticipation.ProgramNumber,
         ShooterId = shooterParticipation.ShooterId,
       };
     }
@@ -72,10 +69,10 @@ namespace ShootingRange.Repository.Repositories
       return _sqlRepository.Find(shooterParticipation => shooterParticipation.ShooterId == shooterId).Select(_selector);
     }
 
-    public IEnumerable<ShooterParticipation> FindByParticipationId(int participationId)
+    public IEnumerable<ShooterParticipation> FindByParticipationId(int programNumber)
     {
       return
-        _sqlRepository.Find(shooterParticipation => shooterParticipation.ParticipationId == participationId)
+        _sqlRepository.Find(shooterParticipation => shooterParticipation.ProgramNumber == programNumber)
           .Select(_selector);
     }
   }

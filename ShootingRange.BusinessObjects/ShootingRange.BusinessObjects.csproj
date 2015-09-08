@@ -37,7 +37,6 @@
     <Compile Include="ShooterCollectionParticipation.cs" />
     <Compile Include="ShooterCollection.cs" />
     <Compile Include="CollectionShooter.cs" />
-    <Compile Include="Participation.cs" />
     <Compile Include="ParticipationDetails.cs" />
     <Compile Include="GroupMemberDetails.cs" />
     <Compile Include="ParticipationType.cs" />

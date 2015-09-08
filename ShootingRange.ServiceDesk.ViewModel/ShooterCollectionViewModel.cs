@@ -22,22 +22,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
       }
     }
 
-
-    private PersonShooterViewModel _selectedShooter;
-    public PersonShooterViewModel SelectedShooter
-    {
-      get { return _selectedShooter; }
-      set
-      {
-        if (value != _selectedShooter)
-        {
-          _selectedShooter = value;
-          OnPropertyChanged("SelectedShooter");
-        }
-      }
-    }
-
-
     private int _shooterCollectionId;
     public int ShooterCollectionId
     {

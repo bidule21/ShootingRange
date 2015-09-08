@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
-             xmlns:converter="clr-namespace:ShootingRange.View.Converter;assembly=ShootingRange.View"
              xmlns:controls="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
+             xmlns:converter="clr-namespace:Gui.Wpf.Converter;assembly=Gui.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance Type=viewModel:GroupsPageViewModel}">
     <UserControl.Resources>
@@ -13,12 +13,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"></ResourceDictionary>
                 <ResourceDictionary>
-                    <converter:PersonNameConverter x:Key="PersonNameConverter" />
+                    <converter:PersonNameFormatConverter x:Key="PersonNameConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid d:DataContext="{d:DesignData Source=../DesignTimeData/GroupsPageData.xaml}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -83,7 +83,7 @@
                                 </Button>
                             </ToolBar>
                         </ToolBarTray>
-                        <ListBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding SelectedShooterCollection.Shooters}" SelectedItem="{Binding SelectedShooterCollection.SelectedShooter}">
+                        <ListBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding SelectedShooterCollection.Shooters}" SelectedItem="{Binding SelectedShooter}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

@@ -1,4 +1,0 @@
-﻿<viewModel:MainWindowViewModel
-    xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel">
-    
-</viewModel:MainWindowViewModel>

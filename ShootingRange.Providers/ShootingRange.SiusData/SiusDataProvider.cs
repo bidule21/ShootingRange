@@ -1,9 +1,6 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing;
 using System.IO;
-using System.Security;
 using ShootingRange.Common;
 using ShootingRange.SiusData.Messages;
 using ShootingRange.SiusData.Parser;

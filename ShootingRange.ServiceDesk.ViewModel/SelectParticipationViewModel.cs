@@ -2,81 +2,102 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using ShootingRange.BusinessObjects.Properties;
+using Gui.ViewModel;
+using Microsoft.Practices.ServiceLocation;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.RepositoryInterfaces;
+using ShootingRange.ServiceDesk.ViewModel.Annotations;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class SelectParticipationViewModel : INotifyPropertyChanged
-  {
-    private IParticipationDataStore _participationDataStore;
-
-    public SelectParticipationViewModel()
+    public class SelectParticipationViewModel : INotifyPropertyChanged 
     {
-      _participationDataStore = ConfigurationSource.Configuration.GetParticipationDataStore();
-    }
-
-    public void Initialize()
-    {
-      Participations =
-        new ObservableCollection<ParticipationViewModel>(
-          _participationDataStore.GetAll()
-            .Select(x => new ParticipationViewModel(x.ParticipationId) {ProgramName = x.ParticipationName}));
-    }
-
-    private string _title;
-
-    public string Title
-    {
-      get { return _title; }
-      set
-      {
-        if (value != _title)
+        public SelectParticipationViewModel()
         {
-          _title = value;
-          OnPropertyChanged("Title");
+            OkCommand = new ViewModelCommand(x => { });
+            OkCommand.AddGuard(x => SelectedParticipationDescription != null);
         }
-      }
-    }
 
-    private ObservableCollection<ParticipationViewModel> _participations;
+        public ViewModelCommand OkCommand { get; private set; }
 
-    public ObservableCollection<ParticipationViewModel> Participations
-    {
-      get { return _participations; }
-      set
-      {
-        if (value != _participations)
+        public void Initialize(int shooterId)
         {
-          _participations = value;
-          OnPropertyChanged("Participations");
+            ServiceDeskConfiguration sdk = ServiceLocator.Current.GetInstance<ServiceDeskConfiguration>();
+            IShooterParticipationDataStore shooterParticipationDataStore = ServiceLocator.Current.GetInstance<IShooterParticipationDataStore>();
+
+            var programNumberToShooterParticipations = from sp in shooterParticipationDataStore.GetAll()
+                join p in sdk.ParticipationDescriptions.GetAll() on sp.ProgramNumber.ToString() equals
+                    p.ProgramNumber
+                where sp.ShooterId == shooterId
+                group sp by p.ProgramNumber into gj select new
+                {
+                    ProgramNumber = gj.Key,
+                    ShooterParticipations = gj.Select(x => x)
+                };
+
+            var selectableParticipations = from p in sdk.ParticipationDescriptions.GetAll()
+                where
+                    (!programNumberToShooterParticipations.Any(x => x.ProgramNumber == p.ProgramNumber) ||
+                     !programNumberToShooterParticipations.Single(x => x.ProgramNumber == p.ProgramNumber)
+                         .ShooterParticipations.Any()) select p;
+
+            ParticipationDescriptions = new ObservableCollection<ParticipationDescription>(selectableParticipations);
         }
-      }
-    }
 
-    private ParticipationViewModel _selectedParticipation;
+        private string _title;
 
-    public ParticipationViewModel SelectedParticipation
-    {
-      get { return _selectedParticipation; }
-      set
-      {
-        if (value != _selectedParticipation)
+        public string Title
         {
-          _selectedParticipation = value;
-          OnPropertyChanged("SelectedParticipation");
+            get { return _title; }
+            set
+            {
+                if (value != _title)
+                {
+                    _title = value;
+                    OnPropertyChanged();
+                }
+            }
         }
-      }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableCollection<ParticipationDescription> _participationDescriptions;
 
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      var handler = PropertyChanged;
-      if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        public ObservableCollection<ParticipationDescription> ParticipationDescriptions
+        {
+            get { return _participationDescriptions; }
+            set
+            {
+                if (value != _participationDescriptions)
+                {
+                    _participationDescriptions = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private ParticipationDescription _selectedParticipationDescription;
+
+        public ParticipationDescription SelectedParticipationDescription
+        {
+            get { return _selectedParticipationDescription; }
+            set
+            {
+                if (value != _selectedParticipationDescription)
+                {
+                    _selectedParticipationDescription = value;
+                    OnPropertyChanged();
+
+                    OkCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-  }
 }

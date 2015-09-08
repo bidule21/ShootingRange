@@ -40,14 +40,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeRepositories\FakeParticipationDataStore.cs" />
     <Compile Include="FakeRepositories\FakeGroupDetailsView.cs" />
     <Compile Include="FakeRepositories\FakeGroupMemberDetailsView.cs" />
     <Compile Include="FakeRepositories\FakePersonDataStore.cs" />
     <Compile Include="FakeRepositories\FakeShooterDataStore.cs" />
-    <Compile Include="Mapper\ShooterCollectionParticipationMapper.cs" />
     <Compile Include="Mapper\ShooterCollectionMapper.cs" />
-    <Compile Include="Mapper\ParticipationMapper.cs" />
     <Compile Include="Mapper\PersonMapper.cs" />
     <Compile Include="Mapper\SessionMapper.cs" />
     <Compile Include="Mapper\CollectionShooterMapper.cs" />
@@ -55,30 +52,21 @@
     <Compile Include="Mapper\ShooterNumberConfigMapper.cs" />
     <Compile Include="Mapper\ShooterParticipationMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ShooterCollectionParticipationDataStore.cs" />
     <Compile Include="Repositories\ShooterCollectionDataStore.cs" />
-    <Compile Include="Repositories\ParticipationDataStore.cs" />
-    <Compile Include="Repositories\GroupDetailsView.cs" />
-    <Compile Include="Repositories\GroupMemberDetailsView.cs" />
     <Compile Include="Repositories\PersonDataStore.cs" />
-    <Compile Include="Repositories\ProgramItemDataStore.cs" />
     <Compile Include="Repositories\SessionDataStore.cs" />
-    <Compile Include="Repositories\SessionDetailsView.cs" />
     <Compile Include="Repositories\SessionSubtotalDataStore.cs" />
     <Compile Include="Repositories\CollectionShooterDataStore.cs" />
     <Compile Include="Repositories\ShooterDataStore.cs" />
     <Compile Include="Repositories\ShooterNumberConfigDataStore.cs" />
     <Compile Include="Repositories\ShooterParticipationDataStore.cs" />
-    <Compile Include="Repositories\ShooterParticipationView.cs" />
     <Compile Include="Repositories\ShotDataStore.cs" />
-    <Compile Include="RepositoryInterfaces\IShooterCollectionParticipationDataStore.cs" />
     <Compile Include="RepositoryInterfaces\IShooterCollectionParticipation.cs" />
     <Compile Include="RepositoryInterfaces\IShooterCollectionDataStore.cs" />
     <Compile Include="RepositoryInterfaces\IDataStore.cs" />
     <Compile Include="RepositoryInterfaces\IDataView.cs" />
     <Compile Include="RepositoryInterfaces\IGroupDetailsView.cs" />
     <Compile Include="RepositoryInterfaces\IGroupMemberDetailsView.cs" />
-    <Compile Include="RepositoryInterfaces\IParticipationDataStore.cs" />
     <Compile Include="RepositoryInterfaces\IPersonDataStore.cs" />
     <Compile Include="RepositoryInterfaces\IProgramItemDataStore.cs" />
     <Compile Include="RepositoryInterfaces\ISessionDataStore.cs" />

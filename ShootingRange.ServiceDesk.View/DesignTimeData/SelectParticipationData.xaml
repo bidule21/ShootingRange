@@ -1,9 +1,0 @@
-﻿<viewModel:SelectParticipationViewModel
-    xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel">
-    <viewModel:SelectParticipationViewModel.Participations>
-        <viewModel:ParticipationViewModel ProgramName="Wortscht + Brot"/>
-        <viewModel:ParticipationViewModel ProgramName="Sie + Er"/>
-        <viewModel:ParticipationViewModel ProgramName="Nachwuchs"/>
-        <viewModel:ParticipationViewModel ProgramName="Gruppe"/>
-    </viewModel:SelectParticipationViewModel.Participations>
-</viewModel:SelectParticipationViewModel>

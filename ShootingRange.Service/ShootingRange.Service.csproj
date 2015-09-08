@@ -42,7 +42,6 @@
     <Compile Include="FakeShooterNumberService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShooterNumberService.cs" />
-    <Compile Include="WindowService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">
@@ -60,10 +59,6 @@
     <ProjectReference Include="..\ShootingRange.Service.Interface\ShootingRange.Service.Interface.csproj">
       <Project>{7B2D7C87-4FA3-48DD-AB24-E90365D41F7F}</Project>
       <Name>ShootingRange.Service.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShootingRange.View\ShootingRange.View.csproj">
-      <Project>{0C979F35-D417-47A1-84C8-13A72EE43480}</Project>
-      <Name>ShootingRange.View</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

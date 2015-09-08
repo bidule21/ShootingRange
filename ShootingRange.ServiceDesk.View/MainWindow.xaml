@@ -68,8 +68,8 @@
                               ShowsPreview="true"
                               Width="4" />
                 <StackPanel Grid.Column="0" Margin="10" Orientation="Vertical">
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Neuer Schütze..." Command="{Binding ShowCreatePersonCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Neue Gruppierung..." Command="{Binding ShowCreateGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Neuer Schütze..." Command="{Binding ShowCreatePersonDialogCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Style="{StaticResource HyperlinkButton}" Content="Neue Gruppierung..." Command="{Binding ShowCreateGroupingDialogCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
                     <!--<Separator />
                     <Button Style="{StaticResource HyperlinkButton}" Content="Konfiguration anpassen..." Command="{Binding ShowConfigurationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>-->
                </StackPanel>

@@ -58,19 +58,7 @@
     <Compile Include="t_orderitem.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="t_participation.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_participationdescription.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="t_person.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_programitem.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_programsubtotal.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_rankignoresession.cs">
@@ -86,9 +74,6 @@
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_shootercollection.cs">
-      <DependentUpon>ShootingRangeModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="t_shootercollectionparticipation.cs">
       <DependentUpon>ShootingRangeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="t_shooternumberconfig.cs">
