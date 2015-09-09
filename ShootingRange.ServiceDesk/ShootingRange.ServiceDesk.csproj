@@ -94,6 +94,7 @@
     </EmbeddedResource>
     <None Include="..\ShootingRange.BarcodePrinter\Templates\Generic_20150909.lbx">
       <Link>Templates\Generic_20150909.lbx</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\ShootingRange.BarcodePrinter\Templates\Volksschiessen_2015.lbx">
       <Link>Templates\Volksschiessen_2015.lbx</Link>
