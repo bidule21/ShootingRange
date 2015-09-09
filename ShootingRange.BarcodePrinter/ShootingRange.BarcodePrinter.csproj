@@ -54,6 +54,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Templates\Generic_20150909.lbx" />
     <None Include="Templates\Volksschiessen.lbx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
