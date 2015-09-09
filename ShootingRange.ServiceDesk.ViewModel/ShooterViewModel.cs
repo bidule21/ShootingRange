@@ -38,7 +38,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
             Initialize(shooter);
 
-            MessengerInstance.Register<RefreshDataFromDatabase>(this,
+            MessengerInstance.Register<RefreshDataFromRepositories>(this,
                 x =>
                 {
                     Groupings = new ObservableCollection<GroupingViewModel>(FetchGroupsByShooter(Shooter)); 

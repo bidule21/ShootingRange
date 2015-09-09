@@ -74,6 +74,9 @@
     <Compile Include="Dialogs\AddShooterToGroupingDialog.xaml.cs">
       <DependentUpon>AddShooterToGroupingDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\EditGrouping.xaml.cs">
+      <DependentUpon>EditGrouping.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\CreateGrouping.xaml.cs">
       <DependentUpon>CreateGrouping.xaml</DependentUpon>
     </Compile>
@@ -100,6 +103,10 @@
     <Page Include="Dialogs\AddShooterToGroupingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\EditGrouping.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\CreateGrouping.xaml">
       <Generator>MSBuild:Compile</Generator>

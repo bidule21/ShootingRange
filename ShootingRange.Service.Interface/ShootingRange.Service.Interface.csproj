@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarcodeFruehlingsschiessen.cs" />
+    <Compile Include="GenericBarcode_20150909.cs" />
     <Compile Include="BarcodeHerbstschiessen.cs" />
     <Compile Include="IBarcodeBuilderService.cs" />
     <Compile Include="IBarcodePrintService.cs" />

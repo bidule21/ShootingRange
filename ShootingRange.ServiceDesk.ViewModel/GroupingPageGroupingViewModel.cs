@@ -17,6 +17,10 @@ namespace ShootingRange.ServiceDesk.ViewModel
             NewGroupingCommand = new ViewModelCommand(x => ShowCreateGrouping((IWindow) x));
             NewGroupingCommand.RaiseCanExecuteChanged();
 
+            EditGroupingCommand = new ViewModelCommand(x => MessengerInstance.Send(new EditGroupingDialogMessage(SelectedShooterCollection.ShooterCollectionId, SelectedShooterCollection.CollectionName)));
+            EditGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
+            EditGroupingCommand.RaiseCanExecuteChanged();
+
             DeleteGroupingCommand = new ViewModelCommand(x => MessengerInstance.Send(new DeleteGroupingDialogMessage(SelectedShooterCollection)));
             DeleteGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
             DeleteGroupingCommand.RaiseCanExecuteChanged();
@@ -29,7 +33,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             AddShooterToGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
             AddShooterToGroupingCommand.RaiseCanExecuteChanged();
 
-            MessengerInstance.Register<RefreshDataFromDatabase>(this,
+            MessengerInstance.Register<RefreshDataFromRepositories>(this,
                 x =>
                 {
                     LoadShooterCollections(ProgramNumber);
@@ -55,13 +59,14 @@ namespace ShootingRange.ServiceDesk.ViewModel
                         .SingleOrDefault(cs => cs.ShooterCollectionId == SelectedShooterCollection.ShooterCollectionId);
 
                 collectionShooterDataStore.Delete(collectionShooter);
-                MessengerInstance.Send(new RefreshDataFromDatabase());
+                MessengerInstance.Send(new RefreshDataFromRepositories());
                 MessengerInstance.Send(new SetSelectedShooterCollectionMessage(shooterCollectionId));
             }
         }
 
         public ViewModelCommand NewGroupingCommand { get; private set; }
 
+        public ViewModelCommand EditGroupingCommand { get; private set; }
         public ViewModelCommand DeleteGroupingCommand { get; private set; }
 
         public ViewModelCommand RemoveShooterFromGroupingCommand { get; private set; }
@@ -190,6 +195,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
                     RemoveShooterFromGroupingCommand.RaiseCanExecuteChanged();
                     AddShooterToGroupingCommand.RaiseCanExecuteChanged();
+                    EditGroupingCommand.RaiseCanExecuteChanged();
                     DeleteGroupingCommand.RaiseCanExecuteChanged();
                 }
             }

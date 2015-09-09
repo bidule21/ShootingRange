@@ -23,7 +23,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             OkCommand.AddGuard(x => !string.IsNullOrWhiteSpace(GroupingName) && SelectedParticipation != null);
         }
 
-        public ViewModelCommand OkCommand { get; set; }
+        public ViewModelCommand OkCommand { get; private set; }
 
         private string _groupingName;
 

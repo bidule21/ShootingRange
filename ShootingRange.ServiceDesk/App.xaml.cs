@@ -61,6 +61,7 @@ namespace ShootingRange.ServiceDesk
             IShooterDataStore shooterDataStore = new ShooterDataStore(entities);
             IShooterParticipationDataStore shooterParticipationDataStore = new ShooterParticipationDataStore(entities);
             IBarcodePrintService barcodePrinter = new PtouchBarcodePrinter();
+            IBarcodeBuilderService barcodeBuilder = new Barcode2Of5InterleavedService();
             ISsvShooterDataWriterService shooterDataWriter = new SsvFileWriter(@"C:\Sius\SiusData\SSVDaten\SSV_schuetzen.txt");
 
             builder.RegisterInstance(shooterNumberService).As<IShooterNumberService>();
@@ -70,6 +71,7 @@ namespace ShootingRange.ServiceDesk
             builder.RegisterInstance(shooterCollectionDataStore).As<IShooterCollectionDataStore>();
             builder.RegisterInstance(collectionShooterDataStore).As<ICollectionShooterDataStore>();
             builder.RegisterInstance(barcodePrinter).As<IBarcodePrintService>();
+            builder.RegisterInstance(barcodeBuilder).As<IBarcodeBuilderService>();
             builder.RegisterInstance(shooterDataWriter).As<ISsvShooterDataWriterService>();
 
             _vs = new ViewService();
@@ -91,6 +93,8 @@ namespace ShootingRange.ServiceDesk
                 (window, model) => vsh.GetOwnedWindow<CreatePerson>((Window) window, model));
             _vs.RegisterFunction<CreateGroupingViewModel, IWindow>(
                 (window, model) => vsh.GetOwnedWindow<CreateGrouping>((Window) window, model));
+            _vs.RegisterFunction<EditGroupingViewModel, IWindow>(
+                (window, model) => vsh.GetOwnedWindow<EditGrouping>((Window) window, model));
             _vs.RegisterFunction<SelectParticipationViewModel, IWindow>(
                 (window, model) => vsh.GetOwnedWindow<AddParticipationToShooterDialog>((Window) window, model));
             _vs.RegisterFunction<SelectGroupingViewModel, IWindow>(
@@ -124,6 +128,7 @@ namespace ShootingRange.ServiceDesk
             RegisterCreatePersonDialog(personDataStore);
             RegisterEditPersonDialog(personDataStore);
             RegisterCreateGroupingDialog(shooterCollectionDataStore, serviceDeskConfiguration);
+            RegisterEditGroupingDialog(shooterCollectionDataStore);
             RegisterDeletePersonDialog(personDataStore);
             RegisterDeleteGroupingDialog(shooterCollectionDataStore);
             RegisterAddShooterToGroupingDialog(collectionShooterDataStore);
@@ -188,7 +193,7 @@ namespace ShootingRange.ServiceDesk
                         Phone = m.Phone
                     };
                     personDataStore.Create(person);
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                     _messenger.Send(new SetSelectedPersonMessage(person.PersonId));
                 });
         }
@@ -229,7 +234,7 @@ namespace ShootingRange.ServiceDesk
                         Phone = m.Phone
                     });
 
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                     _messenger.Send(new SetSelectedPersonMessage(m.PersonId));
                 });
         }
@@ -255,7 +260,7 @@ namespace ShootingRange.ServiceDesk
 
                     Person person = personDataStore.FindById(x.PersonId);
                     personDataStore.Delete(person);
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -280,10 +285,33 @@ namespace ShootingRange.ServiceDesk
                     };
 
                     shooterCollectionDataStore.Create(sc);
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
+        private void RegisterEditGroupingDialog(IShooterCollectionDataStore shooterCollectionDataStore)
+        {
+            _messenger.Register<EditGroupingDialogMessage>(this,
+                x =>
+                {
+                    var m = new EditGroupingViewModel
+                    {
+                        GroupingName = x.GroupingName,
+                        GroupingId = x.GroupingId,
+                        Title = "Gruppenname ändern"
+                    };
+
+                    IWindow w = _vs.ExecuteFunction<EditGroupingViewModel, IWindow>((IWindow) Current.MainWindow, m);
+                    bool? result = w.ShowDialog();
+                    if (!result.HasValue || !result.Value) return;
+
+                    ShooterCollection sc = shooterCollectionDataStore.FindById(m.GroupingId);
+                    sc.CollectionName = m.GroupingName;
+                    shooterCollectionDataStore.Update(sc);
+
+                    _messenger.Send(new RefreshDataFromRepositories());
+                });
+        }
 
         private void RegisterDeleteGroupingDialog(IShooterCollectionDataStore shooterCollectionDataStore)
         {
@@ -304,7 +332,7 @@ namespace ShootingRange.ServiceDesk
                     
                     ShooterCollection sc = shooterCollectionDataStore.FindById(x.ShooterCollectionId);
                     shooterCollectionDataStore.Delete(sc);
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -328,7 +356,7 @@ namespace ShootingRange.ServiceDesk
 
                     Shooter shooter = shooterDataStore.FindByShooterNumber(x.ShooterNumber);
                     shooterDataStore.Delete(shooter);
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -354,7 +382,7 @@ namespace ShootingRange.ServiceDesk
                     CollectionShooter cs = collectionShooterDataStore.FindById(x.Grouping.ShooterCollectionId);
                     collectionShooterDataStore.Delete(cs);
 
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -382,7 +410,7 @@ namespace ShootingRange.ServiceDesk
                     };
                     collectionShooterDataStore.Create(cs);
 
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                     _messenger.Send(new SetSelectedShooterCollectionMessage(x.ShooterCollectionId));
                 });
         }
@@ -410,7 +438,7 @@ namespace ShootingRange.ServiceDesk
                     };
                     collectionShooterDataStore.Create(cs);
 
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -439,7 +467,7 @@ namespace ShootingRange.ServiceDesk
 
                     shooterParticipationDataStore.Create(sp);
 
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -466,7 +494,7 @@ namespace ShootingRange.ServiceDesk
                             .SingleOrDefault(sp => sp.ProgramNumber == x.Participation.ProgramNumber);
                     shooterParticipationDataStore.Delete(shooterParticipation);
 
-                    _messenger.Send(new RefreshDataFromDatabase());
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
         }
 
@@ -496,7 +524,7 @@ namespace ShootingRange.ServiceDesk
                     _viewModel.CurrentPage = page;
                 });
 
-            _messenger.Send(new RefreshDataFromDatabase());
+            _messenger.Send(new RefreshDataFromRepositories());
         }
 
         private void RegisterShowGroupsPageMessage(GroupsPageViewModel groupsPageViewModel)
@@ -508,7 +536,7 @@ namespace ShootingRange.ServiceDesk
                     _viewModel.CurrentPage = page;
                 });
 
-            _messenger.Send(new RefreshDataFromDatabase());
+            _messenger.Send(new RefreshDataFromRepositories());
         }
 
         #endregion

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using Gui.ViewModel;
 using Microsoft.Practices.ServiceLocation;
 using ShootingRange.BusinessObjects;
+using ShootingRange.ConfigurationProvider;
 using ShootingRange.Repository.RepositoryInterfaces;
 using ShootingRange.Service.Interface;
 using ShootingRange.ServiceDesk.ViewModel.MessageTypes;
@@ -19,6 +21,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         private readonly ISsvShooterDataWriterService _shooterDataWriter;
         private ICollectionShooterDataStore _collectionShooterDataStore;
         private IShooterCollectionDataStore _shooterCollectionDataStore;
+        private ServiceDeskConfiguration _serviceDeskConfiguration;
 
         private List<Person> _allPersons;
 
@@ -30,6 +33,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             _shooterDataWriter = ServiceLocator.Current.GetInstance<ISsvShooterDataWriterService>();
             _collectionShooterDataStore = ServiceLocator.Current.GetInstance<ICollectionShooterDataStore>();
             _shooterCollectionDataStore = ServiceLocator.Current.GetInstance<IShooterCollectionDataStore>();
+            _serviceDeskConfiguration = ServiceLocator.Current.GetInstance<ServiceDeskConfiguration>();
 
             MessengerInstance.Register<ShowPersonsPageMessage>(this, x => LoadPersons());
             MessengerInstance.Register<PersonSelectedMessage>(this,
@@ -51,7 +55,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                         SelectedShooter = Shooters.FirstOrDefault();
                 });
 
-            MessengerInstance.Register<RefreshDataFromDatabase>(this,
+            MessengerInstance.Register<RefreshDataFromRepositories>(this,
                 x =>
                 {
                     Person selectedPerson = SelectedPerson;
@@ -103,53 +107,69 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         private void PrintBarcode()
         {
-            throw new NotImplementedException();
             if (SelectedShooter != null)
             {
-                //var personShooter = (from shooter in _shooterDataStore.GetAll()
-                //    join person in _personDataStore.GetAll() on shooter.PersonId equals person.PersonId
-                //    where shooter.ShooterId == SelectedShooter.Shooter.ShooterId
-                //    select new
-                //    {
-                //        person.FirstName,
-                //        person.LastName,
-                //        person.DateOfBirth,
-                //        shooter.ShooterNumber
-                //    }).Single();
+                var personShooter = (from shooter in _shooterDataStore.GetAll()
+                                     join person in _personDataStore.GetAll() on shooter.PersonId equals person.PersonId
+                                     where shooter.ShooterId == SelectedShooter.Shooter.ShooterId
+                                     select new
+                                     {
+                                         person.FirstName,
+                                         person.LastName,
+                                         person.DateOfBirth,
+                                         shooter.ShooterNumber
+                                     }).Single();
 
-                //IEnumerable<string> gruppenstichGruppennamen = from sc in _shooterCollectionDataStore.GetAll()
-                //    join cs in _collectionShooterDataStore.FindByShooterId(SelectedShooter.Shooter.ShooterId) on
-                //        sc.ShooterCollectionId equals cs.ShooterCollectionId
-                //    join scp in _shooterCollectionParticipationDataStore.GetAll() on cs.ShooterCollectionId equals
-                //        scp.ShooterCollectionId
-                //    join p in _pariticipationDataStore.GetAll() on scp.ParticipationId equals p.ParticipationId
-                //    where p.ParticipationName == "Gruppenstich"
-                //    select sc.CollectionName;
+                IBarcodeBuilderService barcodeBuilderService = ServiceLocator.Current.GetInstance<IBarcodeBuilderService>();
+                string barcode = barcodeBuilderService.BuildBarcode(personShooter.ShooterNumber, 0);
 
-                //string gruppenstichGruppenname = gruppenstichGruppennamen.SingleOrDefault(_ => true);
 
-                //IBarcodePrintService barcodeService = ConfigurationSource.Configuration.GetBarcodePrintService();
-                //IBarcodeBuilderService barcodeBuilderService = ConfigurationSource.Configuration.GetBarcodeBuilderService();
+                var shooterCollections = from sc in _shooterCollectionDataStore.GetAll()
+                    join cs in _collectionShooterDataStore.GetAll() on
+                        sc.ShooterCollectionId equals cs.ShooterCollectionId
+                    join p in _serviceDeskConfiguration.ParticipationDescriptions.GetAll() on
+                        sc.ProgramNumber.ToString() equals p.ProgramNumber
+                    where p.AllowShooterCollectionParticipation && cs.ShooterId == SelectedShooter.Shooter.ShooterId
+                    select new
+                    {
+                        sc.CollectionName,
+                        p.ProgramName,
+                        p.ProgramNumber
+                    };
 
-                //BarcodeVolksschiessen barcode = new BarcodeVolksschiessen
-                //{
-                //    FirstName = personShooter.FirstName,
-                //    LastName = personShooter.LastName,
-                //    DateOfBirth = personShooter.DateOfBirth,
-                //    Barcode = barcodeBuilderService.BuildBarcode(personShooter.ShooterNumber, 0),
-                //    Gruppenstich = gruppenstichGruppenname
-                //};
+                Dictionary<string, Tuple<string, string>> grouped = (from sc in shooterCollections
+                    group sc by sc.ProgramNumber
+                    into g
+                    select new
+                    {
+                        ProgramNumber = g.Key,
+                        CollectionName = g.Single().CollectionName,
+                        ProgramName = g.Single().ProgramName
+                    }).ToDictionary(x => x.ProgramNumber,
+                        x => new Tuple<string, string>(x.ProgramName, x.CollectionName));
 
-                //try
-                //{
-                //    barcodeService.Print(barcode);
-                //}
-                //catch (Exception e)
-                //{
-                //    MessengerInstance.Send(new DialogMessage("Barcode Print Error",
-                //        "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.ToString(),
-                //        MessageIcon.Error));
-                //}
+                IBarcodePrintService barcodeService = ServiceLocator.Current.GetInstance<IBarcodePrintService>();
+
+                GenericBarcode_20150909 genericBarcode = new GenericBarcode_20150909
+                {
+                    FirstName = personShooter.FirstName,
+                    LastName = personShooter.LastName,
+                    DateOfBirth = personShooter.DateOfBirth,
+                    Barcode = barcode,
+                    ParticipationTypeToCollectionName = grouped.Values.Take(2).ToList(),
+                    Participations = _serviceDeskConfiguration.ParticipationDescriptions.GetAll().Select(x => x.ProgramName).Take(5).ToList()
+                };
+
+                try
+                {
+                    barcodeService.Print(genericBarcode);
+                }
+                catch (Exception e)
+                {
+                    MessengerInstance.Send(new DialogMessage("Barcode Print Error",
+                        "Fehler beim Drucken des Barcodes.\r\n\r\n" + e.ToString(),
+                        MessageIcon.Error));
+                }
             }
         }
 
@@ -218,9 +238,13 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         public void LoadPersons()
         {
+            Person selectedPerson = SelectedPerson;
             _allPersons =
                 _personDataStore.GetAll().OrderBy(person => person.LastName).ThenBy(person => person.FirstName).ToList();
             FilterPersons();
+
+            if (selectedPerson != null)
+                SelectedPerson = FilteredPersons.FirstOrDefault(x => selectedPerson.PersonId == x.PersonId);
         }
 
         private void FilterPersons()
@@ -271,7 +295,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _programItems)
                 {
                     _programItems = value;
-                    OnPropertyChanged("ProgramItems");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -286,7 +310,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _personFilterText)
                 {
                     _personFilterText = value;
-                    OnPropertyChanged("PersonFilterText");
+                    OnPropertyChanged();
                     FilterPersons();
                 }
             }
@@ -317,7 +341,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _selectedPerson)
                 {
                     _selectedPerson = value;
-                    OnPropertyChanged("SelectedPerson");
+                    OnPropertyChanged();
 
                     MessengerInstance.Send(new PersonSelectedMessage(_selectedPerson));
                 }

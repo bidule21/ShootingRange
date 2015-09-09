@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EditGroupingViewModel.cs" />
     <Compile Include="CreateGroupingViewModel.cs" />
     <Compile Include="CreatePersonViewModel.cs" />
     <Compile Include="GroupingPageGroupingViewModel.cs" />
@@ -66,9 +67,10 @@
     <Compile Include="MessageTypes\DeletePersonDialogMessage.cs" />
     <Compile Include="MessageTypes\DeleteShooterDialogMessage.cs" />
     <Compile Include="MessageTypes\DialogMessage.cs" />
+    <Compile Include="MessageTypes\EditGroupingDialogMessage.cs" />
     <Compile Include="MessageTypes\EditPersonDialogMessage.cs" />
     <Compile Include="MessageTypes\CreatePersonDialogMessage.cs" />
-    <Compile Include="MessageTypes\RefreshDataFromDatabase.cs" />
+    <Compile Include="MessageTypes\RefreshDataFromRepositories.cs" />
     <Compile Include="MessageTypes\RemoveGroupingFromShooterDialogMessage.cs" />
     <Compile Include="MessageTypes\RemoveParticipationFromShooterDialogMessage.cs" />
     <Compile Include="MessageTypes\SetSelectedPersonMessage.cs" />

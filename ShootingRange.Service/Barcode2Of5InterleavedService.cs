@@ -10,8 +10,8 @@ namespace ShootingRange.Service
 
     public string BuildBarcode(int shooterNumber, int legalization)
     {
-      if (shooterNumber < 0 || shooterNumber > 999999) throw new ArgumentOutOfRangeException("shooterNumber");
-      if (legalization < 0 || legalization > 9) throw new ArgumentOutOfRangeException("legalization");
+      if (shooterNumber < 0 || shooterNumber > 999999) throw new ArgumentException("Shooter number must be in the range of [0,999999].","shooterNumber");
+      if (legalization < 0 || legalization > 9) throw new ArgumentException("Legalization must be in the range [0,9].","legalization");
 
       string baseNumber = CreateBaseNumber(shooterNumber, legalization);
       int sum = 0;
@@ -40,9 +40,9 @@ namespace ShootingRange.Service
     private string CreateBaseNumber(int ticketNumber, int legalization)
     {
       if (legalization > 9)
-        throw new NotSupportedException("Legalizations greater than 9 are not allowed.");
+          throw new ArgumentException("Legalizations greater than 9 are not allowed.", "legalization");
       if (ticketNumber > 999999)
-        throw new NotSupportedException("Shooter numbers greater than 999999 are not allowed.");
+          throw new ArgumentException("Shooter numbers greater than 999999 are not allowed.", "ticketNumber");
 
       string ticketString = ticketNumber.ToString("D6");
       string legalString = legalization.ToString("D1");
