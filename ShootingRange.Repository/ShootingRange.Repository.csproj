@@ -68,7 +68,6 @@
     <Compile Include="RepositoryInterfaces\IGroupDetailsView.cs" />
     <Compile Include="RepositoryInterfaces\IGroupMemberDetailsView.cs" />
     <Compile Include="RepositoryInterfaces\IPersonDataStore.cs" />
-    <Compile Include="RepositoryInterfaces\IProgramItemDataStore.cs" />
     <Compile Include="RepositoryInterfaces\ISessionDataStore.cs" />
     <Compile Include="RepositoryInterfaces\ISessionDetailsView.cs" />
     <Compile Include="RepositoryInterfaces\ISessionSubtotalDataStore.cs" />

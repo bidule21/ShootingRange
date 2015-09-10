@@ -79,11 +79,16 @@
     <Compile Include="MessageTypes\ShowGroupsPageMessage.cs" />
     <Compile Include="MessageTypes\ShowPersonsPageMessage.cs" />
     <Compile Include="MessageTypes\PersonSelectedMessage.cs" />
+    <Compile Include="MessageTypes\ShowReassignSessionDialogMessage.cs" />
+    <Compile Include="MessageTypes\ShowReassignShooterNumberDialogMessage.cs" />
+    <Compile Include="MessageTypes\ShowResultsPageMessage.cs" />
     <Compile Include="ParticipationViewModel.cs" />
     <Compile Include="PersonShooterViewModel.cs" />
     <Compile Include="PersonsPageViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReassignProgramNumberViewModel.cs" />
+    <Compile Include="ReassignSessionViewModel.cs" />
     <Compile Include="ResultsPageViewModel.cs" />
     <Compile Include="SelectGroupingViewModel.cs" />
     <Compile Include="SelectParticipationViewModel.cs" />

@@ -60,6 +60,10 @@ namespace ShootingRange.ServiceDesk
             ICollectionShooterDataStore collectionShooterDataStore = new CollectionShooterDataStore(entities);
             IShooterDataStore shooterDataStore = new ShooterDataStore(entities);
             IShooterParticipationDataStore shooterParticipationDataStore = new ShooterParticipationDataStore(entities);
+            ISessionDataStore sessionDataStore = new SessionDataStore(entities);
+            ISessionSubtotalDataStore sessionSubtotalDataStore = new SessionSubtotalDataStore(entities);
+            IShotDataStore shotDataStore = new ShotDataStore(entities);
+
             IBarcodePrintService barcodePrinter = new PtouchBarcodePrinter();
             IBarcodeBuilderService barcodeBuilder = new Barcode2Of5InterleavedService();
             ISsvShooterDataWriterService shooterDataWriter = new SsvFileWriter(@"C:\Sius\SiusData\SSVDaten\SSV_schuetzen.txt");
@@ -70,6 +74,10 @@ namespace ShootingRange.ServiceDesk
             builder.RegisterInstance(new ShooterParticipationDataStore(entities)).As<IShooterParticipationDataStore>();
             builder.RegisterInstance(shooterCollectionDataStore).As<IShooterCollectionDataStore>();
             builder.RegisterInstance(collectionShooterDataStore).As<ICollectionShooterDataStore>();
+            builder.RegisterInstance(sessionDataStore).As<ISessionDataStore>();
+            builder.RegisterInstance(sessionSubtotalDataStore).As<ISessionSubtotalDataStore>();
+            builder.RegisterInstance(shotDataStore).As<IShotDataStore>();
+
             builder.RegisterInstance(barcodePrinter).As<IBarcodePrintService>();
             builder.RegisterInstance(barcodeBuilder).As<IBarcodeBuilderService>();
             builder.RegisterInstance(shooterDataWriter).As<ISsvShooterDataWriterService>();
@@ -88,6 +96,8 @@ namespace ShootingRange.ServiceDesk
                 (window, model) => vsh.GetUserControl<UcPersons>((Window) window, model));
             _vs.RegisterFunction<GroupsPageViewModel, IPage>(
                 (window, model) => vsh.GetUserControl<UcGroups>((Window) window, model));
+            _vs.RegisterFunction<ResultsPageViewModel, IPage>(
+                (window, model) => vsh.GetUserControl<UcResults>((Window) window, model));
 
             _vs.RegisterFunction<CreatePersonViewModel, IWindow>(
                 (window, model) => vsh.GetOwnedWindow<CreatePerson>((Window) window, model));
@@ -101,6 +111,10 @@ namespace ShootingRange.ServiceDesk
                 (window, model) => vsh.GetOwnedWindow<AddGroupingToShooterDialog>((Window) window, model));
             _vs.RegisterFunction<SelectShooterViewModel, IWindow>(
                 (window, model) => vsh.GetOwnedWindow<AddShooterToGroupingDialog>((Window) window, model));
+            _vs.RegisterFunction<ReassignSessionViewModel, IWindow>(
+                (window, model) => vsh.GetOwnedWindow<ReassignSessionDialog>((Window) window, model));
+            _vs.RegisterFunction<ReassignProgramNumberViewModel, IWindow>(
+                (window, model) => vsh.GetOwnedWindow<ReassignProgramNumber>((Window) window, model));
 
             _vs.RegisterFunction<YesNoMessageBoxViewModel, IWindow>(
                 (w, m) => vsh.GetOwnedWindow<YesNoMessageBox>((Window) w, m));
@@ -127,6 +141,9 @@ namespace ShootingRange.ServiceDesk
 
             GroupsPageViewModel groupsPageViewModel = new GroupsPageViewModel();
 
+            ResultsPageViewModel resultsPageViewModel = new ResultsPageViewModel();
+            resultsPageViewModel.Initialize();
+
             RegisterCreatePersonDialog(personDataStore);
             RegisterEditPersonDialog(personDataStore);
             RegisterCreateGroupingDialog(shooterCollectionDataStore, serviceDeskConfiguration);
@@ -140,9 +157,12 @@ namespace ShootingRange.ServiceDesk
             RegisterAddParticipationToShooterDialog(shooterParticipationDataStore);
             RegisterRemoveParticipationFromShooterDialog(shooterParticipationDataStore);
             RegisterMessageBoxDialog();
+            RegisterReassignSessionDialog(sessionDataStore);
+            RegisterReassignShooterNumberDialog(sessionDataStore);
 
             RegisterShowShooterPageMessage(personsPageViewModel);
             RegisterShowGroupsPageMessage(groupsPageViewModel);
+            RegisterShowResultsPageMessage(resultsPageViewModel);
         }
 
         private void ComposeObjects()
@@ -500,6 +520,54 @@ namespace ShootingRange.ServiceDesk
                 });
         }
 
+        private void RegisterReassignSessionDialog(ISessionDataStore sessionDataStore)
+        {
+            _messenger.Register<ShowReassignSessionDialogMessage>(this,
+                x =>
+                {
+                    ReassignSessionViewModel vm = new ReassignSessionViewModel
+                    {
+                        Title = "Schütze neu zuweisen"
+                    };
+                    vm.Initialize(x.SessionId);
+
+                    IWindow w = _vs.ExecuteFunction<ReassignSessionViewModel, IWindow>((IWindow) Current.MainWindow, vm);
+                    bool? result = w.ShowDialog();
+
+                    if (!result.HasValue || !result.Value) return;
+
+                    Session s = sessionDataStore.FindById(x.SessionId);
+                    s.ShooterId = vm.SelectedShooter.ShooterId;
+                    sessionDataStore.Update(s);
+
+                    _messenger.Send(new RefreshDataFromRepositories());
+                });
+        }
+
+        private void RegisterReassignShooterNumberDialog(ISessionDataStore sessionDataStore)
+        {
+            _messenger.Register<ShowReassignShooterNumberDialogMessage>(this,
+                x =>
+                {
+                    ReassignProgramNumberViewModel vm = new ReassignProgramNumberViewModel
+                    {
+                        Title = "Programm neu zuweisen"
+                    };
+                    vm.Initialize(x.SessionId);
+
+                    IWindow w = _vs.ExecuteFunction<ReassignProgramNumberViewModel, IWindow>((IWindow)Current.MainWindow, vm);
+                    bool? result = w.ShowDialog();
+
+                    if (!result.HasValue || !result.Value) return;
+
+                    Session s = sessionDataStore.FindById(x.SessionId);
+                    s.ProgramNumber = vm.SelectedParticipation.ProgramNumber;
+                    sessionDataStore.Update(s);
+
+                    _messenger.Send(new RefreshDataFromRepositories());
+                });
+        }
+
         private void RegisterMessageBoxDialog()
         {
             _messenger.Register<DialogMessage>(this,
@@ -540,6 +608,19 @@ namespace ShootingRange.ServiceDesk
 
             _messenger.Send(new RefreshDataFromRepositories());
         }
+
+        private void RegisterShowResultsPageMessage(ResultsPageViewModel resultsPageViewModel)
+        {
+            _messenger.Register<ShowResultsPageMessage>(this,
+                x =>
+                {
+                    IPage page = _vs.ExecuteFunction<ResultsPageViewModel, IPage>((IWindow) Current.MainWindow, resultsPageViewModel);
+                    _viewModel.CurrentPage = page;
+                });
+
+            _messenger.Send(new RefreshDataFromRepositories());
+        }
+
 
         #endregion
     }

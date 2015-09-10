@@ -6,87 +6,94 @@ using ShootingRange.BusinessObjects.Properties;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-  public class SessionViewModel : INotifyPropertyChanged
-  {
-
-    private Shot _selectedShot;
-    public Shot SelectedShot
+    public class SessionViewModel : INotifyPropertyChanged
     {
-      get { return _selectedShot; }
-      set
-      {
-        if (value != _selectedShot)
+        public int SessionId { get; set; }
+
+
+        private Shot _selectedShot;
+
+        public Shot SelectedShot
         {
-          _selectedShot = value;
-          OnPropertyChanged("SelectedShot");
+            get { return _selectedShot; }
+            set
+            {
+                if (value != _selectedShot)
+                {
+                    _selectedShot = value;
+                    OnPropertyChanged("SelectedShot");
+                }
+            }
         }
-      }
-    }
 
-    private ObservableCollection<Shot> _shots;
-    public ObservableCollection<Shot> Shots
-    {
-      get { return _shots; }
-      set
-      {
-        if (value != _shots)
+        private ObservableCollection<Shot> _shots;
+
+        public ObservableCollection<Shot> Shots
         {
-          _shots = value;
-          OnPropertyChanged("Shots");
+            get { return _shots; }
+            set
+            {
+                if (value != _shots)
+                {
+                    _shots = value;
+                    OnPropertyChanged("Shots");
+                }
+            }
         }
-      }
-    }
 
-    private int _laneNumber;
-    public int LaneNumber
-    {
-      get { return _laneNumber; }
-      set
-      {
-        if (value != _laneNumber)
+        private int _laneNumber;
+
+        public int LaneNumber
         {
-          _laneNumber = value;
-          OnPropertyChanged("LaneNumber");
+            get { return _laneNumber; }
+            set
+            {
+                if (value != _laneNumber)
+                {
+                    _laneNumber = value;
+                    OnPropertyChanged("LaneNumber");
+                }
+            }
         }
-      }
-    }
 
 
-    private decimal _total;
-    public decimal Total
-    {
-      get { return _total; }
-      set
-      {
-        if (value != _total)
+        private decimal _total;
+
+        public decimal Total
         {
-          _total = value;
-          OnPropertyChanged("Total");
+            get { return _total; }
+            set
+            {
+                if (value != _total)
+                {
+                    _total = value;
+                    OnPropertyChanged("Total");
+                }
+            }
         }
-      }
-    }
 
-    private string _programName;
-    public string ProgramName
-    {
-      get { return _programName; }
-      set
-      {
-        if (value != _programName)
+        private string _programName;
+
+        public string ProgramName
         {
-          _programName = value;
-          OnPropertyChanged("ProgramName");
+            get { return _programName; }
+            set
+            {
+                if (value != _programName)
+                {
+                    _programName = value;
+                    OnPropertyChanged("ProgramName");
+                }
+            }
         }
-      }
-    }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-      var handler = PropertyChanged;
-      if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
-  }
 }

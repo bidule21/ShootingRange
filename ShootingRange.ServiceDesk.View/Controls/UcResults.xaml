@@ -5,21 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:ShootingRange.ServiceDesk.View"
              xmlns:businessObjects="clr-namespace:ShootingRange.BusinessObjects;assembly=ShootingRange.BusinessObjects"
-             xmlns:converter="clr-namespace:ShootingRange.View.Converter;assembly=ShootingRange.View"
              xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
+             xmlns:converter1="clr-namespace:Gui.Wpf.Converter;assembly=Gui.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="785" d:DataContext="{d:DesignInstance Type=viewModel:ResultsPageViewModel}">
+             d:DesignHeight="300" d:DesignWidth="785" d:DataContext="{Binding ResultsPage, Source={StaticResource Ds}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/DesignTimeData/DesignDataResource.xaml"/>
                 <ResourceDictionary>
-                    <converter:PersonNameConverter x:Key="PersonNameConverter"/>
+                    <converter1:PersonNameFormatConverter x:Key="PersonNameConverter"/>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid d:DataContext="{d:DesignData Source=../DesignTimeData/ResultsPageData.xaml}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -27,7 +28,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Resultate" Style="{StaticResource PageHeaderStyle}"/>
@@ -65,7 +66,13 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="5,10,5,5" ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}">
+        <ToolBarTray IsLocked="True" Grid.Row="1" Grid.Column="1">
+            <ToolBar>
+                <Button Content="Schützenzuordnung ändern..." Command="{Binding ReassignSessionCommand}"/>
+                <Button Content="Programmnummer ändern..." Command="{Binding ReassignProgramNumberCommand}"/>
+            </ToolBar>
+        </ToolBarTray>
+        <ListView Grid.Row="2" Grid.Column="1" Grid.RowSpan="1" Margin="5,10,5,5" ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:SessionViewModel}">
                     <Grid>
@@ -81,7 +88,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="5,10,5,5" ItemsSource="{Binding SelectedSession.Shots}">
+        <ListView Grid.Row="2" Grid.Column="2" Grid.RowSpan="1" Margin="5,10,5,5" ItemsSource="{Binding SelectedSession.Shots}">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type businessObjects:Shot}">
                     <Grid>

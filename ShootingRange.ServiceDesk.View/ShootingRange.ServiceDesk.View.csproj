@@ -66,6 +66,12 @@
     <Compile Include="Controls\UcPersons.xaml.cs">
       <DependentUpon>UcPersons.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UcRankings.xaml.cs">
+      <DependentUpon>UcRankings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UcResults.xaml.cs">
+      <DependentUpon>UcResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignTimeData\DesignDataProvider.cs" />
     <Compile Include="Dialogs\AddParticipationToShooterDialog.xaml.cs">
       <DependentUpon>AddParticipationToShooterDialog.xaml</DependentUpon>
@@ -85,6 +91,12 @@
     <Compile Include="Dialogs\CreatePerson.xaml.cs">
       <DependentUpon>CreatePerson.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ReassignProgramNumber.xaml.cs">
+      <DependentUpon>ReassignProgramNumber.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ReassignSessionDialog.xaml.cs">
+      <DependentUpon>ReassignSessionDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TextBoxBehavior.cs" />
     <Page Include="Controls\UcGroups.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -93,6 +105,14 @@
     <Page Include="Controls\UcPersons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UcRankings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UcResults.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="DesignTimeData\DesignDataResource.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -119,6 +139,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\CreatePerson.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\ReassignProgramNumber.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\ReassignSessionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -288,21 +288,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         #region Properties
 
-        private ObservableCollection<ProgramItem> _programItems;
-
-        public ObservableCollection<ProgramItem> ProgramItems
-        {
-            get { return _programItems; }
-            set
-            {
-                if (value != _programItems)
-                {
-                    _programItems = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private string _personFilterText;
 
         public string PersonFilterText

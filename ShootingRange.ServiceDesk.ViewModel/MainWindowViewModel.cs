@@ -20,12 +20,17 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
             ShowCreateGroupingDialogCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreateGroupingDialogMessage((IWindow)x)));
             ShowCreateGroupingDialogCommand.RaiseCanExecuteChanged();
+
+            ShowResultsCommand = new ViewModelCommand(x => MessengerInstance.Send(new ShowResultsPageMessage()));
+            ShowResultsCommand.RaiseCanExecuteChanged();
         }
 
         #region Commands
 
         public ViewModelCommand ShowPersonsCommand { get; private set; }
         public ViewModelCommand ShowGroupingsCommand { get; private set; }
+        public ViewModelCommand ShowResultsCommand { get; private set; }
+
         public ViewModelCommand ShowCreatePersonDialogCommand { get; private set; }
         public ViewModelCommand ShowCreateGroupingDialogCommand { get; private set; }
 
