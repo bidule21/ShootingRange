@@ -123,6 +123,8 @@ namespace ShootingRange.ServiceDesk
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));
 
             PersonsPageViewModel personsPageViewModel = new PersonsPageViewModel();
+            personsPageViewModel.Initialize();
+
             GroupsPageViewModel groupsPageViewModel = new GroupsPageViewModel();
 
             RegisterCreatePersonDialog(personDataStore);

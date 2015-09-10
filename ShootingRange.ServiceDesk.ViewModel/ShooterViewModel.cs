@@ -12,11 +12,11 @@ namespace ShootingRange.ServiceDesk.ViewModel
 {
     public class ShooterViewModel : Gui.ViewModel.ViewModel
     {
-        private readonly IShooterParticipationDataStore _shooterParticipationDataStore;
-        private readonly ICollectionShooterDataStore _collectionShooterDataStore;
-        private readonly IShooterCollectionDataStore _shooterCollectionDataStore;
+        private IShooterParticipationDataStore _shooterParticipationDataStore;
+        private ICollectionShooterDataStore _collectionShooterDataStore;
+        private IShooterCollectionDataStore _shooterCollectionDataStore;
 
-        public ShooterViewModel(Shooter shooter)
+        public ShooterViewModel()
         {
             ShowSelectGroupingCommand = new ViewModelCommand(x => MessengerInstance.Send(new AddGroupingToShooterDialogMessage(Shooter.ShooterId)));
             ShowSelectGroupingCommand.RaiseCanExecuteChanged();
@@ -31,28 +31,26 @@ namespace ShootingRange.ServiceDesk.ViewModel
             DeleteParticipationCommand = new ViewModelCommand(x => MessengerInstance.Send(new RemoveParticipationFromShooterDialogMessage(Shooter.ShooterId, SelectedParticipation)));
             DeleteParticipationCommand.AddGuard(x => SelectedParticipation != null);
             DeleteParticipationCommand.RaiseCanExecuteChanged();
+        }
 
+        public void Initialize(Shooter shooter)
+        {
             _shooterParticipationDataStore = ServiceLocator.Current.GetInstance<IShooterParticipationDataStore>();
             _collectionShooterDataStore = ServiceLocator.Current.GetInstance<ICollectionShooterDataStore>();
             _shooterCollectionDataStore = ServiceLocator.Current.GetInstance<IShooterCollectionDataStore>();
 
-            Initialize(shooter);
-
-            MessengerInstance.Register<RefreshDataFromRepositories>(this,
-                x =>
-                {
-                    Groupings = new ObservableCollection<GroupingViewModel>(FetchGroupsByShooter(Shooter)); 
-                    Participations = new ObservableCollection<ParticipationViewModel>(FetchParticipationsByShooter(Shooter));
-                });
-        }
-
-        private void Initialize(Shooter shooter)
-        {
             SelectedGrouping = null;
             SelectedParticipation = null;
             Shooter = shooter;
             Participations = new ObservableCollection<ParticipationViewModel>(FetchParticipationsByShooter(Shooter));
             Groupings = new ObservableCollection<GroupingViewModel>(FetchGroupsByShooter(Shooter));
+
+            MessengerInstance.Register<RefreshDataFromRepositories>(this,
+    x =>
+    {
+        Groupings = new ObservableCollection<GroupingViewModel>(FetchGroupsByShooter(Shooter));
+        Participations = new ObservableCollection<ParticipationViewModel>(FetchParticipationsByShooter(Shooter));
+    });
         }
 
         private IEnumerable<GroupingViewModel> FetchGroupsByShooter(Shooter shooter)
@@ -83,9 +81,10 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 join participation in participations.GetAll() on shooterParticipation.ProgramNumber.ToString() equals
                     participation.ProgramNumber
                 orderby participation.ProgramNumber
-                select new ParticipationViewModel(shooterParticipation.ProgramNumber)
+                select new ParticipationViewModel
                 {
-                    ProgramName = participation.ProgramName
+                    ProgramName = participation.ProgramName,
+                    ProgramNumber = shooterParticipation.ProgramNumber
                 };
         }
 

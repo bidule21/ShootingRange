@@ -9,11 +9,12 @@
       xmlns:controls1="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
       xmlns:converter1="clr-namespace:Gui.Wpf.Converter;assembly=Gui.Wpf"
       mc:Ignorable="d" 
-      d:DesignHeight="323" d:DesignWidth="614" d:DataContext="{d:DesignInstance Type=viewModel:PersonsPageViewModel}">
+      d:DesignHeight="480" d:DesignWidth="805" d:DataContext="{Binding PersonsPage, Source={StaticResource Ds}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/DesignTimeData/DesignDataResource.xaml"/>
                 <ResourceDictionary>
                     <converter1:PersonNameFormatConverter x:Key="PersonNameConverter"/>
                 </ResourceDictionary>
@@ -40,7 +41,8 @@
 
                         <controls1:AutoGreyableImage
                             Source="/ShootingRange.ServiceDesk.View;component/Resources/blank_16.png" Width="16"
-                            Height="16" /></StackPanel>
+                            Height="16" />
+                    </StackPanel>
                 </Button>
                 <Button Command="{Binding ShowEditPersonCommand}" ToolTip="Schütze editieren..."
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
@@ -63,7 +65,8 @@
                         <Label Content="Neue Schützennummer" />
                         <controls1:AutoGreyableImage
                             Source="/ShootingRange.ServiceDesk.View;component/Resources/add_16.png" Width="16"
-                            Height="16" /></StackPanel>
+                            Height="16" />
+                    </StackPanel>
                 </Button>
                 <Button Command="{Binding DeleteShooterCommand}" ToolTip="Schützennummer löschen..."
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
@@ -75,7 +78,7 @@
                     <controls1:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/printer_16.png" Width="16" Height="16"/>
                 </Button>
             </ToolBar>
-            </ToolBarTray>
+        </ToolBarTray>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Schützen" Style="{StaticResource PageHeaderStyle}"/>
         <TextBox Height="23" Grid.Row="2" Grid.Column="0" Name="SearchBox" view:TextBoxBehavior.EscapeClearsText="True" Margin="5,10,5,5" Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
         <ListView Grid.Row="3" Grid.Column="0" Margin="5" ItemsSource="{Binding FilteredPersons}" SelectedItem="{Binding SelectedPerson}">
@@ -145,12 +148,13 @@
                                                 Source="/ShootingRange.ServiceDesk.View;component/Resources/add_16.png"
                                                 Width="16" Height="16" />
                                         </Button>
-                                        <Button ToolTip="Schütze aus Wettkampf entfernen..." Command="{Binding DeleteParticipationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"> 
+                                        <Button ToolTip="Schütze aus Wettkampf entfernen..." Command="{Binding DeleteParticipationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
                                             <controls1:AutoGreyableImage
                                                 Source="/ShootingRange.ServiceDesk.View;component/Resources/delete_16.png"
                                                 Width="16" Height="16" />
                                         </Button>
-                                    </ToolBar></ToolBarTray>
+                                    </ToolBar>
+                                </ToolBarTray>
                                 <ListView Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding Participations}" SelectedItem="{Binding SelectedParticipation}" SelectionMode="Single">
                                     <ListView.ItemTemplate>
                                         <DataTemplate DataType="{x:Type viewModel:ParticipationViewModel}">

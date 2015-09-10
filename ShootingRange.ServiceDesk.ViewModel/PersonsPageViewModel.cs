@@ -15,17 +15,50 @@ namespace ShootingRange.ServiceDesk.ViewModel
 {
     public class PersonsPageViewModel : Gui.ViewModel.ViewModel
     {
-        private readonly IPersonDataStore _personDataStore;
-        private readonly IShooterDataStore _shooterDataStore;
-        private readonly IShooterNumberService _shooterNumberService;
-        private readonly ISsvShooterDataWriterService _shooterDataWriter;
+        private IPersonDataStore _personDataStore;
+        private IShooterDataStore _shooterDataStore;
+        private IShooterNumberService _shooterNumberService;
+        private ISsvShooterDataWriterService _shooterDataWriter;
         private ICollectionShooterDataStore _collectionShooterDataStore;
         private IShooterCollectionDataStore _shooterCollectionDataStore;
         private ServiceDeskConfiguration _serviceDeskConfiguration;
 
-        private List<Person> _allPersons;
-
         public PersonsPageViewModel()
+        {
+            ShowCreatePersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreatePersonDialogMessage()));
+            ShowCreatePersonCommand.RaiseCanExecuteChanged();
+
+            ShowEditPersonCommand =
+                new ViewModelCommand(x => MessengerInstance.Send(new EditPersonDialogMessage(SelectedPerson)));
+            ShowEditPersonCommand.AddGuard(x => SelectedPerson != null);
+            ShowEditPersonCommand.RaiseCanExecuteChanged();
+
+            DeletePersonCommand =
+                new ViewModelCommand(x => MessengerInstance.Send(new DeletePersonDialogMessage(SelectedPerson)));
+            DeletePersonCommand.AddGuard(x => SelectedPerson != null);
+            DeletePersonCommand.RaiseCanExecuteChanged();
+
+            CreateShooterCommand = new ViewModelCommand(x => CreateShooter(SelectedPerson));
+            CreateShooterCommand.AddGuard(x => SelectedPerson != null);
+            CreateShooterCommand.RaiseCanExecuteChanged();
+
+            DeleteShooterCommand =
+                new ViewModelCommand(
+                    x => MessengerInstance.Send(new DeleteShooterDialogMessage(SelectedShooter.Shooter.ShooterNumber)));
+            DeleteShooterCommand.AddGuard(x => SelectedShooter != null);
+            DeleteShooterCommand.RaiseCanExecuteChanged();
+
+            ShowSelectParticipationCommand = new ViewModelCommand(x => { });
+            ShowSelectParticipationCommand.RaiseCanExecuteChanged();
+
+            PrintBarcodeCommand = new ViewModelCommand(x => PrintBarcode());
+            PrintBarcodeCommand.AddGuard(x => SelectedShooter != null);
+            PrintBarcodeCommand.RaiseCanExecuteChanged();
+        }
+
+        public List<Person> AllPersons { get; set; }
+
+        public void Initialize()
         {
             _personDataStore = ServiceLocator.Current.GetInstance<IPersonDataStore>();
             _shooterDataStore = ServiceLocator.Current.GetInstance<IShooterDataStore>();
@@ -68,41 +101,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
                     if (selectedShooter != null)
                         MessengerInstance.Send(new SetSelectedShooterMessage(selectedShooter.Shooter.ShooterId));
                 });
-
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            ShowCreatePersonCommand = new ViewModelCommand(x => MessengerInstance.Send(new CreatePersonDialogMessage()));
-            ShowCreatePersonCommand.RaiseCanExecuteChanged();
-
-            ShowEditPersonCommand =
-                new ViewModelCommand(x => MessengerInstance.Send(new EditPersonDialogMessage(SelectedPerson)));
-            ShowEditPersonCommand.AddGuard(x => SelectedPerson != null);
-            ShowEditPersonCommand.RaiseCanExecuteChanged();
-
-            DeletePersonCommand =
-                new ViewModelCommand(x => MessengerInstance.Send(new DeletePersonDialogMessage(SelectedPerson)));
-            DeletePersonCommand.AddGuard(x => SelectedPerson != null);
-            DeletePersonCommand.RaiseCanExecuteChanged();
-
-            CreateShooterCommand = new ViewModelCommand(x => CreateShooter(SelectedPerson));
-            CreateShooterCommand.AddGuard(x => SelectedPerson != null);
-            CreateShooterCommand.RaiseCanExecuteChanged();
-
-            DeleteShooterCommand =
-                new ViewModelCommand(
-                    x => MessengerInstance.Send(new DeleteShooterDialogMessage(SelectedShooter.Shooter.ShooterNumber)));
-            DeleteShooterCommand.AddGuard(x => SelectedShooter != null);
-            DeleteShooterCommand.RaiseCanExecuteChanged();
-
-            ShowSelectParticipationCommand = new ViewModelCommand(x => { });
-            ShowSelectParticipationCommand.RaiseCanExecuteChanged();
-
-            PrintBarcodeCommand = new ViewModelCommand(x => PrintBarcode());
-            PrintBarcodeCommand.AddGuard(x => SelectedShooter != null);
-            PrintBarcodeCommand.RaiseCanExecuteChanged();
         }
 
         private void PrintBarcode()
@@ -230,7 +228,12 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
                 Shooters =
                     new ObservableCollection<ShooterViewModel>(
-                        shooters.Select(shooter => new ShooterViewModel(shooter)));
+                        shooters.Select(shooter =>
+                        {
+                            ShooterViewModel vm = new ShooterViewModel();
+                            vm.Initialize(shooter);
+                            return vm;
+                        }));
                 SelectedShooter = Shooters.FirstOrDefault();
             }
         }
@@ -239,7 +242,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         public void LoadPersons()
         {
             Person selectedPerson = SelectedPerson;
-            _allPersons =
+            AllPersons =
                 _personDataStore.GetAll().OrderBy(person => person.LastName).ThenBy(person => person.FirstName).ToList();
             FilterPersons();
 
@@ -249,7 +252,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         private void FilterPersons()
         {
-            FilteredPersons = new ObservableCollection<Person>(FilterPersons(_allPersons, PersonFilterText));
+            FilteredPersons = new ObservableCollection<Person>(FilterPersons(AllPersons, PersonFilterText));
         }
 
 
@@ -343,41 +346,11 @@ namespace ShootingRange.ServiceDesk.ViewModel
                     _selectedPerson = value;
                     OnPropertyChanged();
 
-                    MessengerInstance.Send(new PersonSelectedMessage(_selectedPerson));
+                    if (MessengerInstance != null)
+                        MessengerInstance.Send(new PersonSelectedMessage(_selectedPerson));
                 }
             }
         }
-
-        private ParticipationViewModel _selectedParticipation;
-
-        public ParticipationViewModel SelectedParticipation
-        {
-            get { return _selectedParticipation; }
-            set
-            {
-                if (value != _selectedParticipation)
-                {
-                    _selectedParticipation = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private ObservableCollection<ParticipationViewModel> _participations;
-
-        public ObservableCollection<ParticipationViewModel> Participations
-        {
-            get { return _participations; }
-            set
-            {
-                if (value != _participations)
-                {
-                    _participations = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
 
         private ObservableCollection<ShooterViewModel> _shooters;
 
@@ -408,21 +381,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
                     PrintBarcodeCommand.RaiseCanExecuteChanged();
                     DeleteShooterCommand.RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        private ObservableCollection<GroupingViewModel> _groups;
-
-        public ObservableCollection<GroupingViewModel> Groups
-        {
-            get { return _groups; }
-            set
-            {
-                if (value != _groups)
-                {
-                    _groups = value;
-                    OnPropertyChanged();
                 }
             }
         }

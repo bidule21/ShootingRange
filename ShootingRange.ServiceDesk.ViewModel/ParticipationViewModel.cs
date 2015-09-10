@@ -6,17 +6,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 {
   public class ParticipationViewModel : INotifyPropertyChanged
   {
-    public ParticipationViewModel(int programNumber)
-    {
-      ProgramNumber = programNumber;
-    }
-
-    public ParticipationViewModel()
-    {
-      
-    }
-
-    public int ProgramNumber { get; private set; }
+    public int ProgramNumber { get; set; }
 
     private string _programName;
     public string ProgramName
