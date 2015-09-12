@@ -123,15 +123,15 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
             {
                 return new PersonsPageViewModel
                 {
-                    AllPersons = new List<Person>
+                    AllPersons = new List<UiPerson>
                     {
-                        new Person
+                        new UiPerson
                         {
                             FirstName = "Hans",
                             LastName = "Schwegler",
                             DateOfBirth = new DateTime(1982, 12, 21)
                         },
-                        new Person
+                        new UiPerson
                         {
                             FirstName = "Hansueli",
                             LastName = "Schweggimann"
@@ -176,7 +176,7 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
                             }
                         }
                     }),
-                    SelectedPerson = new Person
+                    SelectedPerson = new UiPerson
                     {
                         FirstName = "Hans",
                         LastName = "Schwegler"

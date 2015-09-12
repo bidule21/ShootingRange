@@ -81,15 +81,15 @@
         </ToolBarTray>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Schützen" Style="{StaticResource PageHeaderStyle}"/>
         <TextBox Height="23" Grid.Row="2" Grid.Column="0" Name="SearchBox" view:TextBoxBehavior.EscapeClearsText="True" Margin="5,10,5,5" Text="{Binding PersonFilterText, UpdateSourceTrigger=PropertyChanged}"/>
-        <ListView Grid.Row="3" Grid.Column="0" Margin="5" ItemsSource="{Binding FilteredPersons}" SelectedItem="{Binding SelectedPerson}">
-            <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type businessObjects:Person}">
+        <ListBox Grid.Row="3" Grid.Column="0" Margin="5" ItemsSource="{Binding FilteredPersons}" SelectedItem="{Binding SelectedPerson}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:UiPerson}">
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontWeight="Bold">
+                        <TextBlock Grid.Row="0" FontWeight="Bold" Name="_PersonName">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource PersonNameConverter}" ConverterParameter="FormatLastFirst">
                                     <Binding Path="LastName"/>
@@ -102,12 +102,18 @@
                                 <ColumnDefinition Width="0"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="1" Text="{Binding DateOfBirth, StringFormat=dd.MM.yyyy}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding DateOfBirth, StringFormat=dd.MM.yyyy}" Name="_DateOfBirth"/>
                         </Grid>
                     </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding HasShooters}" Value="False">
+                            <Setter TargetName="_PersonName" Property="Foreground" Value="DarkGray"/>
+                            <Setter TargetName="_DateOfBirth" Property="Foreground" Value="DarkGray"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
             <TextBlock  Style="{StaticResource  PageHeaderStyle}">
                 <TextBlock.Text>

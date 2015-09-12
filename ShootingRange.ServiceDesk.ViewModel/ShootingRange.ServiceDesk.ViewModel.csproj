@@ -96,6 +96,7 @@
     <Compile Include="SessionViewModel.cs" />
     <Compile Include="ShooterCollectionViewModel.cs" />
     <Compile Include="ShooterViewModel.cs" />
+    <Compile Include="UiPerson.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShootingRange.BusinessObjects\ShootingRange.BusinessObjects.csproj">

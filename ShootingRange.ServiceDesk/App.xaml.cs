@@ -225,18 +225,19 @@ namespace ShootingRange.ServiceDesk
             _messenger.Register<EditPersonDialogMessage>(this,
                 x =>
                 {
+                    Person p = personDataStore.FindById(x.PersonId);
                     var m = new CreatePersonViewModel()
                     {
                         Title = "Person editieren",
-                        PersonId = x.PersonId,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                        DateOfBirth = x.DateOfBirth,
-                        Address = x.Address,
-                        City = x.City,
-                        ZipCode = x.ZipCode,
-                        Email = x.Email,
-                        Phone = x.Phone
+                        PersonId = p.PersonId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        DateOfBirth = p.DateOfBirth,
+                        Address = p.Address,
+                        City = p.City,
+                        ZipCode = p.ZipCode,
+                        Email = p.Email,
+                        Phone = p.Phone
                     };
 
                     IWindow w = _vs.ExecuteFunction<CreatePersonViewModel, IWindow>((IWindow) Current.MainWindow, m);

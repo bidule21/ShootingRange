@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Gui.ViewModel;
@@ -56,7 +57,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             PrintBarcodeCommand.RaiseCanExecuteChanged();
         }
 
-        public List<Person> AllPersons { get; set; }
+        public List<UiPerson> AllPersons { get; set; }
 
         public void Initialize()
         {
@@ -73,7 +74,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 x =>
                 {
                     UpdateCommandCanExecuteOnSelectedPersonChanged();
-                    LoadShooters(x.Person);
+                    LoadShooters(x.PersonId);
                 });
             MessengerInstance.Register<SetSelectedPersonMessage>(this,
                 x =>
@@ -91,7 +92,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             MessengerInstance.Register<RefreshDataFromRepositories>(this,
                 x =>
                 {
-                    Person selectedPerson = SelectedPerson;
+                    UiPerson selectedPerson = SelectedPerson;
                     ShooterViewModel selectedShooter = SelectedShooter;
                     LoadPersons();
 
@@ -181,27 +182,30 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         public ViewModelCommand CreateShooterCommand { get; private set; }
 
-        private void CreateShooter(Person person)
+        private void CreateShooter(UiPerson person)
         {
-            int shooterNumber = _shooterNumberService.GetShooterNumber();
-            Shooter shooter = new Shooter
+            if (person != null)
             {
-                PersonId = person.PersonId,
-                ShooterNumber = shooterNumber
-            };
+                int shooterNumber = _shooterNumberService.GetShooterNumber();
+                Shooter shooter = new Shooter
+                {
+                    PersonId = person.PersonId,
+                    ShooterNumber = shooterNumber
+                };
 
-            _shooterDataWriter.WriteShooterData(new SsvShooterData
-            {
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                LicenseNumber = (uint) shooter.ShooterNumber
-            });
+                _shooterDataWriter.WriteShooterData(new SsvShooterData
+                {
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    LicenseNumber = (uint) shooter.ShooterNumber
+                });
 
-            _shooterDataStore.Create(shooter);
+                _shooterDataStore.Create(shooter);
 
-            SetCurrentPerson(person);
-            LoadShooters(person);
-            SelectedShooter = Shooters.FirstOrDefault(s => s.Shooter.ShooterNumber == shooterNumber);
+                MessengerInstance.Send(new RefreshDataFromRepositories());
+                MessengerInstance.Send(new SetSelectedPersonMessage(person.PersonId));
+                MessengerInstance.Send(new SetSelectedShooterMessage(shooter.ShooterId));
+            }
         }
 
         public ViewModelCommand PrintBarcodeCommand { get; private set; }
@@ -214,59 +218,65 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         #endregion
 
-        private void LoadShooters(Person person)
+        private void LoadShooters(int personId)
         {
-            if (person == null)
-            {
-                Shooters = new ObservableCollection<ShooterViewModel>();
-                SelectedShooter = null;
+            Shooter[] shooters = _shooterDataStore.FindByPersonId(personId).ToArray();
 
-            }
-            else
-            {
-                Shooter[] shooters = _shooterDataStore.FindByPersonId(person.PersonId).ToArray();
-
-                Shooters =
-                    new ObservableCollection<ShooterViewModel>(
-                        shooters.Select(shooter =>
-                        {
-                            ShooterViewModel vm = new ShooterViewModel();
-                            vm.Initialize(shooter);
-                            return vm;
-                        }));
-                SelectedShooter = Shooters.FirstOrDefault();
-            }
+            Shooters =
+                new ObservableCollection<ShooterViewModel>(
+                    shooters.Select(shooter =>
+                    {
+                        ShooterViewModel vm = new ShooterViewModel();
+                        vm.Initialize(shooter);
+                        return vm;
+                    }));
+            SelectedShooter = Shooters.FirstOrDefault();
         }
 
 
         public void LoadPersons()
         {
-            Person selectedPerson = SelectedPerson;
-            AllPersons =
-                _personDataStore.GetAll().OrderBy(person => person.LastName).ThenBy(person => person.FirstName).ToList();
+            UiPerson selectedPerson = SelectedPerson;
+            AllPersons = (from p in _personDataStore.GetAll()
+                join s in _shooterDataStore.GetAll() on p.PersonId equals s.PersonId into gj
+                orderby p.FirstName
+                orderby p.LastName
+                from subs in gj.DefaultIfEmpty()
+                group gj by p
+                into grouping
+                select new UiPerson
+                {
+                    PersonId = grouping.Key.PersonId,
+                    FirstName = grouping.Key.FirstName,
+                    LastName = grouping.Key.LastName,
+                    DateOfBirth = grouping.Key.DateOfBirth,
+                    HasShooters = grouping.SelectMany(x => x).Any()
+                }).ToList();
+
             FilterPersons();
 
             if (selectedPerson != null)
                 SelectedPerson = FilteredPersons.FirstOrDefault(x => selectedPerson.PersonId == x.PersonId);
         }
 
+        [DebuggerDisplay("{Person.FirstName} {Person.LastName}")]
+        internal class Foo
+        {
+            public Person Person { get; set; }
+            public IEnumerable<Shooter> Shooters { get; set; }
+        }
+
         private void FilterPersons()
         {
-            FilteredPersons = new ObservableCollection<Person>(FilterPersons(AllPersons, PersonFilterText));
+            FilteredPersons = new ObservableCollection<UiPerson>(FilterPersons(AllPersons, PersonFilterText));
         }
 
-
-        private void SetCurrentPerson(Person person)
-        {
-            SelectedPerson = person;
-        }
-
-        private IEnumerable<Person> FilterPersons(IEnumerable<Person> persons, string filterText)
+        private IEnumerable<UiPerson> FilterPersons(IEnumerable<UiPerson> persons, string filterText)
         {
             if (filterText == null) filterText = string.Empty;
             string[] split = filterText.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (Person person in persons)
+            foreach (UiPerson person in persons)
             {
                 if (string.IsNullOrWhiteSpace(filterText))
                 {
@@ -304,9 +314,9 @@ namespace ShootingRange.ServiceDesk.ViewModel
             }
         }
 
-        private ObservableCollection<Person> _filteredPersons;
+        private ObservableCollection<UiPerson> _filteredPersons;
 
-        public ObservableCollection<Person> FilteredPersons
+        public ObservableCollection<UiPerson> FilteredPersons
         {
             get { return _filteredPersons; }
             set
@@ -319,9 +329,9 @@ namespace ShootingRange.ServiceDesk.ViewModel
             }
         }
 
-        private Person _selectedPerson;
+        private UiPerson _selectedPerson;
 
-        public Person SelectedPerson
+        public UiPerson SelectedPerson
         {
             get { return _selectedPerson; }
             set
@@ -331,8 +341,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
                     _selectedPerson = value;
                     OnPropertyChanged();
 
-                    if (MessengerInstance != null)
-                        MessengerInstance.Send(new PersonSelectedMessage(_selectedPerson));
+                    if (MessengerInstance != null && _selectedPerson != null)
+                        MessengerInstance.Send(new PersonSelectedMessage(_selectedPerson.PersonId));
                 }
             }
         }

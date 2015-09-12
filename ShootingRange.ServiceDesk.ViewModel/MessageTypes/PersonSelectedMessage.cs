@@ -4,11 +4,11 @@ namespace ShootingRange.ServiceDesk.ViewModel.MessageTypes
 {
     public class PersonSelectedMessage
     {
-        public Person Person { get; set; }
+        public int PersonId { get; set; }
 
-        public PersonSelectedMessage(Person person)
+        public PersonSelectedMessage(int personId)
         {
-            Person = person;
+            PersonId = personId;
         }
     }
 }
