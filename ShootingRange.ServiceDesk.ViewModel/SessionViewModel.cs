@@ -21,7 +21,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _selectedShot)
                 {
                     _selectedShot = value;
-                    OnPropertyChanged("SelectedShot");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _shots)
                 {
                     _shots = value;
-                    OnPropertyChanged("Shots");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _laneNumber)
                 {
                     _laneNumber = value;
-                    OnPropertyChanged("LaneNumber");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _total)
                 {
                     _total = value;
-                    OnPropertyChanged("Total");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -82,7 +82,22 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _programName)
                 {
                     _programName = value;
-                    OnPropertyChanged("ProgramName");
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        private bool _shooterIsParticipating;
+        public bool ShooterIsParticipating
+        {
+            get { return _shooterIsParticipating; }
+            set
+            {
+                if (value != _shooterIsParticipating)
+                {
+                    _shooterIsParticipating = value;
+                    OnPropertyChanged();
                 }
             }
         }

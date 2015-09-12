@@ -69,7 +69,7 @@ namespace ShootingRange.Repository.Repositories
       return _sqlRepository.Find(shooterParticipation => shooterParticipation.ShooterId == shooterId).Select(_selector);
     }
 
-    public IEnumerable<ShooterParticipation> FindByParticipationId(int programNumber)
+    public IEnumerable<ShooterParticipation> FindByProgramNumber(int programNumber)
     {
       return
         _sqlRepository.Find(shooterParticipation => shooterParticipation.ProgramNumber == programNumber)

@@ -389,10 +389,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
             CreateShooterCommand.RaiseCanExecuteChanged();
         }
 
-        #region Fetch
-
-        #endregion
-
     }
 
     public interface ILoadable

@@ -19,6 +19,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         private ISessionDataStore _sessionDataStore;
         private ISessionSubtotalDataStore _sessionSubtotalDataStore;
         private IShotDataStore _shotDataStore;
+        private IShooterParticipationDataStore _shooterParticipationDataStore;
         private ServiceDeskConfiguration _sdk;
 
         public ResultsPageViewModel()
@@ -57,6 +58,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             _sessionDataStore = ServiceLocator.Current.GetInstance<ISessionDataStore>();
             _sessionSubtotalDataStore = ServiceLocator.Current.GetInstance<ISessionSubtotalDataStore>();
             _shotDataStore = ServiceLocator.Current.GetInstance<IShotDataStore>();
+            _shooterParticipationDataStore = ServiceLocator.Current.GetInstance<IShooterParticipationDataStore>();
             _sdk = ServiceLocator.Current.GetInstance<ServiceDeskConfiguration>();
         }
 
@@ -162,7 +164,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
                         {
                             LaneNumber = session.LaneNumber,
                             ProgramName = string.Format("{0} [{1}]", programName, session.ProgramNumber),
-                            SessionId = session.SessionId
+                            SessionId = session.SessionId,
+                            ShooterIsParticipating = _shooterParticipationDataStore.FindByShooterId(SelectedPerson.ShooterId).Any(x => x.ProgramNumber == session.ProgramNumber)
                         };
 
                         List<Shot> shots = new List<Shot>();

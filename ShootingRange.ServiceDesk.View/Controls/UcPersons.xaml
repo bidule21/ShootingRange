@@ -9,7 +9,7 @@
       xmlns:controls1="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
       xmlns:converter1="clr-namespace:Gui.Wpf.Converter;assembly=Gui.Wpf"
       mc:Ignorable="d" 
-      d:DesignHeight="480" d:DesignWidth="805" d:DataContext="{Binding PersonsPage, Source={StaticResource Ds}}">
+      d:DataContext="{Binding PersonsPage, Source={StaticResource Ds}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -137,6 +137,10 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
                         <GroupBox Header="Wettkämpfe" Margin="5">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -170,7 +174,7 @@
                                 </ListView>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Gruppierungen" Grid.Row="1" Margin="5">
+                        <GroupBox Grid.Column="0" Header="Gruppierungen" Grid.Row="1" Margin="5">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -208,6 +212,47 @@
                                 </ListView>
                             </Grid>
                         </GroupBox>
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="350"/>
+                                <ColumnDefinition Width="120"/>
+                            </Grid.ColumnDefinitions>
+                            <ToolBarTray IsLocked="True" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                                <ToolBar>
+                                    <Button Content="Schützenzuordnung ändern..." Command="{Binding ReassignSessionCommand}"/>
+                                    <Button Content="Programmnummer ändern..." Command="{Binding ReassignProgramNumberCommand}"/>
+                                </ToolBar>
+                            </ToolBarTray>
+                            <DataGrid IsReadOnly="True" Grid.Row="1" Grid.Column="0" Margin="5,10,5,5" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}" SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="Program Name [Nummer]">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type viewModel:SessionViewModel}">
+                                                <TextBlock Text="{Binding ProgramName}" Name="_ProgramName"/>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding ShooterIsParticipating}" Value="False">
+                                                        <Setter TargetName="_ProgramName" Property="FontWeight" Value="Bold"/>
+                                                        <Setter TargetName="_ProgramName" Property="Foreground" Value="Red"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Binding="{Binding Total}" Header="Total"></DataGridTextColumn>
+                                    <DataGridTextColumn Width="*" Binding="{Binding LaneNumber}" Header="Scheibe"></DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1" Grid.Column="1" Margin="5,10,5,5" ItemsSource="{Binding SelectedSession.Shots}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Ordinal" Binding="{Binding Ordinal}"/>
+                                    <DataGridTextColumn Width="*" Header="Score" Binding="{Binding PrimaryScore}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>

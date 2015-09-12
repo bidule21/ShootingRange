@@ -6,7 +6,7 @@
         xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
         xmlns:wpf="clr-namespace:Gui.Wpf;assembly=Gui.Wpf"
         xmlns:controls="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
-        Title="{Binding Title}" Height="513" Width="786" mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=viewModel:MainWindowViewModel}" Icon="/ShootingRange.ServiceDesk.View;component/Resources/flower_48.png">
+        Title="{Binding Title}" Height="600" Width="900" mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=viewModel:MainWindowViewModel}" Icon="/ShootingRange.ServiceDesk.View;component/Resources/flower_48.png">
     <wpf:CustomWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -36,13 +36,13 @@
                     <TextBlock Text="Ranglisten" Margin="5"/>
                 </StackPanel>
             </Button>-->
-            <Separator/>
+            <!--<Separator/>
             <Button Margin="5" Command="{Binding ShowResultsCommand}">
                 <StackPanel Orientation="Vertical">
                     <controls:AutoGreyableImage Source="/ShootingRange.ServiceDesk.View;component/Resources/target_48.png" Width="48" Height="48"/>
                     <TextBlock Text="Resultate" Margin="5"/>
                 </StackPanel>
-            </Button>
+            </Button>-->
         </ToolBar>
         <Border DockPanel.Dock="Bottom" BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="0,1,0,1">
             <StatusBar Height="18"></StatusBar>
@@ -51,10 +51,6 @@
             <Grid>
                 <Grid.Background>
                     <SolidColorBrush Color="{StaticResource SscLightColor}"></SolidColorBrush>
-                    <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="{StaticResource SscLightColor}" Offset="0.5" />
-                        <GradientStop Color="White" Offset="1.4" />
-                    </LinearGradientBrush>-->
                 </Grid.Background>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="160" />
@@ -70,8 +66,6 @@
                 <StackPanel Grid.Column="0" Margin="10" Orientation="Vertical">
                     <Button Style="{StaticResource HyperlinkButton}" Content="Neuer Schütze..." Command="{Binding ShowCreatePersonDialogCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
                     <Button Style="{StaticResource HyperlinkButton}" Content="Neue Gruppierung..." Command="{Binding ShowCreateGroupingDialogCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-                    <!--<Separator />
-                    <Button Style="{StaticResource HyperlinkButton}" Content="Konfiguration anpassen..." Command="{Binding ShowConfigurationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>-->
                </StackPanel>
                 <Rectangle Grid.Column="2" Fill="AliceBlue"/>
                 <AdornerDecorator Grid.Column="2">
