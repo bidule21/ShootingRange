@@ -78,7 +78,7 @@
                     <Button Style="{StaticResource HyperlinkButton}" Content="Neue Gruppierung..." Command="{Binding ShowCreateGroupingDialogCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
                </StackPanel>
                 <Rectangle Grid.Column="2" Fill="AliceBlue"/>
-                <AdornerDecorator Grid.Column="2">
+                <AdornerDecorator Grid.Column="2" HorizontalAlignment="Left" Margin="5">
                     <ContentControl Name="MainContent" Content="{Binding CurrentPage}"/>
                 </AdornerDecorator>
             </Grid>

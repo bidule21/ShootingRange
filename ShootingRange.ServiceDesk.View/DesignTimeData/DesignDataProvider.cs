@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using ShootingRange.BusinessObjects;
 using ShootingRange.ServiceDesk.ViewModel;
 
@@ -8,9 +9,63 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
 {
     public class DesignDataProvider
     {
+        private DesignDataFactory df;
+        public DesignDataProvider()
+        {
+            df = new DesignDataFactory();
+        }
+
+        public SelectShooterViewModel SelectShooter { get { return new SelectShooterViewModel
+        {
+            Shooters = new ObservableCollection<PersonShooterViewModel>
+            {
+                df.CreatePersonShooter(),
+                df.CreatePersonShooter(),
+                df.CreatePersonShooter(),
+                df.CreatePersonShooter(),
+            }
+        };} }
+
         public ReassignProgramNumberViewModel ReassignProgramNumberDialog
         {
             get {  return new ReassignProgramNumberViewModel();}
+        }
+
+        public GroupsPageViewModel GroupsPage
+        {
+            get
+            {
+                ShooterCollectionViewModel sc = new ShooterCollectionViewModel
+                {
+                    CollectionName = "Sommerportmonee",
+                    Shooters = new ObservableCollection<UiCollectionShooter>
+                    {
+                        df.CreateUiCollectionShooter(),
+                        df.CreateUiCollectionShooter(),
+                        df.CreateUiCollectionShooter(),
+                        df.CreateUiCollectionShooter(),
+                    }
+                };
+
+                GroupingPageGroupingViewModel vm = new GroupingPageGroupingViewModel
+                {
+
+                    GroupingType = "Gruppenstich",
+                    ShooterCollections = new ObservableCollection<ShooterCollectionViewModel>
+                    {
+                        sc
+                    },
+                    SelectedShooterCollection = sc
+                };
+
+                return new GroupsPageViewModel
+                {
+                    Groupings =
+                        new ObservableCollection<GroupingPageGroupingViewModel>(
+                            new List<GroupingPageGroupingViewModel> { vm }),
+                    SelectedGrouping = vm
+                };
+            }
         }
 
         public ReassignSessionViewModel ReassignSessionDialog
@@ -121,22 +176,17 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
         {
             get
             {
+                List<UiPerson> allPersons = new List<UiPerson>
+                {
+                    df.GetUiPerson(),
+                    df.GetUiPerson(),
+                    df.GetUiPerson(),
+                    df.GetUiPerson(),
+                    df.GetUiPerson(),
+                };
                 return new PersonsPageViewModel
                 {
-                    AllPersons = new List<UiPerson>
-                    {
-                        new UiPerson
-                        {
-                            FirstName = "Hans",
-                            LastName = "Schwegler",
-                            DateOfBirth = new DateTime(1982, 12, 21)
-                        },
-                        new UiPerson
-                        {
-                            FirstName = "Hansueli",
-                            LastName = "Schweggimann"
-                        }
-                    },
+                    AllPersons = allPersons,
                     Shooters = new ObservableCollection<ShooterViewModel>(new List<ShooterViewModel>
                     {
                         new ShooterViewModel
@@ -166,7 +216,28 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
                                         GroupingName = "Eichenlaub",
                                         ParticipationName = "Gruppentstich"
                                     }
-                                })
+                                }),
+                                Sessions = new ObservableCollection<SessionViewModel>
+                                {
+                                    new SessionViewModel
+                                    {
+                                        ProgramName = "Gruppenstich [102]",
+                                        ShooterIsParticipating = true,
+                                        LaneNumber = 9,
+                                        Total = 125,
+                                    }
+                                },
+                                SelectedSession = new SessionViewModel
+                                {
+                                    Shots = new ObservableCollection<Shot>
+                                    {
+                                        df.CreateShot(),
+                                        df.CreateShot(),
+                                        df.CreateShot(),
+                                        df.CreateShot(),
+                                        df.CreateShot(),
+                                    }
+                                }
                         },
                         new ShooterViewModel
                         {
@@ -176,12 +247,8 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
                             }
                         }
                     }),
-                    SelectedPerson = new UiPerson
-                    {
-                        FirstName = "Hans",
-                        LastName = "Schwegler"
-                    },
-                    PersonFilterText = "Han Schweg",
+                    SelectedPerson = allPersons.First(),
+                    PersonFilterText = string.Empty,
                 };
             }
         }

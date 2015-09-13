@@ -4,14 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:ShootingRange.ServiceDesk.ViewModel;assembly=ShootingRange.ServiceDesk.ViewModel"
-             xmlns:controls="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
              xmlns:converter="clr-namespace:Gui.Wpf.Converter;assembly=Gui.Wpf"
+             xmlns:controls="clr-namespace:Gui.Wpf.Controls;assembly=Gui.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance Type=viewModel:GroupsPageViewModel}">
+             d:DesignHeight="350" d:DesignWidth="600" Width="650" d:DataContext="{Binding GroupsPage, Source={StaticResource Ds}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/Styles.xaml"/>
+                <ResourceDictionary Source="/ShootingRange.ServiceDesk.View;component/DesignTimeData/DesignDataResource.xaml"/>
                 <ResourceDictionary>
                     <converter:PersonNameFormatConverter x:Key="PersonNameConverter" />
                 </ResourceDictionary>
@@ -23,10 +24,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Text="Gruppierungen" Style="{StaticResource PageHeaderStyle}"></TextBlock>
+        <TextBlock Text="Gruppierungen" Style="{StaticResource PageHeaderStyle}"/>
         <TabControl Grid.Row="1" ItemsSource="{Binding Groupings}" SelectedItem="{Binding SelectedGrouping}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
@@ -63,13 +61,15 @@
                                 </Button>
                             </ToolBar>
                         </ToolBarTray>
-                        <ListBox Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ShooterCollections}" SelectedItem="{Binding SelectedShooterCollection}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding CollectionName}"></TextBlock>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <ListView SelectionMode="Single" Grid.Row="1" Grid.Column="0" Margin="5" ItemsSource="{Binding ShooterCollections}" SelectedItem="{Binding SelectedShooterCollection}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="False">
+                                    <GridViewColumn Header="Gruppenname" Width="120" DisplayMemberBinding="{Binding CollectionName}"/>
+                                    <GridViewColumn Header="# Schützen" DisplayMemberBinding="{Binding CollectionShooterCount}"/>
+                                    <GridViewColumn Header="Aktuelles Total"  DisplayMemberBinding="{Binding CollectionScore}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                         <ToolBarTray Grid.Row="0" Grid.Column="1" Margin="5" IsLocked="True">
                             <ToolBar>
                                 <Button Command="{Binding AddShooterToGroupingCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}">
@@ -86,26 +86,28 @@
                                 </Button>
                             </ToolBar>
                         </ToolBarTray>
-                        <ListBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding SelectedShooterCollection.Shooters}" SelectedItem="{Binding SelectedShooter}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource PersonNameConverter}"
+                        <ListView SelectionMode="Single" Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding SelectedShooterCollection.Shooters}" SelectedItem="{Binding SelectedShooter}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="False">
+                                    <GridViewColumn Width="120" Header="Schütze">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate DataType="{x:Type viewModel:UiCollectionShooter}">
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding Converter="{StaticResource PersonNameConverter}"
                                                               ConverterParameter="FormatLastFirst">
-                                                    <Binding Path="LastName" />
-                                                    <Binding Path="FirstName" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                        <TextBlock Text=" ("></TextBlock>
-                                        <TextBlock Text="{Binding ShooterNumber}"/>
-                                        <TextBlock Text=")"></TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                                            <Binding Path="LastName" />
+                                                            <Binding Path="FirstName" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Punkte" DisplayMemberBinding="{Binding CollectionShooterScore}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>

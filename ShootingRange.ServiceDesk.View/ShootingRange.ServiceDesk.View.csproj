@@ -72,6 +72,7 @@
     <Compile Include="Controls\UcResults.xaml.cs">
       <DependentUpon>UcResults.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignTimeData\DesignDataFactory.cs" />
     <Compile Include="DesignTimeData\DesignDataProvider.cs" />
     <Compile Include="Dialogs\AddParticipationToShooterDialog.xaml.cs">
       <DependentUpon>AddParticipationToShooterDialog.xaml</DependentUpon>

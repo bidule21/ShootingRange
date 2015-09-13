@@ -227,31 +227,35 @@
                                     <Button Content="Programmnummer ändern..." Command="{Binding ReassignProgramNumberCommand}"/>
                                 </ToolBar>
                             </ToolBarTray>
-                            <DataGrid IsReadOnly="True" Grid.Row="1" Grid.Column="0" Margin="5,10,5,5" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}" SelectionMode="Single">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Program Name [Nummer]">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate DataType="{x:Type viewModel:SessionViewModel}">
-                                                <TextBlock Text="{Binding ProgramName}" Name="_ProgramName"/>
-                                                <DataTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding ShooterIsParticipating}" Value="False">
-                                                        <Setter TargetName="_ProgramName" Property="FontWeight" Value="Bold"/>
-                                                        <Setter TargetName="_ProgramName" Property="Foreground" Value="Red"/>
-                                                    </DataTrigger>
-                                                </DataTemplate.Triggers>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTextColumn Binding="{Binding Total}" Header="Total"></DataGridTextColumn>
-                                    <DataGridTextColumn Width="*" Binding="{Binding LaneNumber}" Header="Scheibe"></DataGridTextColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <DataGrid SelectionMode="Single" IsReadOnly="True" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1" Grid.Column="1" Margin="5,10,5,5" ItemsSource="{Binding SelectedSession.Shots}">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Ordinal" Binding="{Binding Ordinal}"/>
-                                    <DataGridTextColumn Width="*" Header="Score" Binding="{Binding PrimaryScore}"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                            <ListView Grid.Row="1" Grid.Column="0" Margin="5,10,5,5" ItemsSource="{Binding Sessions}" SelectedItem="{Binding SelectedSession}" SelectionMode="Single">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Programm Name [Nummber]">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate DataType="{x:Type viewModel:SessionViewModel}">
+                                                    <TextBlock Text="{Binding ProgramName}" Name="_ProgramName"/>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding ShooterIsParticipating}" Value="False">
+                                                            <Setter TargetName="_ProgramName" Property="FontWeight" Value="Bold"/>
+                                                            <Setter TargetName="_ProgramName" Property="Foreground" Value="Red"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Total" DisplayMemberBinding="{Binding Total}"/>
+                                        <GridViewColumn Header="Scheibe" DisplayMemberBinding="{Binding LaneNumber}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <ListView Grid.Row="1" Grid.Column="1" Margin="5,10,5,5" ItemsSource="{Binding SelectedSession.Shots}" SelectionMode="Single">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False">
+                                        <GridViewColumn Header="Ordinal" DisplayMemberBinding="{Binding Ordinal}"/>
+                                        <GridViewColumn Header="Score" DisplayMemberBinding="{Binding PrimaryScore}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
                         </Grid>
                     </Grid>
                 </DataTemplate>

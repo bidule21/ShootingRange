@@ -140,6 +140,7 @@ namespace ShootingRange.ServiceDesk
             personsPageViewModel.Initialize();
 
             GroupsPageViewModel groupsPageViewModel = new GroupsPageViewModel();
+            groupsPageViewModel.Initialize();
 
             ResultsPageViewModel resultsPageViewModel = new ResultsPageViewModel();
             resultsPageViewModel.Initialize();

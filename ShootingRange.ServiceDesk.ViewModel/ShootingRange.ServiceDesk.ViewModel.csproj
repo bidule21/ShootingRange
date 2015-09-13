@@ -83,6 +83,7 @@
     <Compile Include="MessageTypes\ShowReassignShooterNumberDialogMessage.cs" />
     <Compile Include="MessageTypes\ShowResultsPageMessage.cs" />
     <Compile Include="ParticipationViewModel.cs" />
+    <Compile Include="UiCollectionShooter.cs" />
     <Compile Include="PersonShooterViewModel.cs" />
     <Compile Include="PersonsPageViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

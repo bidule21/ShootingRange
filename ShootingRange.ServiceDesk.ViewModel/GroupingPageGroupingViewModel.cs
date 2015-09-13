@@ -14,18 +14,19 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         public GroupingPageGroupingViewModel()
         {
-            NewGroupingCommand = new ViewModelCommand(x => ShowCreateGrouping((IWindow) x));
+            NewGroupingCommand = new ViewModelCommand(x => ShowCreateGrouping((IWindow)x));
             NewGroupingCommand.RaiseCanExecuteChanged();
 
             EditGroupingCommand = new ViewModelCommand(x => MessengerInstance.Send(new EditGroupingDialogMessage(SelectedShooterCollection.ShooterCollectionId, SelectedShooterCollection.CollectionName)));
             EditGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
             EditGroupingCommand.RaiseCanExecuteChanged();
 
-            DeleteGroupingCommand = new ViewModelCommand(x => MessengerInstance.Send(new DeleteGroupingDialogMessage(SelectedShooterCollection)));
+            DeleteGroupingCommand =
+                new ViewModelCommand(x => MessengerInstance.Send(new DeleteGroupingDialogMessage(SelectedShooterCollection)));
             DeleteGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
             DeleteGroupingCommand.RaiseCanExecuteChanged();
 
-            RemoveShooterFromGroupingCommand = new ViewModelCommand(x => RemoveShooterFromGrouping((IWindow) x));
+            RemoveShooterFromGroupingCommand = new ViewModelCommand(x => RemoveShooterFromGrouping((IWindow)x));
             RemoveShooterFromGroupingCommand.AddGuard(x => SelectedShooterCollection != null && SelectedShooter != null);
             RemoveShooterFromGroupingCommand.RaiseCanExecuteChanged();
 
@@ -33,6 +34,10 @@ namespace ShootingRange.ServiceDesk.ViewModel
             AddShooterToGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
             AddShooterToGroupingCommand.RaiseCanExecuteChanged();
 
+        }
+
+        public void Initialize()
+        {
             MessengerInstance.Register<RefreshDataFromRepositories>(this,
                 x => LoadShooterCollections(ProgramNumber));
 
@@ -82,8 +87,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
         }
 
 
-        private PersonShooterViewModel _selectedShooter;
-        public PersonShooterViewModel SelectedShooter
+        private UiCollectionShooter _selectedShooter;
+        public UiCollectionShooter SelectedShooter
         {
             get { return _selectedShooter; }
             set
@@ -123,26 +128,27 @@ namespace ShootingRange.ServiceDesk.ViewModel
             IPersonDataStore personDataStore = ServiceLocator.Current.GetInstance<IPersonDataStore>();
 
             IEnumerable<ShooterCollectionViewModel> scvm = from sc in shooterCollectionDataStore.GetAll()
-              where sc.ProgramNumber == programNumber
-              select new ShooterCollectionViewModel
-              {
-                CollectionName = sc.CollectionName,
-                ShooterCollectionId = sc.ShooterCollectionId,
-                Shooters = new ObservableCollection<PersonShooterViewModel>(from cs in collectionShooterDataStore.GetAll()
-                  where cs.ShooterCollectionId == sc.ShooterCollectionId
-                  join s in shooterDataStore.GetAll() on cs.ShooterId equals s.ShooterId
-                  join p in personDataStore.GetAll() on s.PersonId equals p.PersonId
-                  orderby p.FirstName
-                  orderby p.LastName
-                  select new PersonShooterViewModel
-                  {
-                    ShooterId = s.ShooterId,
-                    PersonId = p.PersonId,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    ShooterNumber = s.ShooterNumber
-                  })
-              };
+                where sc.ProgramNumber == programNumber
+                select new ShooterCollectionViewModel
+                {
+                    CollectionName = sc.CollectionName,
+                    ShooterCollectionId = sc.ShooterCollectionId,
+                    Shooters =
+                        new ObservableCollection<UiCollectionShooter>(from cs in collectionShooterDataStore.GetAll()
+                            where cs.ShooterCollectionId == sc.ShooterCollectionId
+                            join s in shooterDataStore.GetAll() on cs.ShooterId equals s.ShooterId
+                            join p in personDataStore.GetAll() on s.PersonId equals p.PersonId
+                            orderby p.FirstName
+                            orderby p.LastName
+                            select new UiCollectionShooter
+                            {
+                                ShooterId = s.ShooterId,
+                                PersonId = p.PersonId,
+                                FirstName = p.FirstName,
+                                LastName = p.LastName,
+                                ShooterNumber = s.ShooterNumber
+                            })
+                };
 
             ShooterCollections = new ObservableCollection<ShooterCollectionViewModel>(scvm.OrderBy(_ => _.CollectionName));
         }
@@ -157,7 +163,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _groupingType)
                 {
                     _groupingType = value;
-                    OnPropertyChanged("GroupingType");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -172,7 +178,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _shooterCollections)
                 {
                     _shooterCollections = value;
-                    OnPropertyChanged("ShooterCollections");
+                    OnPropertyChanged();
                 }
             }
         }
@@ -188,7 +194,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _selectedShooterCollection)
                 {
                     _selectedShooterCollection = value;
-                    OnPropertyChanged("SelectedShooterCollection");
+                    OnPropertyChanged();
 
                     RemoveShooterFromGroupingCommand.RaiseCanExecuteChanged();
                     AddShooterToGroupingCommand.RaiseCanExecuteChanged();
