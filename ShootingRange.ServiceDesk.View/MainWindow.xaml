@@ -15,6 +15,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </wpf:CustomWindow.Resources>
+    <wpf:CustomWindow.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+    </wpf:CustomWindow.InputBindings>
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Button Margin="5" Command="{Binding ShowPersonsCommand}">
@@ -43,6 +46,13 @@
                     <TextBlock Text="Resultate" Margin="5"/>
                 </StackPanel>
             </Button>-->
+            <Separator/>
+            <Button Margin="5" Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Vertical">
+                    <Image Source="/ShootingRange.ServiceDesk.View;component/Resources/refresh_48.png"/>
+                    <TextBlock Text="Refresh" Margin="5"/>
+                </StackPanel>
+            </Button>
         </ToolBar>
         <Border DockPanel.Dock="Bottom" BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="0,1,0,1">
             <StatusBar Height="18"></StatusBar>
