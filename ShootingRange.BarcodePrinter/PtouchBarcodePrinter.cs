@@ -104,7 +104,6 @@ namespace ShootingRange.BarcodePrinter
               AddCollectionLabel(barcodeInfo, doc, 0);
               AddCollectionLabel(barcodeInfo, doc, 1);
 
-              AddStichLabel(barcodeInfo, doc, 0);
               AddStichLabel(barcodeInfo, doc, 1);
               AddStichLabel(barcodeInfo, doc, 2);
               AddStichLabel(barcodeInfo, doc, 3);

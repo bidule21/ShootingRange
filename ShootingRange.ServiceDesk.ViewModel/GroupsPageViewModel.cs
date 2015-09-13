@@ -40,7 +40,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _selectedGrouping)
                 {
                     _selectedGrouping = value;
-                    OnPropertyChanged("SelectedGrouping");
+                    OnPropertyChanged();
 
                     if (value != null)
                         value.Load();
@@ -60,7 +60,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 if (value != _groupings)
                 {
                     _groupings = value;
-                    OnPropertyChanged("Groupings");
+                    OnPropertyChanged();
                 }
             }
         }

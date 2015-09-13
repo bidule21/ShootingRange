@@ -6,6 +6,6 @@ namespace ShootingRange.Repository.RepositoryInterfaces
   public interface IShooterParticipationDataStore : IDataStore<ShooterParticipation, int>
   {
     IEnumerable<ShooterParticipation> FindByShooterId(int shooterId);
-    IEnumerable<ShooterParticipation> FindByProgramNumber(int participationId);
+    IEnumerable<ShooterParticipation> FindByProgramNumber(int programNumber);
   }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Gui.ViewModel;
 using Microsoft.Practices.ServiceLocation;
+using ShootingRange.BusinessObjects;
 using ShootingRange.BusinessObjects.Properties;
 using ShootingRange.Repository.RepositoryInterfaces;
 
@@ -24,37 +25,36 @@ namespace ShootingRange.ServiceDesk.ViewModel
             IShooterDataStore shooterDataStore = ServiceLocator.Current.GetInstance<IShooterDataStore>();
             ICollectionShooterDataStore collectionShooterDataStore = ServiceLocator.Current.GetInstance<ICollectionShooterDataStore>();
             IShooterCollectionDataStore shooterCollectionDataStore = ServiceLocator.Current.GetInstance<IShooterCollectionDataStore>();
+            IShooterParticipationDataStore shooterParticipationDataStore =
+                ServiceLocator.Current.GetInstance<IShooterParticipationDataStore>();
 
-            var personToParticipationTypes = from s in shooterDataStore.GetAll()
+            // ShooterIds enroled in ProgramNumber
+            IEnumerable<int> shooters = from sp in shooterParticipationDataStore.FindByProgramNumber(programNumber)
+                select sp.ShooterId;
+
+            // ShooterIds with a ShooterCollection participating in ProgramNumber
+            IEnumerable<int> shootersWithCollectionInProgramNumber = from cs in collectionShooterDataStore.GetAll()
+                join sc in shooterCollectionDataStore.GetAll() on cs.ShooterCollectionId equals sc.ShooterCollectionId
+                where sc.ProgramNumber == programNumber
+                select cs.ShooterId;
+
+            IEnumerable<int> shootersFinal = shooters.Except(shootersWithCollectionInProgramNumber);
+
+            IEnumerable<PersonShooterViewModel> result = from shooterId in shootersFinal
+                join s in shooterDataStore.GetAll() on shooterId equals s.ShooterId
                 join p in personDataStore.GetAll() on s.PersonId equals p.PersonId
-                join cs in collectionShooterDataStore.GetAll() on s.ShooterId equals cs.ShooterId into gj
-                select new
-                {
-                    Person = p,
-                    Shooter = s,
-                    ParticipationTypes = from cs in gj
-                        join sc in shooterCollectionDataStore.GetAll() on cs.ShooterCollectionId equals
-                            sc.ShooterCollectionId
-                        select sc.ProgramNumber
-                };
+                select
+                    new PersonShooterViewModel
+                    {
+                        PersonId = p.PersonId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        DateOfBirth = p.DateOfBirth,
+                        ShooterId = s.ShooterId,
+                        ShooterNumber = s.ShooterNumber
+                    };
 
-            IEnumerable<PersonShooterViewModel> shooters = (from grouped in personToParticipationTypes
-                                                            where grouped.ParticipationTypes.All(_ => _ != programNumber)
-                                                            orderby grouped.Shooter.ShooterNumber
-                                                            orderby grouped.Person.FirstName
-                                                            orderby grouped.Person.LastName
-                                                            select
-                                                              new PersonShooterViewModel
-                                                              {
-                                                                  PersonId = grouped.Person.PersonId,
-                                                                  FirstName = grouped.Person.FirstName,
-                                                                  LastName = grouped.Person.LastName,
-                                                                  DateOfBirth = grouped.Person.DateOfBirth,
-                                                                  ShooterId = grouped.Shooter.ShooterId,
-                                                                  ShooterNumber = grouped.Shooter.ShooterNumber
-                                                              });
-
-            Shooters = new ObservableCollection<PersonShooterViewModel>(shooters);
+            Shooters = new ObservableCollection<PersonShooterViewModel>(result);
         }
 
 
