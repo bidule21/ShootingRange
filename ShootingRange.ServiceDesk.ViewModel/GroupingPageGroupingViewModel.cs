@@ -34,10 +34,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             AddShooterToGroupingCommand.RaiseCanExecuteChanged();
 
             MessengerInstance.Register<RefreshDataFromRepositories>(this,
-                x =>
-                {
-                    LoadShooterCollections(ProgramNumber);
-                });
+                x => LoadShooterCollections(ProgramNumber));
 
             MessengerInstance.Register<SetSelectedShooterCollectionMessage>(this,
                 x =>

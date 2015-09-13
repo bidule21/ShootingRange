@@ -8,7 +8,7 @@ using ShootingRange.ConfigurationProvider;
 
 namespace ShootingRange.ServiceDesk.ViewModel
 {
-    public class GroupsPageViewModel : INotifyPropertyChanged, ILoadable
+    public class GroupsPageViewModel : INotifyPropertyChanged
     {
         public GroupsPageViewModel()
         {

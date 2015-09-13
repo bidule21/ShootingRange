@@ -69,7 +69,6 @@ namespace ShootingRange.ServiceDesk.ViewModel
             _shooterCollectionDataStore = ServiceLocator.Current.GetInstance<IShooterCollectionDataStore>();
             _serviceDeskConfiguration = ServiceLocator.Current.GetInstance<ServiceDeskConfiguration>();
 
-            MessengerInstance.Register<ShowPersonsPageMessage>(this, x => LoadPersons());
             MessengerInstance.Register<PersonSelectedMessage>(this,
                 x =>
                 {
@@ -389,10 +388,4 @@ namespace ShootingRange.ServiceDesk.ViewModel
             CreateShooterCommand.RaiseCanExecuteChanged();
         }
 
-    }
-
-    public interface ILoadable
-    {
-        void Load();
-    }
-}
+    }}

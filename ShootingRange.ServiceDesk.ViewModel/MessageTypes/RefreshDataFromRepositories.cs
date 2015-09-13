@@ -2,6 +2,8 @@
 {
     public class RefreshDataFromRepositories
     {
-         
+        public RefreshDataFromRepositories()
+        {
+        }
     }
 }

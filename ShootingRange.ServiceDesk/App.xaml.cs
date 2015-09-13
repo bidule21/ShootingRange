@@ -162,7 +162,7 @@ namespace ShootingRange.ServiceDesk
 
             RegisterShowShooterPageMessage(personsPageViewModel);
             RegisterShowGroupsPageMessage(groupsPageViewModel);
-            RegisterShowResultsPageMessage(resultsPageViewModel);
+            // RegisterShowResultsPageMessage(resultsPageViewModel);
         }
 
         private void ComposeObjects()
@@ -593,10 +593,8 @@ namespace ShootingRange.ServiceDesk
                 {
                     IPage page = _vs.ExecuteFunction<PersonsPageViewModel, IPage>((IWindow)Current.MainWindow, personsPageViewModel);
                     _viewModel.CurrentPage = page;
-                });
-
-            _messenger.Send(new RefreshDataFromRepositories());
-        }
+                    _messenger.Send(new RefreshDataFromRepositories());
+                });        }
 
         private void RegisterShowGroupsPageMessage(GroupsPageViewModel groupsPageViewModel)
         {
@@ -605,9 +603,8 @@ namespace ShootingRange.ServiceDesk
                 {
                     IPage page = _vs.ExecuteFunction<GroupsPageViewModel, IPage>((IWindow) Current.MainWindow, groupsPageViewModel);
                     _viewModel.CurrentPage = page;
+                    _messenger.Send(new RefreshDataFromRepositories());
                 });
-
-            _messenger.Send(new RefreshDataFromRepositories());
         }
 
         private void RegisterShowResultsPageMessage(ResultsPageViewModel resultsPageViewModel)
