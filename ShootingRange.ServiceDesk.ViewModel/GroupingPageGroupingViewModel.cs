@@ -26,7 +26,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             DeleteGroupingCommand.AddGuard(x => SelectedShooterCollection != null);
             DeleteGroupingCommand.RaiseCanExecuteChanged();
 
-            RemoveShooterFromGroupingCommand = new ViewModelCommand(x => RemoveShooterFromGrouping((IWindow)x));
+            RemoveShooterFromGroupingCommand = new ViewModelCommand(x => RemoveShooterFromGrouping());
             RemoveShooterFromGroupingCommand.AddGuard(x => SelectedShooterCollection != null && SelectedShooter != null);
             RemoveShooterFromGroupingCommand.RaiseCanExecuteChanged();
 
@@ -38,7 +38,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
         public void Initialize()
         {
-            MessengerInstance.Register<RefreshDataFromRepositories>(this,
+            MessengerInstance.Register<RefreshDataFromRepositoriesMessage>(this,
                 x => LoadShooterCollections(ProgramNumber));
 
             MessengerInstance.Register<SetSelectedShooterCollectionMessage>(this,
@@ -49,7 +49,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                 });
         }
 
-        private void RemoveShooterFromGrouping(IWindow window)
+        private void RemoveShooterFromGrouping()
         {
             if (SelectedShooterCollection != null && SelectedShooter != null)
             {
@@ -61,7 +61,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
                         .SingleOrDefault(cs => cs.ShooterCollectionId == SelectedShooterCollection.ShooterCollectionId);
 
                 collectionShooterDataStore.Delete(collectionShooter);
-                MessengerInstance.Send(new RefreshDataFromRepositories());
+                MessengerInstance.Send(new RefreshDataFromRepositoriesMessage());
+                MessengerInstance.Send(new SetSelectedCollectionProgramNumber(ProgramNumber));
                 MessengerInstance.Send(new SetSelectedShooterCollectionMessage(shooterCollectionId));
             }
         }

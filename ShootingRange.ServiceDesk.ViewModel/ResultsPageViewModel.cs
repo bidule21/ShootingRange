@@ -26,7 +26,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         {
             if (MessengerInstance != null)
             {
-                MessengerInstance.Register<RefreshDataFromRepositories>(this,
+                MessengerInstance.Register<RefreshDataFromRepositoriesMessage>(this,
                     x =>
                     {
                         PersonShooterViewModel bkp = SelectedPerson;

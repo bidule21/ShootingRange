@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ShootingRange.BusinessObjects;
+using ShootingRange.Ranking;
 using ShootingRange.ServiceDesk.ViewModel;
 
 namespace ShootingRange.ServiceDesk.View.DesignTimeData
@@ -13,6 +14,56 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
         public DesignDataProvider()
         {
             df = new DesignDataFactory();
+        }
+
+        public RankViewModel RankingPage
+        {
+            get
+            {
+                RankViewModel vm = new RankViewModel
+                {
+                    Participations = new ObservableCollection<ParticipationViewModel>
+                    {
+                      new ParticipationViewModel
+                      {
+                          ProgramNumber = 101,
+                          ProgramName = "Gruppenstich"
+                      }  
+                    },
+                    RankItems = new ObservableCollection<RankItem>
+                    {
+                        new RankItem
+                        {
+                            Rank = 1,
+                            Label = string.Format("{0} {1}", df.FirstName, df.LastName),
+                            Score = df.Score
+                        },
+                        new RankItem
+                        {
+                            Rank = 2,
+                            Label = string.Format("{0} {1}", df.FirstName, df.LastName),
+                            Score = df.Score
+
+                        },
+                        new RankItem
+                        {
+                            Rank = 3,
+                            Label = string.Format("{0} {1}", df.FirstName, df.LastName),
+                            Score = df.Score
+
+                        },
+                        new RankItem
+                        {
+                            Rank = 4,
+                            Label = string.Format("{0} {1}", df.FirstName, df.LastName)
+                            ,
+                            Score = df.Score
+
+                        },
+                    }
+                };
+                return vm;
+            }
         }
 
         public SelectShooterViewModel SelectShooter { get { return new SelectShooterViewModel

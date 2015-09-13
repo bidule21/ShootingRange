@@ -80,5 +80,12 @@ namespace ShootingRange.ConfigurationProvider
             get { return (bool) this["AllowShooterParticipation"]; }
             set { this["AllowShooterParticipation"] = value; }
         }
+
+        [ConfigurationProperty("RankingType", IsRequired = true, IsKey = false)]
+        public string RankingType
+        {
+            get { return (string) this["RankingType"]; }
+            set { this["RankingType"] = value; }
+        }
     }
 }

@@ -30,6 +30,11 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
 
         public string FirstName
         {
+            get { return _firstNames.GetRandom(); }
+        }
+
+        public string LastName
+        {
             get { return _lastNames.GetRandom(); }
         }
 
@@ -76,6 +81,11 @@ namespace ShootingRange.ServiceDesk.View.DesignTimeData
                     ShooterNumber = _rand.Next(100001, 999999)
                 };
             }
+        }
+
+        public decimal Score
+        {
+            get { return _rand.Next(0, 100); }
         }
     }
 

@@ -197,6 +197,10 @@
       <Project>{4DA2B804-0082-45A9-9CE8-C727050A58A0}</Project>
       <Name>ShootingRange.ConfigurationProvider</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Ranking\ShootingRange.Ranking.csproj">
+      <Project>{A759DEB2-241F-4A67-B3EF-7A5EE258E561}</Project>
+      <Name>ShootingRange.Ranking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShootingRange.ServiceDesk.ViewModel\ShootingRange.ServiceDesk.ViewModel.csproj">
       <Project>{172a838b-0e90-408c-a1d2-41e5812c176d}</Project>
       <Name>ShootingRange.ServiceDesk.ViewModel</Name>

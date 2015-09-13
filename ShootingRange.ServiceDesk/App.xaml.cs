@@ -98,6 +98,8 @@ namespace ShootingRange.ServiceDesk
                 (window, model) => vsh.GetUserControl<UcGroups>((Window) window, model));
             _vs.RegisterFunction<ResultsPageViewModel, IPage>(
                 (window, model) => vsh.GetUserControl<UcResults>((Window) window, model));
+            _vs.RegisterFunction<RankViewModel, IPage>(
+                (window, model) => vsh.GetUserControl<UcRankings>((Window) window, model));
 
             _vs.RegisterFunction<CreatePersonViewModel, IWindow>(
                 (window, model) => vsh.GetOwnedWindow<CreatePerson>((Window) window, model));
@@ -145,6 +147,9 @@ namespace ShootingRange.ServiceDesk
             ResultsPageViewModel resultsPageViewModel = new ResultsPageViewModel();
             resultsPageViewModel.Initialize();
 
+            RankViewModel rankViewModel = new RankViewModel();
+            rankViewModel.Initialize();
+
             RegisterCreatePersonDialog(personDataStore);
             RegisterEditPersonDialog(personDataStore);
             RegisterCreateGroupingDialog(shooterCollectionDataStore, serviceDeskConfiguration);
@@ -164,6 +169,7 @@ namespace ShootingRange.ServiceDesk
             RegisterShowShooterPageMessage(personsPageViewModel);
             RegisterShowGroupsPageMessage(groupsPageViewModel);
             // RegisterShowResultsPageMessage(resultsPageViewModel);
+            RegisterShowRankingsPageMessage(rankViewModel);
         }
 
         private void ComposeObjects()
@@ -216,7 +222,7 @@ namespace ShootingRange.ServiceDesk
                         Phone = m.Phone
                     };
                     personDataStore.Create(person);
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                     _messenger.Send(new SetSelectedPersonMessage(person.PersonId));
                 });
         }
@@ -258,7 +264,7 @@ namespace ShootingRange.ServiceDesk
                         Phone = m.Phone
                     });
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                     _messenger.Send(new SetSelectedPersonMessage(m.PersonId));
                 });
         }
@@ -284,7 +290,7 @@ namespace ShootingRange.ServiceDesk
 
                     Person person = personDataStore.FindById(x.PersonId);
                     personDataStore.Delete(person);
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -309,7 +315,7 @@ namespace ShootingRange.ServiceDesk
                     };
 
                     shooterCollectionDataStore.Create(sc);
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -333,7 +339,7 @@ namespace ShootingRange.ServiceDesk
                     sc.CollectionName = m.GroupingName;
                     shooterCollectionDataStore.Update(sc);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -356,7 +362,7 @@ namespace ShootingRange.ServiceDesk
                     
                     ShooterCollection sc = shooterCollectionDataStore.FindById(x.ShooterCollectionId);
                     shooterCollectionDataStore.Delete(sc);
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -380,7 +386,7 @@ namespace ShootingRange.ServiceDesk
 
                     Shooter shooter = shooterDataStore.FindByShooterNumber(x.ShooterNumber);
                     shooterDataStore.Delete(shooter);
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -406,7 +412,7 @@ namespace ShootingRange.ServiceDesk
                     CollectionShooter cs = collectionShooterDataStore.FindById(x.Grouping.ShooterCollectionId);
                     collectionShooterDataStore.Delete(cs);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -434,7 +440,7 @@ namespace ShootingRange.ServiceDesk
                     };
                     collectionShooterDataStore.Create(cs);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                     _messenger.Send(new SetSelectedShooterCollectionMessage(x.ShooterCollectionId));
                 });
         }
@@ -462,7 +468,7 @@ namespace ShootingRange.ServiceDesk
                     };
                     collectionShooterDataStore.Create(cs);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -491,7 +497,7 @@ namespace ShootingRange.ServiceDesk
 
                     shooterParticipationDataStore.Create(sp);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -518,7 +524,7 @@ namespace ShootingRange.ServiceDesk
                             .SingleOrDefault(sp => sp.ProgramNumber == x.Participation.ProgramNumber);
                     shooterParticipationDataStore.Delete(shooterParticipation);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -542,7 +548,7 @@ namespace ShootingRange.ServiceDesk
                     s.ShooterId = vm.SelectedShooter.ShooterId;
                     sessionDataStore.Update(s);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -566,7 +572,7 @@ namespace ShootingRange.ServiceDesk
                     s.ProgramNumber = vm.SelectedParticipation.ProgramNumber;
                     sessionDataStore.Update(s);
 
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -594,7 +600,7 @@ namespace ShootingRange.ServiceDesk
                 {
                     IPage page = _vs.ExecuteFunction<PersonsPageViewModel, IPage>((IWindow)Current.MainWindow, personsPageViewModel);
                     _viewModel.CurrentPage = page;
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });        }
 
         private void RegisterShowGroupsPageMessage(GroupsPageViewModel groupsPageViewModel)
@@ -604,7 +610,7 @@ namespace ShootingRange.ServiceDesk
                 {
                     IPage page = _vs.ExecuteFunction<GroupsPageViewModel, IPage>((IWindow) Current.MainWindow, groupsPageViewModel);
                     _viewModel.CurrentPage = page;
-                    _messenger.Send(new RefreshDataFromRepositories());
+                    _messenger.Send(new RefreshDataFromRepositoriesMessage());
                 });
         }
 
@@ -617,10 +623,20 @@ namespace ShootingRange.ServiceDesk
                     _viewModel.CurrentPage = page;
                 });
 
-            _messenger.Send(new RefreshDataFromRepositories());
+            _messenger.Send(new RefreshDataFromRepositoriesMessage());
         }
 
+        private void RegisterShowRankingsPageMessage(RankViewModel rankViewModel)
+        {
+            _messenger.Register<ShowRankingsPageMessage>(this,
+                x =>
+                {
+                    IPage page = _vs.ExecuteFunction<RankViewModel, IPage>((IWindow)Current.MainWindow, rankViewModel);
+                    _viewModel.CurrentPage = page;
+                });
 
+            _messenger.Send(new RefreshDataFromRepositoriesMessage());
+        }
         #endregion
     }
 }

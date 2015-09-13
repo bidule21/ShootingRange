@@ -40,8 +40,8 @@ namespace ShootingRange.SiusDbWriter
             builder.RegisterInstance(shotDataStore).As<IShotDataStore>();
             builder.RegisterInstance(shooterDataStore).As<IShooterDataStore>();
             builder.RegisterInstance(personDataStore).As<IPersonDataStore>();
-            //builder.RegisterInstance(new SiusDataFileProvider(@"C:\Users\eberlid\Dropbox\SSC\2014\Herbstschiessen\ShootingRange\20140516_164043.log")).As<IShootingRange>();
-            builder.RegisterInstance(new SiusDataSocketProvider("127.0.0.1", 4000)).As<IShootingRange>();
+            builder.RegisterInstance(new SiusDataFileProvider(@"F:\work\ShootingRange\dumps\20150912_140726.log")).As<IShootingRange>();
+            //builder.RegisterInstance(new SiusDataSocketProvider("127.0.0.1", 4000)).As<IShootingRange>();
 
             _container = builder.Build();
         }

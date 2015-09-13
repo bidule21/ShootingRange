@@ -88,7 +88,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
                         SelectedShooter = Shooters.FirstOrDefault();
                 });
 
-            MessengerInstance.Register<RefreshDataFromRepositories>(this,
+            MessengerInstance.Register<RefreshDataFromRepositoriesMessage>(this,
                 x =>
                 {
                     UiPerson selectedPerson = SelectedPerson;
@@ -201,7 +201,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
 
                 _shooterDataStore.Create(shooter);
 
-                MessengerInstance.Send(new RefreshDataFromRepositories());
+                MessengerInstance.Send(new RefreshDataFromRepositoriesMessage());
                 MessengerInstance.Send(new SetSelectedPersonMessage(person.PersonId));
                 MessengerInstance.Send(new SetSelectedShooterMessage(shooter.ShooterId));
             }

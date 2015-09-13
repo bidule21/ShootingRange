@@ -63,7 +63,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
             Groupings = new ObservableCollection<GroupingViewModel>(FetchGroupsByShooter(Shooter));
             SelectedPersonChanged(shooter.ShooterId);
 
-            MessengerInstance.Register<RefreshDataFromRepositories>(this,
+            MessengerInstance.Register<RefreshDataFromRepositoriesMessage>(this,
     x =>
     {
         Groupings = new ObservableCollection<GroupingViewModel>(FetchGroupsByShooter(Shooter));

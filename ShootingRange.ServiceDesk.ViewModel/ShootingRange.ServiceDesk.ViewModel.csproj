@@ -70,19 +70,22 @@
     <Compile Include="MessageTypes\EditGroupingDialogMessage.cs" />
     <Compile Include="MessageTypes\EditPersonDialogMessage.cs" />
     <Compile Include="MessageTypes\CreatePersonDialogMessage.cs" />
-    <Compile Include="MessageTypes\RefreshDataFromRepositories.cs" />
+    <Compile Include="MessageTypes\RefreshDataFromRepositoriesMessage.cs" />
     <Compile Include="MessageTypes\RemoveGroupingFromShooterDialogMessage.cs" />
     <Compile Include="MessageTypes\RemoveParticipationFromShooterDialogMessage.cs" />
+    <Compile Include="MessageTypes\SetSelectedCollectionProgramNumber.cs" />
     <Compile Include="MessageTypes\SetSelectedPersonMessage.cs" />
     <Compile Include="MessageTypes\SetSelectedShooterCollectionMessage.cs" />
     <Compile Include="MessageTypes\SetSelectedShooterMessage.cs" />
     <Compile Include="MessageTypes\ShowGroupsPageMessage.cs" />
     <Compile Include="MessageTypes\ShowPersonsPageMessage.cs" />
     <Compile Include="MessageTypes\PersonSelectedMessage.cs" />
+    <Compile Include="MessageTypes\ShowRankingsPageMessage.cs" />
     <Compile Include="MessageTypes\ShowReassignSessionDialogMessage.cs" />
     <Compile Include="MessageTypes\ShowReassignShooterNumberDialogMessage.cs" />
     <Compile Include="MessageTypes\ShowResultsPageMessage.cs" />
     <Compile Include="ParticipationViewModel.cs" />
+    <Compile Include="RankViewModel.cs" />
     <Compile Include="UiCollectionShooter.cs" />
     <Compile Include="PersonShooterViewModel.cs" />
     <Compile Include="PersonsPageViewModel.cs" />
@@ -107,6 +110,10 @@
     <ProjectReference Include="..\ShootingRange.ConfigurationProvider\ShootingRange.ConfigurationProvider.csproj">
       <Project>{4DA2B804-0082-45A9-9CE8-C727050A58A0}</Project>
       <Name>ShootingRange.ConfigurationProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShootingRange.Ranking\ShootingRange.Ranking.csproj">
+      <Project>{A759DEB2-241F-4A67-B3EF-7A5EE258E561}</Project>
+      <Name>ShootingRange.Ranking</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShootingRange.Repository\ShootingRange.Repository.csproj">
       <Project>{E55AD8CA-D4FE-444C-8A31-4D310755A630}</Project>

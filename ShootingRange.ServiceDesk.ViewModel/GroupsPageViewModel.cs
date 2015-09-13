@@ -1,10 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.Practices.ServiceLocation;
-using ShootingRange.BusinessObjects.Properties;
 using ShootingRange.ConfigurationProvider;
 using ShootingRange.ServiceDesk.ViewModel.MessageTypes;
 
@@ -16,7 +12,8 @@ namespace ShootingRange.ServiceDesk.ViewModel
         {
             if (ServiceLocator.IsLocationProviderSet)
             {
-                MessengerInstance.Register<RefreshDataFromRepositories>(this, x => Initialize());
+                MessengerInstance.Register<RefreshDataFromRepositoriesMessage>(this, x => Initialize());
+                MessengerInstance.Register<SetSelectedCollectionProgramNumber>(this, x=> SelectedGrouping = Groupings.FirstOrDefault(g => g.ProgramNumber == x.ProgramNumber));
             }
         }
 

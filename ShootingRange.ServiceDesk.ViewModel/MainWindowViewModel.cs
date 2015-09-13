@@ -24,8 +24,11 @@ namespace ShootingRange.ServiceDesk.ViewModel
             ShowResultsCommand = new ViewModelCommand(x => MessengerInstance.Send(new ShowResultsPageMessage()));
             ShowResultsCommand.RaiseCanExecuteChanged();
 
-            RefreshCommand = new ViewModelCommand(x => MessengerInstance.Send(new RefreshDataFromRepositories()));
+            RefreshCommand = new ViewModelCommand(x => MessengerInstance.Send(new RefreshDataFromRepositoriesMessage()));
             RefreshCommand.RaiseCanExecuteChanged();
+
+            ShowRankingsCommand = new ViewModelCommand(x => MessengerInstance.Send(new ShowRankingsPageMessage()));
+            ShowRankingsCommand.RaiseCanExecuteChanged();
         }
 
         #region Commands
@@ -33,6 +36,7 @@ namespace ShootingRange.ServiceDesk.ViewModel
         public ViewModelCommand ShowPersonsCommand { get; private set; }
         public ViewModelCommand ShowGroupingsCommand { get; private set; }
         public ViewModelCommand ShowResultsCommand { get; private set; }
+        public ViewModelCommand ShowRankingsCommand { get; private set; }
 
         public ViewModelCommand ShowCreatePersonDialogCommand { get; private set; }
         public ViewModelCommand ShowCreateGroupingDialogCommand { get; private set; }
